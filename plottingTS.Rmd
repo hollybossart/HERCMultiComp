@@ -1,7 +1,7 @@
 ---
-title: "Exploratory Volatility Calculations"
+title: "Exploratory Volatility and Pricing Plotting"
 author: "Holly Bossart"
-date: "February 20, 2020"
+date: "February 21, 2020"
 output:
   html_document:
     df_print: paged
@@ -500,7 +500,8 @@ plot.ts(garmanklassTA(walmart$OPENPRC, walmart$ASKHI, walmart$BIDLO, walmart$PRC
 
 
 
-### intel
+### Intel
+#### Summary of Price Data
 ```{r, echo=FALSE}
 intel.p.t <- ts(intel$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(intel.p.t)
@@ -512,7 +513,18 @@ plot.ts(intel.p.t, ylim=c(20,65),xlab="2015-2019",main="intel Closing Prices 01/
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(intel$OPENPRC, intel$ASKHI, intel$BIDLO, intel$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(intel$OPENPRC, intel$ASKHI, intel$BIDLO, intel$PRC), ylab="GK volatility", main = "intel Volatility 01/02/2015-12/31/2019")
+
+```
+
+
+
 ### Bank of America
+#### Summary of Price Data
 ```{r, echo=FALSE}
 bankofa.p.t <- ts(bankofa$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(bankofa.p.t)
@@ -524,8 +536,19 @@ plot.ts(bankofa.p.t, ylim=c(10,40),xlab="2015-2019",main="bankofa Closing Prices
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(bankofa$OPENPRC, bankofa$ASKHI, bankofa$BIDLO, bankofa$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(bankofa$OPENPRC, bankofa$ASKHI, bankofa$BIDLO, bankofa$PRC), ylab="GK volatility", main = "bankofa Volatility 01/02/2015-12/31/2019")
 
-### verizon
+```
+
+
+
+### Verizon
+#### Summary of Price Data
+
 ```{r, echo=FALSE}
 verizon.p.t <- ts(verizon$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(verizon.p.t)
@@ -537,8 +560,17 @@ plot.ts(verizon.p.t, ylim=c(40,65),xlab="2015-2019",main="verizon Closing Prices
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(verizon$OPENPRC, verizon$ASKHI, verizon$BIDLO, verizon$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(verizon$OPENPRC, verizon$ASKHI, verizon$BIDLO, verizon$PRC), ylab="GK volatility", main = "verizon Volatility 01/02/2015-12/31/2019")
 
-### att
+```
+
+
+### AT&T
+Summary of Price Data
 ```{r, echo=FALSE}
 att.p.t <- ts(att$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(att.p.t)
@@ -550,7 +582,17 @@ plot.ts(att.p.t, ylim=c(25,45),xlab="2015-2019",main="att Closing Prices 01/01/2
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(att$OPENPRC, att$ASKHI, att$BIDLO, att$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(att$OPENPRC, att$ASKHI, att$BIDLO, att$PRC), ylab="GK volatility", main = "att Volatility 01/02/2015-12/31/2019")
+
+```
+
+
 ### Home Depot
+#### Summary of Price Data
 ```{r, echo=FALSE}
 homedep.p.t <- ts(homedep$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(homedep.p.t)
@@ -562,7 +604,17 @@ plot.ts(homedep.p.t, ylim=c(100,240),xlab="2015-2019",main="homedep Closing Pric
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(homedep$OPENPRC, homedep$ASKHI, homedep$BIDLO, homedep$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(homedep$OPENPRC, homedep$ASKHI, homedep$BIDLO, homedep$PRC), ylab="GK volatility", main = "homedep Volatility 01/02/2015-12/31/2019")
+
+```
+
+
 ### Citi Bank
+#### Summary of Price Data
 ```{r, echo=FALSE}
 citi.p.t <- ts(citi$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(citi.p.t)
@@ -574,8 +626,18 @@ plot.ts(citi.p.t, ylim=c(30,85),xlab="2015-2019",main="citi Closing Prices 01/01
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(citi$OPENPRC, citi$ASKHI, citi$BIDLO, citi$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(citi$OPENPRC, citi$ASKHI, citi$BIDLO, citi$PRC), ylab="GK volatility", main = "citi Volatility 01/02/2015-12/31/2019")
 
-### amazon
+```
+
+
+
+### Amazon
+#### Summary of Price Data
 ```{r, echo=FALSE}
 amazon.p.t <- ts(amazon$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(amazon.p.t)
@@ -587,8 +649,18 @@ plot.ts(amazon.p.t, ylim=c(280,2040),xlab="2015-2019",main="amazon Closing Price
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(amazon$OPENPRC, amazon$ASKHI, amazon$BIDLO, amazon$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(amazon$OPENPRC, amazon$ASKHI, amazon$BIDLO, amazon$PRC), ylab="GK volatility", main = "amazon Volatility 01/02/2015-12/31/2019")
+
+```
+
+
 
 ### China Mobile
+#### Summary of Price Data
 ```{r, echo=FALSE}
 chinamob.p.t <- ts(chinamob$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(chinamob.p.t)
@@ -600,8 +672,17 @@ plot.ts(chinamob.p.t, ylim=c(35,76),xlab="2015-2019",main="China Mobile Closing 
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(chinamob$OPENPRC, chinamob$ASKHI, chinamob$BIDLO, chinamob$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(chinamob$OPENPRC, chinamob$ASKHI, chinamob$BIDLO, chinamob$PRC), ylab="GK volatility", main = "chinamob Volatility 01/02/2015-12/31/2019")
+
+```
+
 
 ### Taiwan SemiConductors
+#### Summary of Price Data
 ```{r, echo=FALSE}
 taiwan.p.t <- ts(taiwan$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(taiwan.p.t)
@@ -613,8 +694,18 @@ plot.ts(taiwan.p.t, ylim=c(18,60),xlab="2015-2019",main="Taiwan Semiconductors C
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(taiwan$OPENPRC, taiwan$ASKHI, taiwan$BIDLO, taiwan$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(taiwan$OPENPRC, taiwan$ASKHI, taiwan$BIDLO, taiwan$PRC), ylab="GK volatility", main = "taiwan Volatility 01/02/2015-12/31/2019")
+
+```
+
+
 
 ### Novartis
+#### Summary of Price Data
 ```{r, echo=FALSE}
 novartis.p.t <- ts(novartis$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(novartis.p.t)
@@ -626,7 +717,17 @@ plot.ts(novartis.p.t, ylim=c(65,110),xlab="2015-2019",main="novartis Closing Pri
 
 ```
 
-### visa
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(novartis$OPENPRC, novartis$ASKHI, novartis$BIDLO, novartis$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(novartis$OPENPRC, novartis$ASKHI, novartis$BIDLO, novartis$PRC), ylab="GK volatility", main = "novartis Volatility 01/02/2015-12/31/2019")
+
+```
+
+
+### Visa 
+#### Summary of Price Data
 ```{r, echo=FALSE}
 visa.p.t <- ts(visa$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(visa.p.t)
@@ -641,8 +742,18 @@ plot.ts(visa.p.t, ylim=c(63,280),xlab="2015-2019",main="visa Closing Prices 01/0
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(visa$OPENPRC, visa$ASKHI, visa$BIDLO, visa$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(visa$OPENPRC, visa$ASKHI, visa$BIDLO, visa$PRC), ylab="GK volatility", main = "visa Volatility 01/02/2015-12/31/2019")
+
+```
+
+
 
 ### United Health
+#### Summary of Price Data
 ```{r, echo=FALSE}
 unhealth.p.t <- ts(unhealth$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(unhealth.p.t)
@@ -654,8 +765,18 @@ plot.ts(unhealth.p.t, ylim=c(90,300),xlab="2015-2019",main="United Health Closin
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(unhealth$OPENPRC, unhealth$ASKHI, unhealth$BIDLO, unhealth$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(unhealth$OPENPRC, unhealth$ASKHI, unhealth$BIDLO, unhealth$PRC), ylab="GK volatility", main = "unhealth Volatility 01/02/2015-12/31/2019")
+
+```
+
+
 
 ### Busch
+#### Summary of Prices
 ```{r, echo=FALSE}
 busch.p.t <- ts(busch$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(busch.p.t)
@@ -667,8 +788,18 @@ plot.ts(busch.p.t, ylim=c(60,135),xlab="2015-2019",main="Busch Closing Prices 01
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(busch$OPENPRC, busch$ASKHI, busch$BIDLO, busch$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(busch$OPENPRC, busch$ASKHI, busch$BIDLO, busch$PRC), ylab="GK volatility", main = "busch Volatility 01/02/2015-12/31/2019")
 
-### netflix
+```
+
+
+
+### Netflix
+#### Summary of Prices
 ```{r, echo=FALSE}
 netflix.p.t <- ts(netflix$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(netflix.p.t)
@@ -683,3 +814,12 @@ par(mfrow=c(1,1), mex=0.75)
 plot.ts(netflix.p.t, ylim=c(80,710),xlab="2015-2019",main="netflix Closing Prices 01/01/2015-12/31/2019")
 
 ```
+
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(netflix$OPENPRC, netflix$ASKHI, netflix$BIDLO, netflix$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(netflix$OPENPRC, netflix$ASKHI, netflix$BIDLO, netflix$PRC), ylab="GK volatility", main = "netflix Volatility 01/02/2015-12/31/2019")
+
+```
+
