@@ -281,3 +281,133 @@ par(mfrow=c(1,1), mex=0.75)
 plot.ts(bankofa.p.t, ylim=c(10,40),xlab="2015-2019",main="bankofa Closing Prices 01/01/2015-12/31/2019")
 
 ```
+
+
+### verizon
+```{r}
+verizon.p.t <- ts(verizon$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(verizon.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(verizon.p.t, ylim=c(40,65),xlab="2015-2019",main="verizon Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### att
+```{r}
+att.p.t <- ts(att$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(att.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(att.p.t, ylim=c(25,45),xlab="2015-2019",main="att Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### homedep
+```{r}
+homedep.p.t <- ts(homedep$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(homedep.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(homedep.p.t, ylim=c(100,240),xlab="2015-2019",main="homedep Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### citi
+```{r}
+citi.p.t <- ts(citi$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(citi.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(citi.p.t, ylim=c(30,85),xlab="2015-2019",main="citi Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### amazon
+```{r}
+amazon.p.t <- ts(amazon$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(amazon.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(amazon.p.t, ylim=c(280,2040),xlab="2015-2019",main="amazon Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### chinamob
+```{r}
+chinamob.p.t <- ts(chinamob$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(chinamob.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(chinamob.p.t, ylim=c(35,76),xlab="2015-2019",main="China Mobile Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### taiwan
+```{r}
+taiwan.p.t <- ts(taiwan$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(taiwan.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(taiwan.p.t, ylim=c(18,60),xlab="2015-2019",main="Taiwan Semiconductors Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### novartis
+```{r}
+novartis.p.t <- ts(novartis$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(novartis.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(novartis.p.t, ylim=c(65,110),xlab="2015-2019",main="novartis Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### visa
+```{r}
+visa.p.t <- ts(visa$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(visa.p.t)
+
+```
+
+
+### Visa split their stock in March 2015, hence the drop in price.
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(visa.p.t, ylim=c(63,280),xlab="2015-2019",main="visa Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### unhealth
+```{r}
+unhealth.p.t <- ts(unhealth$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(unhealth.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(unhealth.p.t, ylim=c(90,300),xlab="2015-2019",main="United Health Closing Prices 01/01/2015-12/31/2019")
+
+```
