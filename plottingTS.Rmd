@@ -144,3 +144,63 @@ par(mfrow=c(1,1), mex=0.75)
 plot.ts(facebook.p.t, ylim=c(70,230),xlab="2015-2019",main="facebook Closing Prices 01/01/2015-12/31/2019")
 
 ```
+### chevron
+```{r}
+chevron.p.t <- ts(chevron$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(chevron.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(chevron.p.t, ylim=c(60,145),xlab="2015-2019",main="chevron Closing Prices 01/01/2015-12/31/2019")
+
+```
+### apple
+```{r}
+apple.p.t <- ts(apple$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(apple.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(apple.p.t, ylim=c(80,300),xlab="2015-2019",main="apple Closing Prices 01/01/2015-12/31/2019")
+
+```
+### alibaba
+```{r}
+alibaba.p.t <- ts(alibaba$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(alibaba.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(alibaba.p.t, ylim=c(50,220),xlab="2015-2019",main="alibaba Closing Prices 01/01/2015-12/31/2019")
+
+```
+### pg
+```{r}
+pg.p.t <- ts(pg$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(pg.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(pg.p.t, ylim=c(60,130),xlab="2015-2019",main="pg Closing Prices 01/01/2015-12/31/2019")
+
+```
+### pfizer
+```{r}
+pfizer.p.t <- ts(pfizer$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(pfizer.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(pfizer.p.t, ylim=c(25,50),xlab="2015-2019",main="pfizer Closing Prices 01/01/2015-12/31/2019")
+
+```
