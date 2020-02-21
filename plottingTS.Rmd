@@ -1,0 +1,46 @@
+---
+title: "Exploratory Volatility Calculations"
+author: "Holly Bossart"
+date: "February 20, 2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(TTR)
+library(tidyverse)
+
+
+data = read.csv("Data/OHLCprices.csv")
+ticker = data.frame(unique(data$TICKER))
+names(ticker)[1] <- "Company"
+
+
+```
+
+## 31 Companies
+Data collected from WRDS CRSP Database.
+
+```{r data}
+data$COMNAM[data$COMNAM == 'WAL MART STORES INC'] <- 'WALMART INC'
+comnames <- data.frame(unique(data$COMNAM))
+
+```
+
+
+## Breaking up individual data sets
+```{r data}
+oracle <- filter(data, data$COMNAM == 'ORACLE CORP')
+microsoft <- filter(data, data$COMNAM == 'MICROSOFT CORP')
+exxon <- filter(data, data$COMNAM == 'EXXON MOBIL CORP')
+ibm <- filter(data, data$COMNAM == 'INTERNATIONAL BUSINESS MACHS COR')
+exxon <- filter(data, data$COMNAM == 'EXXON MOBIL CORP')
+fb <- filter(data, data$COMNAM == 'FACEBOOK INC')
+
+
+```
+
+
