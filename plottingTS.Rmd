@@ -5,6 +5,7 @@ date: "February 20, 2020"
 output:
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +25,7 @@ names(ticker)[1] <- "Company"
 ## 31 Companies
 Data collected from WRDS CRSP Database.
 
-```{r data}
+```{r}
 data$COMNAM[data$COMNAM == 'WAL MART STORES INC'] <- 'WALMART INC'
 comnames <- data.frame(unique(data$COMNAM))
 
@@ -32,7 +33,7 @@ comnames <- data.frame(unique(data$COMNAM))
 
 
 ## Breaking up individual data sets
-```{r data}
+```{r}
 oracle <- filter(data, data$COMNAM == 'ORACLE CORP')
 microsoft <- filter(data, data$COMNAM == 'MICROSOFT CORP')
 exxon <- filter(data, data$COMNAM == 'EXXON MOBIL CORP')
@@ -76,7 +77,6 @@ summary(oracle.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(oracle.p.t, ylim=c(30,75),xlab="2015-2019",main="Oracle Closing Prices 01/01/2015-12/31/2019")
 
@@ -89,11 +89,11 @@ summary(microsoft.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(microsoft.p.t, ylim=c(30,175),xlab="2015-2019",main="microsoft Closing Prices 01/01/2015-12/31/2019")
 
 ```
+
 ### exxon
 ```{r}
 exxon.p.t <- ts(exxon$PRC, start = c(2015,1,1), frequency = 251.6)
@@ -102,11 +102,11 @@ summary(exxon.p.t)
 ```
 
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(exxon.p.t, ylim=c(60,100),xlab="2015-2019",main="exxon Closing Prices 01/01/2015-12/31/2019")
 
 ```
+
 ### general motors
 ```{r}
 gm.p.t <- ts(gm$PRC, start = c(2015,1,1), frequency = 251.6)
@@ -114,7 +114,6 @@ summary(gm.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(gm.p.t, ylim=c(20,55),xlab="2015-2019",main="gm Closing Prices 01/01/2015-12/31/2019")
 
@@ -126,7 +125,6 @@ summary(ibm.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(ibm.p.t, ylim=c(100,190),xlab="2015-2019",main="ibm Closing Prices 01/01/2015-12/31/2019")
 
@@ -139,7 +137,6 @@ summary(facebook.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(facebook.p.t, ylim=c(70,230),xlab="2015-2019",main="facebook Closing Prices 01/01/2015-12/31/2019")
 
@@ -151,7 +148,6 @@ summary(chevron.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(chevron.p.t, ylim=c(60,145),xlab="2015-2019",main="chevron Closing Prices 01/01/2015-12/31/2019")
 
@@ -163,7 +159,6 @@ summary(apple.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(apple.p.t, ylim=c(80,300),xlab="2015-2019",main="apple Closing Prices 01/01/2015-12/31/2019")
 
@@ -175,7 +170,6 @@ summary(alibaba.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(alibaba.p.t, ylim=c(50,220),xlab="2015-2019",main="alibaba Closing Prices 01/01/2015-12/31/2019")
 
@@ -187,7 +181,6 @@ summary(pg.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(pg.p.t, ylim=c(60,130),xlab="2015-2019",main="pg Closing Prices 01/01/2015-12/31/2019")
 
@@ -199,8 +192,92 @@ summary(pfizer.p.t)
 
 ```
 ```{r}
-dev.new(width=12, height=6)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(pfizer.p.t, ylim=c(25,50),xlab="2015-2019",main="pfizer Closing Prices 01/01/2015-12/31/2019")
+
+```
+### johnson and johnson
+```{r}
+johnson.p.t <- ts(johnson$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(johnson.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(johnson.p.t, ylim=c(85,150),xlab="2015-2019",main="johnson&johnson Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### disney
+```{r}
+disney.p.t <- ts(disney$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(disney.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(disney.p.t, ylim=c(80,160),xlab="2015-2019",main="disney Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### wellsfargo
+```{r}
+wellsfargo.p.t <- ts(wellsfargo$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(wellsfargo.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(wellsfargo.p.t, ylim=c(40,70),xlab="2015-2019",main="wellsfargo Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### jpmorgan
+```{r}
+jpmorgan.p.t <- ts(jpmorgan$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(jpmorgan.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(jpmorgan.p.t, ylim=c(50,150),xlab="2015-2019",main="jpmorgan Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### walmart
+```{r}
+walmart.p.t <- ts(walmart$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(walmart.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(walmart.p.t, ylim=c(50,130),xlab="2015-2019",main="walmart Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### intel
+```{r}
+intel.p.t <- ts(intel$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(intel.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(intel.p.t, ylim=c(20,65),xlab="2015-2019",main="intel Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### bankofa
+```{r}
+bankofa.p.t <- ts(bankofa$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(bankofa.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(bankofa.p.t, ylim=c(10,40),xlab="2015-2019",main="bankofa Closing Prices 01/01/2015-12/31/2019")
 
 ```

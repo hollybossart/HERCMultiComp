@@ -128,40 +128,322 @@
 \begin{document}
 \maketitle
 
-\subsection{R Markdown}\label{r-markdown}
+\subsection{31 Companies}\label{companies}
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see \url{http://rmarkdown.rstudio.com}.
-
-When you click the \textbf{Knit} button a document will be generated
-that includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+Data collected from WRDS CRSP Database.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{summary}\NormalTok{(cars)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{COMNAM[data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'WAL MART STORES INC'}\NormalTok{] <-}\StringTok{ 'WALMART INC'}
+\NormalTok{comnames <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{unique}\NormalTok{(data}\OperatorTok{$}\NormalTok{COMNAM))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Breaking up individual data
+sets}\label{breaking-up-individual-data-sets}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oracle <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'ORACLE CORP'}\NormalTok{)}
+\NormalTok{microsoft <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'MICROSOFT CORP'}\NormalTok{)}
+\NormalTok{exxon <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'EXXON MOBIL CORP'}\NormalTok{)}
+\NormalTok{gm <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'GENERAL MOTORS CO'}\NormalTok{)}
+\NormalTok{ibm <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'INTERNATIONAL BUSINESS MACHS COR'}\NormalTok{)}
+\NormalTok{facebook <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'FACEBOOK INC'}\NormalTok{)}
+\NormalTok{chevron <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'CHEVRON CORP NEW'}\NormalTok{)}
+\NormalTok{apple <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'APPLE INC'}\NormalTok{)}
+\NormalTok{alibaba <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'ALIBABA GROUP HOLDING LTD'}\NormalTok{)}
+\NormalTok{pg <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'PROCTER & GAMBLE CO'}\NormalTok{)}
+\NormalTok{pfizer <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'PFIZER INC'}\NormalTok{)}
+\NormalTok{johnson <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'JOHNSON & JOHNSON'}\NormalTok{)}
+\NormalTok{disney <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'DISNEY WALT CO'}\NormalTok{)}
+\NormalTok{wellsfargo <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'WELLS FARGO & CO NEW'}\NormalTok{)}
+\NormalTok{jpmorgan <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'JPMORGAN CHASE & CO'}\NormalTok{)}
+\NormalTok{walmart <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'WALMART INC'}\NormalTok{)}
+\NormalTok{intel <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'INTEL CORP'}\NormalTok{)}
+\NormalTok{bankofa <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'BANK OF AMERICA CORP'}\NormalTok{)}
+\NormalTok{verizon <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'VERIZON COMMUNICATIONS INC'}\NormalTok{)}
+\NormalTok{att <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'A T & T INC'}\NormalTok{)}
+\NormalTok{homedep <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'HOME DEPOT INC'}\NormalTok{)}
+\NormalTok{citi <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'CITIGROUP INC'}\NormalTok{)}
+\NormalTok{amazon <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'AMAZON COM INC'}\NormalTok{)}
+\NormalTok{chinamob <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'CHINA MOBILE LTD'}\NormalTok{)}
+\NormalTok{taiwan <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'TAIWAN SEMICONDUCTOR MFG CO LTD'}\NormalTok{)}
+\NormalTok{novartis <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'NOVARTIS A G'}\NormalTok{)}
+\NormalTok{visa <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'VISA INC'}\NormalTok{)}
+\NormalTok{unhealth <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'UNITEDHEALTH GROUP INC'}\NormalTok{)}
+\NormalTok{busch <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'ANHEUSER BUSCH INBEV SA NV'}\NormalTok{)}
+\NormalTok{netflix <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(data, data}\OperatorTok{$}\NormalTok{COMNAM }\OperatorTok{==}\StringTok{ 'NETFLIX INC'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Plotting Closing Price or Bid/Ask
+Average}\label{plotting-closing-price-or-bidask-average}
+
+\subsubsection{Oracle}\label{oracle}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# making the data into time series plots}
+\NormalTok{oracle.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(oracle}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(oracle.p.t)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   33.94   40.39   45.35   45.69   50.23   60.15
 \end{verbatim}
 
-\subsection{Including Plots}\label{including-plots}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(oracle.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{75}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"Oracle Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-You can also embed plots, for example:
+\subsubsection{Microsoft}\label{microsoft}
 
-\includegraphics{plottingTS_files/figure-latex/pressure-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{microsoft.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(microsoft}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(microsoft.p.t)}
+\end{Highlighting}
+\end{Shaded}
 
-Note that the \texttt{echo\ =\ FALSE} parameter was added to the code
-chunk to prevent printing of the R code that generated the plot.
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   40.29   53.52   71.01   81.07  106.25  158.96
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(microsoft.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{175}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"microsoft Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{exxon}\label{exxon}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{exxon.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(exxon}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(exxon.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   65.51   76.94   81.57   80.92   84.97   95.12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(exxon.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{60}\NormalTok{,}\DecValTok{100}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"exxon Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{general motors}\label{general-motors}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gm.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(gm}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(gm.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   26.90   33.12   35.77   35.72   37.85   46.48
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(gm.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\DecValTok{55}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"gm Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{IBM}\label{ibm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ibm.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(ibm}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(ibm.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   107.6   139.9   148.5   148.9   158.3   181.9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(ibm.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{,}\DecValTok{190}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"ibm Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{facebook}\label{facebook}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{facebook.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(facebook}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(facebook.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   74.05  112.19  145.65  143.07  177.56  217.50
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(facebook.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{70}\NormalTok{,}\DecValTok{230}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"facebook Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{chevron}\label{chevron}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{chevron.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(chevron}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(chevron.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   70.02  102.28  111.14  109.50  118.79  133.60
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(chevron.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{60}\NormalTok{,}\DecValTok{145}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"chevron Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{apple}\label{apple}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{apple.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(apple}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(apple.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   90.34  115.50  150.56  154.48  186.00  293.65
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(apple.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{80}\NormalTok{,}\DecValTok{300}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"apple Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{alibaba}\label{alibaba}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{alibaba.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(alibaba}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(alibaba.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   57.39   84.81  138.76  131.77  176.28  216.38
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(alibaba.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{50}\NormalTok{,}\DecValTok{220}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"alibaba Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{pg}\label{pg}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pg.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(pg}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(pg.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   68.06   80.96   86.27   89.26   91.88  126.09
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(pg.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{60}\NormalTok{,}\DecValTok{130}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"pg Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{pfizer}\label{pfizer}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pfizer.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(pfizer}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(pfizer.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   28.56   33.32   35.02   35.94   37.21   46.23
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(pfizer.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{25}\NormalTok{,}\DecValTok{50}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"pfizer Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{johnson and johnson}\label{johnson-and-johnson}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{johnson.p.t <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(johnson}\OperatorTok{$}\NormalTok{PRC, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{frequency =} \FloatTok{251.6}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(johnson.p.t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   90.73  109.01  125.69  122.20  133.84  148.14
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.new}\NormalTok{(}\DataTypeTok{width=}\DecValTok{12}\NormalTok{, }\DataTypeTok{height=}\DecValTok{6}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{mex=}\FloatTok{0.75}\NormalTok{)}
+\KeywordTok{plot.ts}\NormalTok{(johnson.p.t, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{85}\NormalTok{,}\DecValTok{150}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"2015-2019"}\NormalTok{,}\DataTypeTok{main=}\StringTok{"johnson&johnson Closing Prices 01/01/2015-12/31/2019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 
 \end{document}
