@@ -101,4 +101,46 @@ summary(exxon.p.t)
 
 ```
 
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(exxon.p.t, ylim=c(60,100),xlab="2015-2019",main="exxon Closing Prices 01/01/2015-12/31/2019")
 
+```
+### general motors
+```{r}
+gm.p.t <- ts(gm$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(gm.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(gm.p.t, ylim=c(20,55),xlab="2015-2019",main="gm Closing Prices 01/01/2015-12/31/2019")
+
+```
+### IBM
+```{r}
+ibm.p.t <- ts(ibm$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(ibm.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(ibm.p.t, ylim=c(100,190),xlab="2015-2019",main="ibm Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### facebook
+```{r}
+facebook.p.t <- ts(facebook$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(facebook.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(facebook.p.t, ylim=c(70,230),xlab="2015-2019",main="facebook Closing Prices 01/01/2015-12/31/2019")
+
+```
