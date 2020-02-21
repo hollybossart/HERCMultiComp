@@ -67,4 +67,38 @@ netflix <- filter(data, data$COMNAM == 'NETFLIX INC')
 
 ```
 
+## Plotting Closing Price or Bid/Ask Average
+### Oracle
+```{r}
+# making the data into time series plots
+oracle.p.t <- ts(oracle$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(oracle.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(oracle.p.t, ylim=c(30,75),xlab="2015-2019",main="Oracle Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+### Microsoft
+```{r}
+microsoft.p.t <- ts(microsoft$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(microsoft.p.t)
+
+```
+```{r}
+dev.new(width=12, height=6)
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(microsoft.p.t, ylim=c(30,175),xlab="2015-2019",main="microsoft Closing Prices 01/01/2015-12/31/2019")
+
+```
+### exxon
+```{r}
+exxon.p.t <- ts(exxon$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(exxon.p.t)
+
+```
+
 
