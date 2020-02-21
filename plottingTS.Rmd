@@ -26,7 +26,7 @@ names(ticker)[1] <- "Company"
 ## 30 Companies
 Data collected from WRDS CRSP Database.
 
-```{r}
+```{r, echo=FALSE}
 data$COMNAM[data$COMNAM == 'WAL MART STORES INC'] <- 'WALMART INC'
 comnames <- data.frame(unique(data$COMNAM))
 comnames
@@ -301,8 +301,25 @@ plot.ts(apple.p.t, ylim=c(80,300),xlab="2015-2019",main="apple Closing Prices 01
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(apple$OPENPRC, apple$ASKHI, apple$BIDLO, apple$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(apple$OPENPRC, apple$ASKHI, apple$BIDLO, apple$PRC), ylab="GK volatility", main = "apple Volatility 01/02/2015-12/31/2019")
 
-### alibaba
+```
+
+```{r, echo=FALSE}
+apple.v <- garmanklassTA(apple$OPENPRC, apple$ASKHI, apple$BIDLO, apple$PRC)
+apple.v <- apple.v[-1]
+apple.v <- ts(apple.v, start = c(2015,1,2), frequency = 251.4)
+
+```
+
+
+
+### Alibaba
+#### Summary of Price Data
 ```{r, echo=FALSE}
 alibaba.p.t <- ts(alibaba$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(alibaba.p.t)
@@ -314,8 +331,17 @@ plot.ts(alibaba.p.t, ylim=c(50,220),xlab="2015-2019",main="alibaba Closing Price
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(alibaba$OPENPRC, alibaba$ASKHI, alibaba$BIDLO, alibaba$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(alibaba$OPENPRC, alibaba$ASKHI, alibaba$BIDLO, alibaba$PRC), ylab="GK volatility", main = "alibaba Volatility 01/02/2015-12/31/2019")
+
+```
+
 
 ### Procter-Gamble
+#### Summary of Price Data
 ```{r, echo=FALSE}
 pg.p.t <- ts(pg$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(pg.p.t)
@@ -328,7 +354,19 @@ plot.ts(pg.p.t, ylim=c(60,130),xlab="2015-2019",main="pg Closing Prices 01/01/20
 ```
 
 
-### pfizer
+
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(pg$OPENPRC, pg$ASKHI, pg$BIDLO, pg$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(pg$OPENPRC, pg$ASKHI, pg$BIDLO, pg$PRC), ylab="GK volatility", main = "pg Volatility 01/02/2015-12/31/2019")
+
+```
+
+
+
+### Pfizer
+#### Summary of Price Data
 ```{r, echo=FALSE}
 pfizer.p.t <- ts(pfizer$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(pfizer.p.t)
@@ -341,7 +379,18 @@ plot.ts(pfizer.p.t, ylim=c(25,50),xlab="2015-2019",main="pfizer Closing Prices 0
 ```
 
 
-### johnson and johnson
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(pfizer$OPENPRC, pfizer$ASKHI, pfizer$BIDLO, pfizer$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(pfizer$OPENPRC, pfizer$ASKHI, pfizer$BIDLO, pfizer$PRC), ylab="GK volatility", main = "pfizer Volatility 01/02/2015-12/31/2019")
+
+```
+
+
+
+### Johnson and Johnson
+#### Summary of Price Data
 ```{r, echo=FALSE}
 johnson.p.t <- ts(johnson$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(johnson.p.t)
@@ -353,8 +402,18 @@ plot.ts(johnson.p.t, ylim=c(85,150),xlab="2015-2019",main="johnson&johnson Closi
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(johnson$OPENPRC, johnson$ASKHI, johnson$BIDLO, johnson$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(johnson$OPENPRC, johnson$ASKHI, johnson$BIDLO, johnson$PRC), ylab="GK volatility", main = "johnson Volatility 01/02/2015-12/31/2019")
 
-### disney
+```
+
+
+
+### Disney
+#### Summary of Price Data
 ```{r, echo=FALSE}
 disney.p.t <- ts(disney$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(disney.p.t)
@@ -366,8 +425,16 @@ plot.ts(disney.p.t, ylim=c(80,160),xlab="2015-2019",main="disney Closing Prices 
 
 ```
 
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(disney$OPENPRC, disney$ASKHI, disney$BIDLO, disney$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(disney$OPENPRC, disney$ASKHI, disney$BIDLO, disney$PRC), ylab="GK volatility", main = "disney Volatility 01/02/2015-12/31/2019")
 
-### wellsfargo
+```
+
+### Wells Fargo
+#### Summary of Price Data
 ```{r, echo=FALSE}
 wellsfargo.p.t <- ts(wellsfargo$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(wellsfargo.p.t)
@@ -379,7 +446,17 @@ plot.ts(wellsfargo.p.t, ylim=c(40,70),xlab="2015-2019",main="wellsfargo Closing 
 
 ```
 
-### jpmorgan
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(wellsfargo$OPENPRC, wellsfargo$ASKHI, wellsfargo$BIDLO, wellsfargo$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(wellsfargo$OPENPRC, wellsfargo$ASKHI, wellsfargo$BIDLO, wellsfargo$PRC), ylab="GK volatility", main = "wellsfargo Volatility 01/02/2015-12/31/2019")
+
+```
+
+
+### JP Morgan
+#### Summary of Price Data
 ```{r, echo=FALSE}
 jpmorgan.p.t <- ts(jpmorgan$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(jpmorgan.p.t)
@@ -391,7 +468,17 @@ plot.ts(jpmorgan.p.t, ylim=c(50,150),xlab="2015-2019",main="jpmorgan Closing Pri
 
 ```
 
-### walmart
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(jpmorgan$OPENPRC, jpmorgan$ASKHI, jpmorgan$BIDLO, jpmorgan$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(jpmorgan$OPENPRC, jpmorgan$ASKHI, jpmorgan$BIDLO, jpmorgan$PRC), ylab="GK volatility", main = "jpmorgan Volatility 01/02/2015-12/31/2019")
+
+```
+
+
+### Walmart
+#### Summary of Price Data
 ```{r, echo=FALSE}
 walmart.p.t <- ts(walmart$PRC, start = c(2015,1,1), frequency = 251.6)
 summary(walmart.p.t)
@@ -402,6 +489,15 @@ par(mfrow=c(1,1), mex=0.75)
 plot.ts(walmart.p.t, ylim=c(50,130),xlab="2015-2019",main="walmart Closing Prices 01/01/2015-12/31/2019")
 
 ```
+
+#### Summary of Volatility Data
+```{r, echo=FALSE}
+summary(garmanklassTA(walmart$OPENPRC, walmart$ASKHI, walmart$BIDLO, walmart$PRC))
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(garmanklassTA(walmart$OPENPRC, walmart$ASKHI, walmart$BIDLO, walmart$PRC), ylab="GK volatility", main = "walmart Volatility 01/02/2015-12/31/2019")
+
+```
+
 
 
 ### intel
