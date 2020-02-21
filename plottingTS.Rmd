@@ -411,3 +411,33 @@ par(mfrow=c(1,1), mex=0.75)
 plot.ts(unhealth.p.t, ylim=c(90,300),xlab="2015-2019",main="United Health Closing Prices 01/01/2015-12/31/2019")
 
 ```
+
+
+### busch
+```{r}
+busch.p.t <- ts(busch$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(busch.p.t)
+
+```
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(busch.p.t, ylim=c(60,135),xlab="2015-2019",main="Busch Closing Prices 01/01/2015-12/31/2019")
+
+```
+
+
+### netflix
+```{r}
+netflix.p.t <- ts(netflix$PRC, start = c(2015,1,1), frequency = 251.6)
+summary(netflix.p.t)
+
+```
+
+
+
+#### Netflix split their stock in July 2015.
+```{r}
+par(mfrow=c(1,1), mex=0.75)
+plot.ts(netflix.p.t, ylim=c(80,710),xlab="2015-2019",main="netflix Closing Prices 01/01/2015-12/31/2019")
+
+```
