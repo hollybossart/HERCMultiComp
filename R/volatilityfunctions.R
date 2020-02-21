@@ -1,5 +1,5 @@
 garmanklassTA <- function (open, high, low, close) {
-  TS = is.timeSeries(open)
+  TS = is.ts(open)
   if (TS) {
     x = open
     open = as.vector(open)
@@ -28,5 +28,7 @@ garmanklassTA <- function (open, high, low, close) {
   } else {
     x = garmanklass
   }
+  x <- x[-1]
+  x <- ts(x, start = c(2015,1,2), frequency = 251.4)
   x
 }
