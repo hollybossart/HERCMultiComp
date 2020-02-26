@@ -28,8 +28,7 @@ Data collected from WRDS CRSP Database.
 
 ```{r, echo=FALSE}
 data$COMNAM[data$COMNAM == 'WAL MART STORES INC'] <- 'WALMART INC'
-comnames <- data.frame(unique(data$COMNAM))
-comnames
+comnames <- as.data.frame(unique(data$COMNAM))
 
 ```
 
@@ -100,9 +99,15 @@ plot.ts(garmanklassTA(oracle$OPENPRC, oracle$ASKHI, oracle$BIDLO, oracle$PRC), y
 
 ```{r, echo=FALSE}
 oracle.v <- garmanklassTA(oracle$OPENPRC, oracle$ASKHI, oracle$BIDLO, oracle$PRC)
-oracle.v <- oracle.v[-1]
 oracle.v <- ts(oracle.v, start = c(2015,1,2), frequency = 251.4)
 
+temp <- oracle[-1,]
+vol <- as.data.frame(oracle.v) 
+temp <- cbind(temp$date, vol)
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/oracle.csv", row.names = FALSE)
+rm(temp)
+rm(vol)
 ```
 
 
@@ -132,8 +137,13 @@ plot.ts(garmanklassTA(microsoft$OPENPRC, microsoft$ASKHI, microsoft$BIDLO, micro
 
 ```{r, echo=FALSE}
 microsoft.v <- garmanklassTA(microsoft$OPENPRC, microsoft$ASKHI, microsoft$BIDLO, microsoft$PRC)
-microsoft.v <- microsoft.v[-1]
 microsoft.v <- ts(microsoft.v, start = c(2015,1,2), frequency = 251.4)
+temp <- microsoft[-1,]
+temp <- cbind(temp$date, as.data.frame(microsoft.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/microsoft.csv", row.names = FALSE)
+rm(temp)
+
 
 ```
 
@@ -163,8 +173,12 @@ plot.ts(garmanklassTA(exxon$OPENPRC, exxon$ASKHI, exxon$BIDLO, exxon$PRC), ylab=
 
 ```{r, echo=FALSE}
 exxon.v <- garmanklassTA(exxon$OPENPRC, exxon$ASKHI, exxon$BIDLO, exxon$PRC)
-exxon.v <- exxon.v[-1]
 exxon.v <- ts(exxon.v, start = c(2015,1,2), frequency = 251.4)
+temp <- cbind(exxon[-1,]$date, as.data.frame(exxon.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/exxon.csv", row.names = FALSE)
+rm(temp)
+
 
 ```
 
@@ -193,8 +207,12 @@ plot.ts(garmanklassTA(gm$OPENPRC, gm$ASKHI, gm$BIDLO, gm$PRC), ylab="GK volatili
 
 ```{r, echo=FALSE}
 gm.v <- garmanklassTA(gm$OPENPRC, gm$ASKHI, gm$BIDLO, gm$PRC)
-gm.v <- gm.v[-1]
 gm.v <- ts(gm.v, start = c(2015,1,2), frequency = 251.4)
+
+temp <- cbind(gm[-1,]$date, as.data.frame(gm.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/gm.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -222,8 +240,12 @@ plot.ts(garmanklassTA(ibm$OPENPRC, ibm$ASKHI, ibm$BIDLO, ibm$PRC), ylab="GK vola
 
 ```{r, echo=FALSE}
 ibm.v <- garmanklassTA(ibm$OPENPRC, ibm$ASKHI, ibm$BIDLO, ibm$PRC)
-ibm.v <- ibm.v[-1]
 ibm.v <- ts(ibm.v, start = c(2015,1,2), frequency = 251.4)
+
+temp <- cbind(ibm[-1,]$date, as.data.frame(ibm.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/ibm.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -251,8 +273,12 @@ plot.ts(garmanklassTA(facebook$OPENPRC, facebook$ASKHI, facebook$BIDLO, facebook
 
 ```{r, echo=FALSE}
 facebook.v <- garmanklassTA(facebook$OPENPRC, facebook$ASKHI, facebook$BIDLO, facebook$PRC)
-facebook.v <- facebook.v[-1]
 facebook.v <- ts(facebook.v, start = c(2015,1,2), frequency = 251.4)
+
+temp <- cbind(facebook[-1,]$date, as.data.frame(facebook.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/facebook.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -281,8 +307,12 @@ plot.ts(garmanklassTA(chevron$OPENPRC, chevron$ASKHI, chevron$BIDLO, chevron$PRC
 
 ```{r, echo=FALSE}
 chevron.v <- garmanklassTA(chevron$OPENPRC, chevron$ASKHI, chevron$BIDLO, chevron$PRC)
-chevron.v <- chevron.v[-1]
 chevron.v <- ts(chevron.v, start = c(2015,1,2), frequency = 251.4)
+
+temp <- cbind(chevron[-1,]$date, as.data.frame(chevron.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/chevron.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -311,8 +341,11 @@ plot.ts(garmanklassTA(apple$OPENPRC, apple$ASKHI, apple$BIDLO, apple$PRC), ylab=
 
 ```{r, echo=FALSE}
 apple.v <- garmanklassTA(apple$OPENPRC, apple$ASKHI, apple$BIDLO, apple$PRC)
-apple.v <- apple.v[-1]
 apple.v <- ts(apple.v, start = c(2015,1,2), frequency = 251.4)
+temp <- cbind(apple[-1,]$date, as.data.frame(apple.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/apple.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -333,9 +366,14 @@ plot.ts(alibaba.p.t, ylim=c(50,220),xlab="2015-2019",main="alibaba Closing Price
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(alibaba$OPENPRC, alibaba$ASKHI, alibaba$BIDLO, alibaba$PRC))
+summary(alibaba.v <- garmanklassTA(alibaba$OPENPRC, alibaba$ASKHI, alibaba$BIDLO, alibaba$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(alibaba$OPENPRC, alibaba$ASKHI, alibaba$BIDLO, alibaba$PRC), ylab="GK volatility", main = "alibaba Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(alibaba[-1,]$date, as.data.frame(alibaba.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/alibaba.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -357,10 +395,14 @@ plot.ts(pg.p.t, ylim=c(60,130),xlab="2015-2019",main="pg Closing Prices 01/01/20
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(pg$OPENPRC, pg$ASKHI, pg$BIDLO, pg$PRC))
+summary(pg.v <- garmanklassTA(pg$OPENPRC, pg$ASKHI, pg$BIDLO, pg$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(pg$OPENPRC, pg$ASKHI, pg$BIDLO, pg$PRC), ylab="GK volatility", main = "pg Volatility 01/02/2015-12/31/2019")
 
+temp <- cbind(pg[-1,]$date, as.data.frame(pg.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/pg.csv", row.names = FALSE)
+rm(temp)
 ```
 
 
@@ -381,9 +423,14 @@ plot.ts(pfizer.p.t, ylim=c(25,50),xlab="2015-2019",main="pfizer Closing Prices 0
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(pfizer$OPENPRC, pfizer$ASKHI, pfizer$BIDLO, pfizer$PRC))
+summary(pfizer.v <- garmanklassTA(pfizer$OPENPRC, pfizer$ASKHI, pfizer$BIDLO, pfizer$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(pfizer$OPENPRC, pfizer$ASKHI, pfizer$BIDLO, pfizer$PRC), ylab="GK volatility", main = "pfizer Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(pfizer[-1,]$date, as.data.frame(pfizer.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/pfizer.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -404,9 +451,14 @@ plot.ts(johnson.p.t, ylim=c(85,150),xlab="2015-2019",main="johnson&johnson Closi
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(johnson$OPENPRC, johnson$ASKHI, johnson$BIDLO, johnson$PRC))
+summary(johnson.v <- garmanklassTA(johnson$OPENPRC, johnson$ASKHI, johnson$BIDLO, johnson$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(johnson$OPENPRC, johnson$ASKHI, johnson$BIDLO, johnson$PRC), ylab="GK volatility", main = "johnson Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(johnson[-1,]$date, as.data.frame(johnson.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/johnson.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -427,9 +479,14 @@ plot.ts(disney.p.t, ylim=c(80,160),xlab="2015-2019",main="disney Closing Prices 
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(disney$OPENPRC, disney$ASKHI, disney$BIDLO, disney$PRC))
+summary(disney.v <- garmanklassTA(disney$OPENPRC, disney$ASKHI, disney$BIDLO, disney$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(disney$OPENPRC, disney$ASKHI, disney$BIDLO, disney$PRC), ylab="GK volatility", main = "disney Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(disney[-1,]$date, as.data.frame(disney.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/disney.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -448,9 +505,14 @@ plot.ts(wellsfargo.p.t, ylim=c(40,70),xlab="2015-2019",main="wellsfargo Closing 
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(wellsfargo$OPENPRC, wellsfargo$ASKHI, wellsfargo$BIDLO, wellsfargo$PRC))
+summary(wellsfargo.v <- garmanklassTA(wellsfargo$OPENPRC, wellsfargo$ASKHI, wellsfargo$BIDLO, wellsfargo$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(wellsfargo$OPENPRC, wellsfargo$ASKHI, wellsfargo$BIDLO, wellsfargo$PRC), ylab="GK volatility", main = "wellsfargo Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(wellsfargo[-1,]$date, as.data.frame(wellsfargo.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/wellsfargo.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -470,9 +532,14 @@ plot.ts(jpmorgan.p.t, ylim=c(50,150),xlab="2015-2019",main="jpmorgan Closing Pri
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(jpmorgan$OPENPRC, jpmorgan$ASKHI, jpmorgan$BIDLO, jpmorgan$PRC))
+summary(jpmorgan.v <- garmanklassTA(jpmorgan$OPENPRC, jpmorgan$ASKHI, jpmorgan$BIDLO, jpmorgan$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(jpmorgan$OPENPRC, jpmorgan$ASKHI, jpmorgan$BIDLO, jpmorgan$PRC), ylab="GK volatility", main = "jpmorgan Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(jpmorgan[-1,]$date, as.data.frame(jpmorgan.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/jpmorgan.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -492,9 +559,14 @@ plot.ts(walmart.p.t, ylim=c(50,130),xlab="2015-2019",main="walmart Closing Price
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(walmart$OPENPRC, walmart$ASKHI, walmart$BIDLO, walmart$PRC))
+summary(walmart.v <- garmanklassTA(walmart$OPENPRC, walmart$ASKHI, walmart$BIDLO, walmart$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(walmart$OPENPRC, walmart$ASKHI, walmart$BIDLO, walmart$PRC), ylab="GK volatility", main = "walmart Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(walmart[-1,]$date, as.data.frame(walmart.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/walmart.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -515,9 +587,14 @@ plot.ts(intel.p.t, ylim=c(20,65),xlab="2015-2019",main="intel Closing Prices 01/
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(intel$OPENPRC, intel$ASKHI, intel$BIDLO, intel$PRC))
+summary(intel.v <- garmanklassTA(intel$OPENPRC, intel$ASKHI, intel$BIDLO, intel$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(intel$OPENPRC, intel$ASKHI, intel$BIDLO, intel$PRC), ylab="GK volatility", main = "intel Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(intel[-1,]$date, as.data.frame(intel.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/intel.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -538,9 +615,14 @@ plot.ts(bankofa.p.t, ylim=c(10,40),xlab="2015-2019",main="bankofa Closing Prices
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(bankofa$OPENPRC, bankofa$ASKHI, bankofa$BIDLO, bankofa$PRC))
+summary(bankofa.v <- garmanklassTA(bankofa$OPENPRC, bankofa$ASKHI, bankofa$BIDLO, bankofa$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(bankofa$OPENPRC, bankofa$ASKHI, bankofa$BIDLO, bankofa$PRC), ylab="GK volatility", main = "bankofa Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(bankofa[-1,]$date, as.data.frame(bankofa.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/bankofa.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -562,9 +644,14 @@ plot.ts(verizon.p.t, ylim=c(40,65),xlab="2015-2019",main="verizon Closing Prices
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(verizon$OPENPRC, verizon$ASKHI, verizon$BIDLO, verizon$PRC))
+summary(verizon.v <- garmanklassTA(verizon$OPENPRC, verizon$ASKHI, verizon$BIDLO, verizon$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(verizon$OPENPRC, verizon$ASKHI, verizon$BIDLO, verizon$PRC), ylab="GK volatility", main = "verizon Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(verizon[-1,]$date, as.data.frame(verizon.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/verizon.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -584,9 +671,14 @@ plot.ts(att.p.t, ylim=c(25,45),xlab="2015-2019",main="att Closing Prices 01/01/2
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(att$OPENPRC, att$ASKHI, att$BIDLO, att$PRC))
+summary(att.v <- garmanklassTA(att$OPENPRC, att$ASKHI, att$BIDLO, att$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(att$OPENPRC, att$ASKHI, att$BIDLO, att$PRC), ylab="GK volatility", main = "att Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(att[-1,]$date, as.data.frame(att.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/att.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -606,9 +698,14 @@ plot.ts(homedep.p.t, ylim=c(100,240),xlab="2015-2019",main="homedep Closing Pric
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(homedep$OPENPRC, homedep$ASKHI, homedep$BIDLO, homedep$PRC))
+summary(homedep.v <- garmanklassTA(homedep$OPENPRC, homedep$ASKHI, homedep$BIDLO, homedep$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(homedep$OPENPRC, homedep$ASKHI, homedep$BIDLO, homedep$PRC), ylab="GK volatility", main = "homedep Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(homedep[-1,]$date, as.data.frame(homedep.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/homedep.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -628,9 +725,13 @@ plot.ts(citi.p.t, ylim=c(30,85),xlab="2015-2019",main="citi Closing Prices 01/01
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(citi$OPENPRC, citi$ASKHI, citi$BIDLO, citi$PRC))
+summary(citi.v <- garmanklassTA(citi$OPENPRC, citi$ASKHI, citi$BIDLO, citi$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(citi$OPENPRC, citi$ASKHI, citi$BIDLO, citi$PRC), ylab="GK volatility", main = "citi Volatility 01/02/2015-12/31/2019")
+temp <- cbind(citi[-1,]$date, as.data.frame(citi.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/ibm.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
