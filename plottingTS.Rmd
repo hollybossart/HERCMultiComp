@@ -752,9 +752,14 @@ plot.ts(amazon.p.t, ylim=c(280,2040),xlab="2015-2019",main="amazon Closing Price
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(amazon$OPENPRC, amazon$ASKHI, amazon$BIDLO, amazon$PRC))
+summary(amazon.v <- garmanklassTA(amazon$OPENPRC, amazon$ASKHI, amazon$BIDLO, amazon$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(amazon$OPENPRC, amazon$ASKHI, amazon$BIDLO, amazon$PRC), ylab="GK volatility", main = "amazon Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(amazon[-1,]$date, as.data.frame(amazon.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/amazon.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -775,9 +780,14 @@ plot.ts(chinamob.p.t, ylim=c(35,76),xlab="2015-2019",main="China Mobile Closing 
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(chinamob$OPENPRC, chinamob$ASKHI, chinamob$BIDLO, chinamob$PRC))
+summary(chinamob.v <- garmanklassTA(chinamob$OPENPRC, chinamob$ASKHI, chinamob$BIDLO, chinamob$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(chinamob$OPENPRC, chinamob$ASKHI, chinamob$BIDLO, chinamob$PRC), ylab="GK volatility", main = "chinamob Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(chinamob[-1,]$date, as.data.frame(chinamob.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/chinamob.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -797,9 +807,14 @@ plot.ts(taiwan.p.t, ylim=c(18,60),xlab="2015-2019",main="Taiwan Semiconductors C
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(taiwan$OPENPRC, taiwan$ASKHI, taiwan$BIDLO, taiwan$PRC))
+summary(taiwan.v <- garmanklassTA(taiwan$OPENPRC, taiwan$ASKHI, taiwan$BIDLO, taiwan$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(taiwan$OPENPRC, taiwan$ASKHI, taiwan$BIDLO, taiwan$PRC), ylab="GK volatility", main = "taiwan Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(taiwan[-1,]$date, as.data.frame(taiwan.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/taiwan.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
@@ -816,13 +831,20 @@ summary(novartis.p.t)
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(novartis.p.t, ylim=c(65,110),xlab="2015-2019",main="novartis Closing Prices 01/01/2015-12/31/2019")
 
+
+
 ```
 
 #### Summary of Volatility Data
 ```{r, echo=FALSE}
-summary(garmanklassTA(novartis$OPENPRC, novartis$ASKHI, novartis$BIDLO, novartis$PRC))
+summary(novartis.v <- garmanklassTA(novartis$OPENPRC, novartis$ASKHI, novartis$BIDLO, novartis$PRC))
 par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(novartis$OPENPRC, novartis$ASKHI, novartis$BIDLO, novartis$PRC), ylab="GK volatility", main = "novartis Volatility 01/02/2015-12/31/2019")
+
+temp <- cbind(novartis[-1,]$date, as.data.frame(novartis.v))
+names(temp) <- c('date', 'volatility')
+write.csv(temp, "Data/novartis.csv", row.names = FALSE)
+rm(temp)
 
 ```
 
