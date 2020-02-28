@@ -10,7 +10,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+library(knitr)
 library(TTR)
 library(tidyverse)
 
@@ -945,4 +945,5 @@ par(mfrow=c(1,1), mex=0.75)
 plot.ts(garmanklassTA(netflix$OPENPRC, netflix$ASKHI, netflix$BIDLO, netflix$PRC), ylab="GK volatility", main = "netflix Volatility 01/02/2015-12/31/2019")
 
 ```
+
 
