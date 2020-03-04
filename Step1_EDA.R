@@ -1,20 +1,26 @@
 #*[-----------------------------------------------------------------------------------------------]*#
 #*[ Objectives : This program computes volatilityes and their changepoints.                       ]*#
-#*[ Last update: 02/28/2020                                                                       ]*#
+#*[ Last update: 03/06/2020                                                                       ]*#
 #*[ Author     : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
-### Setup data input and output directories
-WD.lib <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Codes/")
-WD.inp <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Data/")
-WD.out <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Work/")
+### Setup data input and output directories (Lee)
+# WD.lib <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Codes/")
+# WD.inp <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Data/")
+# WD.out <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Work/")
+
+
+### Setup data input and output directories (Bossart)
+WD.lib <- c("C:/Users/12088/Dropbox/Research/HERCMultiComp/R/")
+WD.inp <- c("C:/Users/12088/Dropbox/Research/HERCMultiComp/Data/")
+WD.out <- c("C:/Users/12088/Dropbox/Research/HERCMultiComp/Output/")
 
 ### Load the proposed GA code and Poisson likelihood funtions
 source(file=paste(WD.lib,"lib_volatilityfunctions.R",sep=""))
 
 ### Required packages
-library(TTR)
-library(tidyverse)
+library(TTR)                                            # Alternate volatility function volatility()
+library(tidyverse)                                      # for filter() 
 library(changepoint)                                    # PELT method (Killick, Fearnhead, & Eckley, JASA 2012)
 library(ecp)                                            # e.divisive (Matteson & James, JASA 2014) &
                                                         # e.cp3o (James & Matteson, arXiv 2015)
