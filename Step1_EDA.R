@@ -277,6 +277,11 @@ summary(cpt.PELT_v.netflix)                               # 44 changepoints dete
 
 t.PELT_v.netflix <- cpts(cpt.PELT_v.netflix)+1 
 
+cpt.PELT_v.unhealth <- cpt.mean(v.t_unhealth,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.unhealth)                              # 160 161 685 773 777 778 782 833 949 987 1003 1074 1077 1079 1226 1227  
+
+t.PELT_v.unhealth <- cpts(cpt.PELT_v.unhealth)+1 
+
 
 
 # Plotting volatility with change points
@@ -299,4 +304,11 @@ plot.ts(v.t_netflix,ylim=c(0,18),
         xlab="Year",ylab="GK volatility",main="Netflix Volatility 1/02/2015-12/31/2019")
 abline(v=time(v.t_netflix)[t.PELT_v.netflix],col="red",lty=2)
  
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)                               # united health plot with changepoints
+plot.ts(v.t_unhealth,ylim=c(0,18),
+        xlab="Year",ylab="GK volatility",main="United Health Volatility 1/02/2015-12/31/2019")
+abline(v=time(v.t_unhealth)[t.PELT_v.unhealth],col="red",lty=2)
+
+
 
