@@ -74,15 +74,7 @@ n.day                                                   # 251.6
 p.t_oracle     <- ts(data.oracle$PRC,     start=c(2015,1,1), frequency=n.day)
 p.t_microsoft  <- ts(data.microsoft$PRC,  start=c(2015,1,1), frequency=n.day)
 p.t_exxon      <- ts(data.exxon$PRC,      start=c(2015,1,1), frequency=n.day)
-
-
 p.t_homedep    <- ts(data.homedep$PRC,    start=c(2015,1,1), frequency=n.day)
-
-
-
-
-
-
 
 
 
@@ -105,12 +97,10 @@ par(mfrow=c(1,1),mex=0.75)
 plot.ts(p.t_exxon,ylim=c(40,120),xlab="Year",main="Exxon Closing Prices 1/01/2015-12/31/2019")
 
 
-
 summary(p.t_homedep)
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(p.t_homedep,ylim=c(100,250),xlab="Year",main="Home Depot Closing Prices 1/01/2015-12/31/2019")
-
 
 
 
@@ -132,8 +122,36 @@ v.t_homedep    <- garmanklassTA(open =data.homedep$OPENPRC,
                                 low  =data.homedep$BIDLO,
                                 close=data.homedep$PRC)
 
+v.t_netflix   <- garmanklassTA(open =data.netflix$OPENPRC,
+                                high =data.netflix$ASKHI,
+                                low  =data.netflix$BIDLO,
+                                close=data.netflix$PRC)
+
+v.t_unhealth  <- garmanklassTA(open =data.unhealth$OPENPRC,
+                                 high =data.unhealth$ASKHI,
+                                 low  =data.unhealth$BIDLO,
+                                 close=data.unhealth$PRC)
+
+v.t_visa      <- garmanklassTA(open =data.visa$OPENPRC,
+                                 high =data.visa$ASKHI,
+                                 low  =data.visa$BIDLO,
+                                 close=data.visa$PRC)
+
+v.t_taiwan    <- garmanklassTA(open =data.taiwan$OPENPRC,
+                             high =data.taiwan$ASKHI,
+                             low  =data.taiwan$BIDLO,
+                             close=data.taiwan$PRC)
+
+v.t_amazon    <- garmanklassTA(open =data.amazon$OPENPRC,
+                               high =data.amazon$ASKHI,
+                               low  =data.amazon$BIDLO,
+                               close=data.amazon$PRC)
 
 
+v.t_bankofa    <- garmanklassTA(open =data.bankofa$OPENPRC,
+                               high =data.bankofa$ASKHI,
+                               low  =data.bankofa$BIDLO,
+                               close=data.bankofa$PRC)
 
 length(p.t_oracle)                               # 1258
 length(v.t_oracle)                               # 1257 [CAUTION] We might need to keep an eye on this for changepoints
@@ -164,12 +182,12 @@ length(w.t_oracle)                               # 1258 [CAUTION] This does not 
 
 
 ### Volitility time plots (v.t and w.t)          # [Q] which one should we use?
-summary(w.t_oracle)
+summary(w.t_oracle)                              # seems TTR is scaled down version of garmanKlassTA 
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(v.t_oracle,ylim=c(0,2),
         xlab="Year",ylab="GK volatility",main="Oracle Volatility 1/02/2015-12/31/2019")
-lines(w.t_oracle,col="blue")
+lines(w.t_oracle,col="blue")                               
 
 summary(w.t_microsoft)
 dev.new(width=12,height=6)
@@ -232,14 +250,14 @@ summary(cpt.PELT_w.homedep)                               # no changepoints dete
 
 
 
-dev.new(width=12,height=6)
+dev.new(width=12,height=6)                                # microsoft plot with changepoints
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(v.t_microsoft,ylim=c(0,5),
         xlab="Year",ylab="GK volatility",main="Microsoft Volatility 1/02/2015-12/31/2019")
 abline(v=time(v.t_microsoft)[t.PELT_v.microsoft],col="red",lty=2) 
 
 dev.new(width=12,height=6)
-par(mfrow=c(1,1),mex=0.75)
+par(mfrow=c(1,1),mex=0.75)                               # home depot plot with changepoints
 plot.ts(v.t_homedep,ylim=c(0,18),
         xlab="Year",ylab="GK volatility",main="Home Depot Volatility 1/02/2015-12/31/2019")
 abline(v=time(v.t_homedep)[t.PELT_w.homedep],col="red",lty=2)
