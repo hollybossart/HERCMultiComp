@@ -153,6 +153,29 @@ v.t_bankofa    <- garmanklassTA(open =data.bankofa$OPENPRC,
                                low  =data.bankofa$BIDLO,
                                close=data.bankofa$PRC)
 
+v.t_intel    <- garmanklassTA(open =data.intel$OPENPRC,
+                               high =data.intel$ASKHI,
+                               low  =data.intel$BIDLO,
+                               close=data.intel$PRC)
+
+
+v.t_alibaba    <- garmanklassTA(open =data.alibaba$OPENPRC,
+                               high =data.alibaba$ASKHI,
+                               low  =data.alibaba$BIDLO,
+                               close=data.alibaba$PRC)
+
+v.t_exxon    <- garmanklassTA(open =data.exxon$OPENPRC,
+                                high =data.exxon$ASKHI,
+                                low  =data.exxon$BIDLO,
+                                close=data.exxon$PRC)
+
+v.t_microsoft    <- garmanklassTA(open =data.microsoft$OPENPRC,
+                              high =data.microsoft$ASKHI,
+                              low  =data.microsoft$BIDLO,
+                              close=data.microsoft$PRC) 
+                                                           
+
+
 length(p.t_oracle)                               # 1258
 length(v.t_oracle)                               # 1257 [CAUTION] We might need to keep an eye on this for changepoints
 
