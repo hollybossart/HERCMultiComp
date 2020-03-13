@@ -274,13 +274,28 @@ summary(cpt.PELT_w.homedep)                               # no changepoints dete
 
 cpt.PELT_v.netflix <- cpt.mean(v.t_netflix,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.netflix)                               # 44 changepoints detected, seems high
-
 t.PELT_v.netflix <- cpts(cpt.PELT_v.netflix)+1 
 
 cpt.PELT_v.unhealth <- cpt.mean(v.t_unhealth,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.unhealth)                              # 160 161 685 773 777 778 782 833 949 987 1003 1074 1077 1079 1226 1227  
-
 t.PELT_v.unhealth <- cpts(cpt.PELT_v.unhealth)+1 
+
+cpt.PELT_v.visa <- cpt.mean(v.t_visa,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.visa)                                 # 51 160 161 777 782 946 1009
+t.PELT_v.visa <- cpts(cpt.PELT_v.visa)+1 
+
+cpt.PELT_v.taiwan <- cpt.mean(v.t_taiwan,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.taiwan)                                # no changepoints detected
+
+cpt.PELT_v.amazon <- cpt.mean(v.t_amazon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.amazon)                               # 331 change points detected    
+t.PELT_v.amazon <- cpts(cpt.PELT_v.amazon)+1 
+
+
+
+
+
+
 
 
 
@@ -292,10 +307,10 @@ plot.ts(v.t_microsoft,ylim=c(0,5),
 abline(v=time(v.t_microsoft)[t.PELT_v.microsoft],col="red",lty=2) 
 
 dev.new(width=12,height=6)
-par(mfrow=c(1,1),mex=0.75)                               # home depot plot with changepoints
-plot.ts(v.t_homedep,ylim=c(0,18),
-        xlab="Year",ylab="GK volatility",main="Home Depot Volatility 1/02/2015-12/31/2019")
-abline(v=time(v.t_homedep)[t.PELT_w.homedep],col="red",lty=2) 
+par(mfrow=c(1,1),mex=0.75)                               # visa plot with changepoints
+plot.ts(v.t_visa,ylim=c(0,18),
+        xlab="Year",ylab="GK volatility",main="Visa Volatility 1/02/2015-12/31/2019")
+abline(v=time(v.t_visa)[t.PELT_w.visa],col="red",lty=2) 
 
 
 dev.new(width=12,height=6)
@@ -311,4 +326,9 @@ plot.ts(v.t_unhealth,ylim=c(0,18),
 abline(v=time(v.t_unhealth)[t.PELT_v.unhealth],col="red",lty=2)
 
 
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)                               # visa plot with changepoints
+plot.ts(v.t_visa,ylim=c(0,18),
+        xlab="Year",ylab="GK volatility",main="Visa Volatility 1/02/2015-12/31/2019")
+abline(v=time(v.t_visa)[t.PELT_v.visa],col="red",lty=2)
 
