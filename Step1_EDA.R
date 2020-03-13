@@ -105,6 +105,7 @@ plot.ts(p.t_homedep,ylim=c(100,250),xlab="Year",main="Home Depot Closing Prices 
 
 
 ### Garman & Klass volatility series using garmanklassTA: v.t
+### not all companies are included here from the original 30. [Q] should I do this for all 30?
 v.t_oracle     <- garmanklassTA(open =data.oracle$OPENPRC,
                                 high =data.oracle$ASKHI,
                                 low  =data.oracle$BIDLO,
@@ -220,7 +221,6 @@ plot.ts(v.t_microsoft,ylim=c(0,5),
 lines(w.t_microsoft,col="blue")
 
 
-
 summary(w.t_homedep)
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
@@ -258,8 +258,6 @@ cpt.PELT_w.microsoft <- cpt.mean(w.t_microsoft,penalty="MBIC",method="PELT",test
 summary(cpt.PELT_w.microsoft)                             # no changepoints detected
 
 
-
-
 cpt.PELT_v.homedep <- cpt.mean(v.t_homedep,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.homedep)
 
@@ -271,8 +269,17 @@ data.microsoft[t.PELT_w.homedep,]
 cpt.PELT_w.homedep <- cpt.mean(w.t_homedep,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_w.homedep)                               # no changepoints detected
 
+                                                          # changepoint calculation only with garmanKlassTA
+                                                          # [Q] should I implement this as well with TTR function
+
+cpt.PELT_v.netflix <- cpt.mean(v.t_netflix,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.netflix)                               # 44 changepoints detected, seems high
+
+t.PELT_v.netflix <- cpts(cpt.PELT_v.netflix)+1 
 
 
+
+# Plotting volatility with change points
 dev.new(width=12,height=6)                                # microsoft plot with changepoints
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(v.t_microsoft,ylim=c(0,5),
@@ -283,9 +290,13 @@ dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)                               # home depot plot with changepoints
 plot.ts(v.t_homedep,ylim=c(0,18),
         xlab="Year",ylab="GK volatility",main="Home Depot Volatility 1/02/2015-12/31/2019")
-abline(v=time(v.t_homedep)[t.PELT_w.homedep],col="red",lty=2)
+abline(v=time(v.t_homedep)[t.PELT_w.homedep],col="red",lty=2) 
 
 
-
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)                               # netflix plot with changepoints
+plot.ts(v.t_netflix,ylim=c(0,18),
+        xlab="Year",ylab="GK volatility",main="Netflix Volatility 1/02/2015-12/31/2019")
+abline(v=time(v.t_netflix)[t.PELT_v.netflix],col="red",lty=2)
  
 
