@@ -1,6 +1,6 @@
 #*[-----------------------------------------------------------------------------------------------]*#
-#*[ Objectives : This program computes volatilityes and their changepoints.                       ]*#
-#*[ Last update: 03/06/2020                                                                       ]*#
+#*[ Objectives : This program computes volatilities and their changepoints.                       ]*#
+#*[ Last update: 03/13/2020                                                                       ]*#
 #*[ Author     : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
@@ -32,7 +32,7 @@ comnames <- as.data.frame(unique(data.OHLC$COMNAM))
 colnames(comnames) <- "Company"
 comnames                                                # 30 companies
 
-### Indivisual company data
+### Individual company data
 data.oracle     <- filter(data.OHLC, COMNAM == 'ORACLE CORP')
 data.microsoft  <- filter(data.OHLC, COMNAM == 'MICROSOFT CORP')
 data.exxon      <- filter(data.OHLC, COMNAM == 'EXXON MOBIL CORP')
