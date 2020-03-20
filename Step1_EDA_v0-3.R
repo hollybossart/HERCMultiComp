@@ -105,6 +105,7 @@ p.t_busch      <- ts(data.busch$PRC,      start=c(2015,1,1), frequency=n.day)
 
 
 ### Time plot of closing prices for all 30 companies over 1/01/2015-12/31/2019
+### NOTE: when comparing two TS plots, notice that scale is dependent on mins/maxs of each TS 
 summary(p.t_oracle)
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
@@ -123,7 +124,72 @@ plot.ts(p.t_exxon,ylim=c(40,120),xlab="Year",main="Exxon Closing Prices 1/01/201
 summary(p.t_gm)
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
-plot.ts(p.t_homedep,ylim=c(100,250),xlab="Year",main="Home Depot Closing Prices 1/01/2015-12/31/2019")
+plot.ts(p.t_gm,ylim=c(25,50),xlab="Year",main="General Motors Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_ibm)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_ibm,ylim=c(100,190),xlab="Year",main="IBM Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_facebook)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_facebook,ylim=c(75,220),xlab="Year",main="Facebook Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_chevron)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_chevron,ylim=c(65,135),xlab="Year",main="Chevron Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_apple)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_apple,ylim=c(85,300),xlab="Year",main="Apple Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_alibaba)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_alibaba,ylim=c(55,220),xlab="Year",main="Alibaba Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_pg)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_pg,ylim=c(65,130),xlab="Year",main="Procter & Gamble Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_pfizer)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_pfizer,ylim=c(25,50),xlab="Year",main="Pfizer Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_johnson)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_johnson,ylim=c(85,150),xlab="Year",main="Johnson & Johnson Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_disney)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_disney,ylim=c(85,155),xlab="Year",main="Disney Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_wellsfargo)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_wellsfargo,ylim=c(40,70),xlab="Year",main="Wells Fargo Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_jpmorgan)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_jpmorgan,ylim=c(50,140),xlab="Year",main="JP Morgan Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_walmart)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_walmart,ylim=c(55,125),xlab="Year",main="Walmart Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_intel)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_intel,ylim=c(20,65),xlab="Year",main="Intel Closing Prices 1/01/2015-12/31/2019")
 
 
 ### Garman & Klass volatility series using garmanklassTA: v.t
@@ -199,47 +265,7 @@ summary(v.t_homedep)
 
 
 
-
-### Garman & Klass volatility series using TTR volatility: w.t
-w.t_oracle     <- ts(volatility(OHLC=data.oracle[,c(6,4,3,5)],n=1,calc="garman.klass",N=260),
-                     start=c(2015,1,1),frequency=n.day)
-
-w.t_microsoft  <- ts(volatility(OHLC=data.microsoft[,c(6,4,3,5)],n=1,calc="garman.klass",N=260),
-                     start=c(2015,1,1),frequency=n.day)
-
-w.t_homedep    <- ts(volatility(OHLC=data.homedep[,c(6,4,3,5)],n=1,calc="garman.klass",N=260),
-                     start=c(2015,1,1),frequency=n.day)
-
-
-
-length(w.t_oracle)                               # 1258 [CAUTION] This does not produce missing when n=1
-
-
-
-
-### Volitility time plots (v.t and w.t)          # [Q] which one should we use?
-summary(w.t_oracle)                              # seems TTR is scaled down version of garmanKlassTA 
-dev.new(width=12,height=6)
-par(mfrow=c(1,1),mex=0.75)
-plot.ts(v.t_oracle,ylim=c(0,2),
-        xlab="Year",ylab="GK volatility",main="Oracle Volatility 1/02/2015-12/31/2019")
-lines(w.t_oracle,col="blue")                               
-
-summary(w.t_microsoft)
-dev.new(width=12,height=6)
-par(mfrow=c(1,1),mex=0.75)
-plot.ts(v.t_microsoft,ylim=c(0,5),
-        xlab="Year",ylab="GK volatility",main="Microsoft Volatility 1/02/2015-12/31/2019")
-lines(w.t_microsoft,col="blue")
-
-
-summary(w.t_homedep)
-dev.new(width=12,height=6)
-par(mfrow=c(1,1),mex=0.75)
-plot.ts(v.t_homedep,ylim=c(0,18),
-        xlab="Year",ylab="GK volatility",main="Home Depot Volatility 1/02/2015-12/31/2019")
-lines(w.t_homedep,col="blue")                     # [Note] outliers around summer of 2015
-
+### Volitility time plots (v.t)
 
 
 
