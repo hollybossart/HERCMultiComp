@@ -5,10 +5,9 @@
 #*[-----------------------------------------------------------------------------------------------]*#
 
 ### Setup data input and output directories (Lee)
-# WD.lib <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Codes/")
-# WD.inp <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Data/")
-# WD.out <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Work/")
-
+WD.lib <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Codes/")
+WD.inp <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Data/")
+WD.out <- c("L:/Home/JaechoulLee/!1Research/Paper/ESS/P04_MC/S3_HERC/Work/")
 
 ### Setup data input and output directories (Bossart)
 WD.lib <- c("C:/Users/12088/Dropbox/Research/HERCMultiComp/R/")
@@ -76,10 +75,6 @@ p.t_microsoft  <- ts(data.microsoft$PRC,  start=c(2015,1,1), frequency=n.day)
 p.t_exxon      <- ts(data.exxon$PRC,      start=c(2015,1,1), frequency=n.day)
 p.t_homedep    <- ts(data.homedep$PRC,    start=c(2015,1,1), frequency=n.day)
 
-
-
-
-
 ### Time plot of closing prices over 1/01/2015-12/31/2019
 summary(p.t_oracle)
 dev.new(width=12,height=6)
@@ -96,16 +91,13 @@ dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(p.t_exxon,ylim=c(40,120),xlab="Year",main="Exxon Closing Prices 1/01/2015-12/31/2019")
 
-
 summary(p.t_homedep)
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(p.t_homedep,ylim=c(100,250),xlab="Year",main="Home Depot Closing Prices 1/01/2015-12/31/2019")
 
 
-
 ### Garman & Klass volatility series using garmanklassTA: v.t
-### not all companies are included here from the original 30. [Q] should I do this for all 30?
 v.t_oracle     <- garmanklassTA(open =data.oracle$OPENPRC,
                                 high =data.oracle$ASKHI,
                                 low  =data.oracle$BIDLO,
@@ -115,8 +107,6 @@ v.t_microsoft  <- garmanklassTA(open =data.microsoft$OPENPRC,
                                 high =data.microsoft$ASKHI,
                                 low  =data.microsoft$BIDLO,
                                 close=data.microsoft$PRC)
-
-
 
 v.t_homedep    <- garmanklassTA(open =data.homedep$OPENPRC,
                                 high =data.homedep$ASKHI,
@@ -148,7 +138,6 @@ v.t_amazon    <- garmanklassTA(open =data.amazon$OPENPRC,
                                low  =data.amazon$BIDLO,
                                close=data.amazon$PRC)
 
-
 v.t_bankofa    <- garmanklassTA(open =data.bankofa$OPENPRC,
                                high =data.bankofa$ASKHI,
                                low  =data.bankofa$BIDLO,
@@ -158,7 +147,6 @@ v.t_intel    <- garmanklassTA(open =data.intel$OPENPRC,
                                high =data.intel$ASKHI,
                                low  =data.intel$BIDLO,
                                close=data.intel$PRC)
-
 
 v.t_alibaba    <- garmanklassTA(open =data.alibaba$OPENPRC,
                                high =data.alibaba$ASKHI,
@@ -170,10 +158,6 @@ v.t_exxon    <- garmanklassTA(open =data.exxon$OPENPRC,
                                 low  =data.exxon$BIDLO,
                                 close=data.exxon$PRC)
 
-v.t_microsoft    <- garmanklassTA(open =data.microsoft$OPENPRC,
-                              high =data.microsoft$ASKHI,
-                              low  =data.microsoft$BIDLO,
-                              close=data.microsoft$PRC) 
                                                            
 
 
@@ -182,8 +166,9 @@ length(v.t_oracle)                               # 1257 [CAUTION] We might need 
 
 summary(v.t_oracle)
 summary(v.t_microsoft)
-
 summary(v.t_homedep)
+
+
 
 
 ### Garman & Klass volatility series using TTR volatility: w.t
@@ -192,8 +177,6 @@ w.t_oracle     <- ts(volatility(OHLC=data.oracle[,c(6,4,3,5)],n=1,calc="garman.k
 
 w.t_microsoft  <- ts(volatility(OHLC=data.microsoft[,c(6,4,3,5)],n=1,calc="garman.klass",N=260),
                      start=c(2015,1,1),frequency=n.day)
-
-
 
 w.t_homedep    <- ts(volatility(OHLC=data.homedep[,c(6,4,3,5)],n=1,calc="garman.klass",N=260),
                      start=c(2015,1,1),frequency=n.day)
@@ -226,7 +209,7 @@ dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(v.t_homedep,ylim=c(0,18),
         xlab="Year",ylab="GK volatility",main="Home Depot Volatility 1/02/2015-12/31/2019")
-lines(w.t_homedep,col="blue")
+lines(w.t_homedep,col="blue")                     # [Note] outliers around summer of 2015
 
 
 
@@ -243,9 +226,6 @@ acf(w.t_oracle,lag.max=100,na.action=na.pass)
 cpt.PELT_v.oracle <- cpt.mean(v.t_oracle,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.oracle)                                # no changepoints detected
 
-cpt.PELT_w.oracle <- cpt.mean(w.t_oracle,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_w.oracle)                                # no changepoints detected
-
 cpt.PELT_v.microsoft <- cpt.mean(v.t_microsoft,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.microsoft)
 
@@ -254,25 +234,15 @@ t.PELT_v.microsoft                                        # 775
 
 data.microsoft[t.PELT_v.microsoft,]                       # date 20180130
 
-cpt.PELT_w.microsoft <- cpt.mean(w.t_microsoft,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_w.microsoft)                             # no changepoints detected
-
-
 cpt.PELT_v.homedep <- cpt.mean(v.t_homedep,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.homedep)
 
-t.PELT_w.homedep <- cpts(cpt.PELT_v.homedep)+1            # add 1 to keep changepoint time meaning same
-t.PELT_w.homedep                                          # 161  162  774  783  946 1005
+t.PELT_v.homedep <- cpts(cpt.PELT_v.homedep)+1            # add 1 to keep changepoint time meaning same
+t.PELT_v.homedep                                          # 161  162  774  783  946 1005
 
-data.microsoft[t.PELT_w.homedep,]
+data.microsoft[t.PELT_v.homedep,]
 
-cpt.PELT_w.homedep <- cpt.mean(w.t_homedep,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_w.homedep)                               # no changepoints detected
-
-                                                          # changepoint calculation only with garmanKlassTA
-                                                          # [Q] should I implement this as well with TTR function
-
-cpt.PELT_v.netflix <- cpt.mean(v.t_netflix,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+cpt.PELT_v.netflix <- cpt.mean(v.t_netflix,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=260)
 summary(cpt.PELT_v.netflix)                               # 44 changepoints detected, seems high
 t.PELT_v.netflix <- cpts(cpt.PELT_v.netflix)+1 
 
@@ -292,9 +262,25 @@ summary(cpt.PELT_v.amazon)                               # 331 change points det
 t.PELT_v.amazon <- cpts(cpt.PELT_v.amazon)+1 
 
 
+cpt.PELT_v.bankofa <- cpt.mean(v.t_bankofa,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.bankofa)                               # no change points detected  
 
 
+cpt.PELT_v.intel <- cpt.mean(v.t_intel,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.intel)                               # no change points detected  
 
+
+cpt.PELT_v.alibaba <- cpt.mean(v.t_alibaba,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.alibaba)                               # 611 614 775 782 1026  
+t.PELT_v.alibaba <- cpts(cpt.PELT_v.alibaba)+1
+
+
+cpt.PELT_v.exxon <- cpt.mean(v.t_exxon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.exxon)                               # no changepoints detected 
+
+
+cpt.PELT_v.microsoft <- cpt.mean(v.t_microsoft,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.microsoft)                          # CAUTION 774 changepoints detected
 
 
 
@@ -310,7 +296,7 @@ dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)                               # visa plot with changepoints
 plot.ts(v.t_visa,ylim=c(0,18),
         xlab="Year",ylab="GK volatility",main="Visa Volatility 1/02/2015-12/31/2019")
-abline(v=time(v.t_visa)[t.PELT_w.visa],col="red",lty=2) 
+abline(v=time(v.t_visa)[t.PELT_v.visa],col="red",lty=2) 
 
 
 dev.new(width=12,height=6)
@@ -327,8 +313,14 @@ abline(v=time(v.t_unhealth)[t.PELT_v.unhealth],col="red",lty=2)
 
 
 dev.new(width=12,height=6)
-par(mfrow=c(1,1),mex=0.75)                               # visa plot with changepoints
-plot.ts(v.t_visa,ylim=c(0,18),
-        xlab="Year",ylab="GK volatility",main="Visa Volatility 1/02/2015-12/31/2019")
-abline(v=time(v.t_visa)[t.PELT_v.visa],col="red",lty=2)
+par(mfrow=c(1,1),mex=0.75)                               # Amazon plot with changepoints
+plot.ts(v.t_amazon,ylim=c(0,18),
+        xlab="Year",ylab="GK volatility",main="Amazon Volatility 1/02/2015-12/31/2019")
+abline(v=time(v.t_amazon)[t.PELT_v.amazon],col="red",lty=2)
 
+
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)                               # alibaba plot with changepoints
+plot.ts(v.t_alibaba,ylim=c(0,18),
+        xlab="Year",ylab="GK volatility",main="Alibaba Volatility 1/02/2015-12/31/2019")
+abline(v=time(v.t_alibaba)[t.PELT_v.alibaba],col="red",lty=2)
