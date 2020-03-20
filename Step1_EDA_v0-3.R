@@ -357,41 +357,80 @@ v.t_bankofa    <- garmanklassTA(open =data.bankofa$OPENPRC,
                                 close=data.bankofa$PRC)
 
 
+v.t_verizon    <- garmanklassTA(open =data.verizon$OPENPRC,
+                                high =data.verizon$ASKHI,
+                                low  =data.verizon$BIDLO,
+                                close=data.verizon$PRC)
+
+v.t_att        <- garmanklassTA(open =data.att$OPENPRC,
+                                high =data.att$ASKHI,
+                                low  =data.att$BIDLO,
+                                close=data.att$PRC)
+
 v.t_homedep    <- garmanklassTA(open =data.homedep$OPENPRC,
                                 high =data.homedep$ASKHI,
                                 low  =data.homedep$BIDLO,
                                 close=data.homedep$PRC)
 
-v.t_netflix   <- garmanklassTA(open =data.netflix$OPENPRC,
+
+v.t_citi       <- garmanklassTA(open =data.citi$OPENPRC,
+                                high =data.citi$ASKHI,
+                                low  =data.citi$BIDLO,
+                                close=data.citi$PRC)
+
+
+v.t_amazon     <- garmanklassTA(open =data.amazon$OPENPRC,
+                                high =data.amazon$ASKHI,
+                                low  =data.amazon$BIDLO,
+                                close=data.amazon$PRC)
+
+
+
+v.t_chinamob   <- garmanklassTA(open =data.chinamob$OPENPRC,
+                                high =data.chinamob$ASKHI,
+                                low  =data.chinamob$BIDLO,
+                                close=data.chinamob$PRC)
+
+
+v.t_taiwan     <- garmanklassTA(open =data.taiwan$OPENPRC,
+                                high =data.taiwan$ASKHI,
+                                low  =data.taiwan$BIDLO,
+                                close=data.taiwan$PRC)
+
+v.t_novartis   <- garmanklassTA(open =data.novartis$OPENPRC,
+                                high =data.novartis$ASKHI,
+                                low  =data.novartis$BIDLO,
+                                close=data.novartis$PRC)
+
+
+
+v.t_netflix    <- garmanklassTA(open =data.netflix$OPENPRC,
                                 high =data.netflix$ASKHI,
                                 low  =data.netflix$BIDLO,
                                 close=data.netflix$PRC)
 
-v.t_unhealth  <- garmanklassTA(open =data.unhealth$OPENPRC,
-                                 high =data.unhealth$ASKHI,
-                                 low  =data.unhealth$BIDLO,
-                                 close=data.unhealth$PRC)
+v.t_visa       <- garmanklassTA(open =data.visa$OPENPRC,
+                                high =data.visa$ASKHI,
+                                low  =data.visa$BIDLO,
+                                close=data.visa$PRC)
 
-v.t_visa      <- garmanklassTA(open =data.visa$OPENPRC,
-                                 high =data.visa$ASKHI,
-                                 low  =data.visa$BIDLO,
-                                 close=data.visa$PRC)
+v.t_unhealth   <- garmanklassTA(open =data.unhealth$OPENPRC,
+                                high =data.unhealth$ASKHI,
+                                low  =data.unhealth$BIDLO,
+                                close=data.unhealth$PRC)
 
-v.t_taiwan    <- garmanklassTA(open =data.taiwan$OPENPRC,
-                             high =data.taiwan$ASKHI,
-                             low  =data.taiwan$BIDLO,
-                             close=data.taiwan$PRC)
 
-v.t_amazon    <- garmanklassTA(open =data.amazon$OPENPRC,
-                               high =data.amazon$ASKHI,
-                               low  =data.amazon$BIDLO,
-                               close=data.amazon$PRC)
+v.t_busch      <- garmanklassTA(open =data.busch$OPENPRC,
+                                high =data.busch$ASKHI,
+                                low  =data.busch$BIDLO,
+                                close=data.busch$PRC)
+
 
                                                            
 
-
-length(p.t_oracle)                               # 1258
-length(v.t_oracle)                               # 1257 [CAUTION] We might need to keep an eye on this for changepoints
+# Checking lengths of the volatility TS and the price TS
+length(p.t_oracle)                                           # 1258
+length(v.t_oracle)                                           # 1257 [CAUTION] We might need to keep an eye on this for changepoints
 
 summary(v.t_oracle)
 summary(v.t_microsoft)
