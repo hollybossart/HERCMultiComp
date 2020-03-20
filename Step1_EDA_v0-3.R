@@ -263,10 +263,99 @@ v.t_oracle     <- garmanklassTA(open =data.oracle$OPENPRC,
                                 low  =data.oracle$BIDLO,
                                 close=data.oracle$PRC)
 
+
 v.t_microsoft  <- garmanklassTA(open =data.microsoft$OPENPRC,
                                 high =data.microsoft$ASKHI,
                                 low  =data.microsoft$BIDLO,
                                 close=data.microsoft$PRC)
+
+
+v.t_exxon      <- garmanklassTA(open =data.exxon$OPENPRC,
+                                high =data.exxon$ASKHI,
+                                low  =data.exxon$BIDLO,
+                                close=data.exxon$PRC)
+
+
+v.t_gm         <- garmanklassTA(open =data.gm$OPENPRC,
+                                high =data.gm$ASKHI,
+                                low  =data.gm$BIDLO,
+                                close=data.gm$PRC)
+
+
+v.t_ibm        <- garmanklassTA(open =data.ibm$OPENPRC,
+                                high =data.ibm$ASKHI,
+                                low  =data.ibm$BIDLO,
+                                close=data.ibm$PRC)
+
+v.t_facebook   <- garmanklassTA(open =data.facebook$OPENPRC,
+                                high =data.facebook$ASKHI,
+                                low  =data.facebook$BIDLO,
+                                close=data.facebook$PRC)
+
+v.t_chevron    <- garmanklassTA(open =data.chevron$OPENPRC,
+                                high =data.chevron$ASKHI,
+                                low  =data.chevron$BIDLO,
+                                close=data.chevron$PRC)
+
+v.t_apple      <- garmanklassTA(open =data.apple$OPENPRC,
+                                high =data.apple$ASKHI,
+                                low  =data.apple$BIDLO,
+                                close=data.apple$PRC)
+
+v.t_alibaba    <- garmanklassTA(open =data.alibaba$OPENPRC,
+                                high =data.alibaba$ASKHI,
+                                low  =data.alibaba$BIDLO,
+                                close=data.alibaba$PRC)
+
+v.t_pg         <- garmanklassTA(open =data.pg$OPENPRC,
+                                high =data.pg$ASKHI,
+                                low  =data.pg$BIDLO,
+                                close=data.pg$PRC)
+
+v.t_pfizer     <- garmanklassTA(open =data.pfizer$OPENPRC,
+                                high =data.pfizer$ASKHI,
+                                low  =data.pfizer$BIDLO,
+                                close=data.pfizer$PRC)
+
+
+v.t_johnson    <- garmanklassTA(open =data.johnson$OPENPRC,
+                                high =data.johnson$ASKHI,
+                                low  =data.johnson$BIDLO,
+                                close=data.johnson$PRC)
+
+v.t_disney     <- garmanklassTA(open =data.disney$OPENPRC,
+                                high =data.disney$ASKHI,
+                                low  =data.disney$BIDLO,
+                                close=data.disney$PRC)
+
+
+v.t_wellsfargo <- garmanklassTA(open =data.wellsfargo$OPENPRC,
+                                high =data.wellsfargo$ASKHI,
+                                low  =data.wellsfargo$BIDLO,
+                                close=data.wellsfargo$PRC)
+
+
+v.t_jpmorgan   <- garmanklassTA(open =data.jpmorgan$OPENPRC,
+                                high =data.jpmorgan$ASKHI,
+                                low  =data.jpmorgan$BIDLO,
+                                close=data.jpmorgan$PRC)
+
+v.t_walmart    <- garmanklassTA(open =data.walmart$OPENPRC,
+                                high =data.walmart$ASKHI,
+                                low  =data.walmart$BIDLO,
+                                close=data.walmart$PRC)
+
+v.t_intel      <- garmanklassTA(open =data.intel$OPENPRC,
+                                high =data.intel$ASKHI,
+                                low  =data.intel$BIDLO,
+                                close=data.intel$PRC)
+
+
+v.t_bankofa    <- garmanklassTA(open =data.bankofa$OPENPRC,
+                                high =data.bankofa$ASKHI,
+                                low  =data.bankofa$BIDLO,
+                                close=data.bankofa$PRC)
+
 
 v.t_homedep    <- garmanklassTA(open =data.homedep$OPENPRC,
                                 high =data.homedep$ASKHI,
@@ -297,26 +386,6 @@ v.t_amazon    <- garmanklassTA(open =data.amazon$OPENPRC,
                                high =data.amazon$ASKHI,
                                low  =data.amazon$BIDLO,
                                close=data.amazon$PRC)
-
-v.t_bankofa    <- garmanklassTA(open =data.bankofa$OPENPRC,
-                               high =data.bankofa$ASKHI,
-                               low  =data.bankofa$BIDLO,
-                               close=data.bankofa$PRC)
-
-v.t_intel    <- garmanklassTA(open =data.intel$OPENPRC,
-                               high =data.intel$ASKHI,
-                               low  =data.intel$BIDLO,
-                               close=data.intel$PRC)
-
-v.t_alibaba    <- garmanklassTA(open =data.alibaba$OPENPRC,
-                               high =data.alibaba$ASKHI,
-                               low  =data.alibaba$BIDLO,
-                               close=data.alibaba$PRC)
-
-v.t_exxon    <- garmanklassTA(open =data.exxon$OPENPRC,
-                                high =data.exxon$ASKHI,
-                                low  =data.exxon$BIDLO,
-                                close=data.exxon$PRC)
 
                                                            
 
