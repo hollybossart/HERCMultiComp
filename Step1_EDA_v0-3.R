@@ -96,7 +96,7 @@ p.t_citi       <- ts(data.citi$PRC,       start=c(2015,1,1), frequency=n.day)
 p.t_amazon     <- ts(data.amazon$PRC,     start=c(2015,1,1), frequency=n.day)
 p.t_chinamob   <- ts(data.chinamob$PRC,   start=c(2015,1,1), frequency=n.day)
 p.t_taiwan     <- ts(data.taiwan$PRC,     start=c(2015,1,1), frequency=n.day)
-p.t_novartis   <- ts(data.novartisPRC,    start=c(2015,1,1), frequency=n.day)
+p.t_novartis   <- ts(data.novartis$PRC,   start=c(2015,1,1), frequency=n.day)
 p.t_netflix    <- ts(data.netflix$PRC,    start=c(2015,1,1), frequency=n.day)
 p.t_visa       <- ts(data.visa$PRC,       start=c(2015,1,1), frequency=n.day)
 p.t_unhealth   <- ts(data.unhealth$PRC,   start=c(2015,1,1), frequency=n.day)
@@ -190,6 +190,71 @@ summary(p.t_intel)
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(p.t_intel,ylim=c(20,65),xlab="Year",main="Intel Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_bankofa)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_bankofa,ylim=c(10,40),xlab="Year",main="Bank of America Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_verizon)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_verizon,ylim=c(40,65),xlab="Year",main="Verizon Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_att)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_att,ylim=c(25,45),xlab="Year",main="AT&T Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_homedep)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_homedep,ylim=c(100,240),xlab="Year",main="Home Depot Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_citi)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_citi,ylim=c(30,85),xlab="Year",main="CITI Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_amazon)                                                   # extremely large spread min: 286.9 and max: 2039.5
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_amazon,ylim=c(280,2040),xlab="Year",main="Amazon Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_chinamob)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_chinamob,ylim=c(35,80),xlab="Year",main="China Mobile Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_taiwan)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_taiwan,ylim=c(15,60),xlab="Year",main="Taiwan Semiconductor Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_novartis)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_novartis,ylim=c(65,110),xlab="Year",main="Novartis Mobile Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_netflix)                                               # large spread min: 82.79 and max: 707.61
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_netflix,ylim=c(80,710),xlab="Year",main="Netflix Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_visa)                                                  # sharp drop at beg. of 2015 due to stocks splitting
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_visa,ylim=c(60,280),xlab="Year",main="Visa Mobile Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_unhealth)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_unhealth,ylim=c(95,300),xlab="Year",main="United Health Closing Prices 1/01/2015-12/31/2019")
+
+summary(p.t_busch)
+dev.new(width=12,height=6)
+par(mfrow=c(1,1),mex=0.75)
+plot.ts(p.t_busch,ylim=c(60,135),xlab="Year",main="Busch Closing Prices 1/01/2015-12/31/2019")
 
 
 ### Garman & Klass volatility series using garmanklassTA: v.t
