@@ -438,10 +438,6 @@ summary(v.t_homedep)
 
 
 
-### Volitility time plots (v.t)
-
-
-
 ### Sample ACF
 dev.new()
 par(mfrow=c(2,1),mex=0.75)
@@ -454,66 +450,173 @@ acf(w.t_oracle,lag.max=100,na.action=na.pass)
 cpt.PELT_v.oracle <- cpt.mean(v.t_oracle,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.oracle)                                # no changepoints detected
 
-cpt.PELT_v.microsoft <- cpt.mean(v.t_microsoft,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+
+
+cpt.PELT_v.microsoft <- cpt.mean(v.t_microsoft,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=50)
 summary(cpt.PELT_v.microsoft)
-
 t.PELT_v.microsoft <- cpts(cpt.PELT_v.microsoft)+1        # add 1 to keep changepoint time meaning same
-t.PELT_v.microsoft                                        # 775
+t.PELT_v.microsoft                                        # 770
+data.microsoft[t.PELT_v.microsoft,]                       # date 20180123
 
-data.microsoft[t.PELT_v.microsoft,]                       # date 20180130
 
-cpt.PELT_v.homedep <- cpt.mean(v.t_homedep,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+cpt.PELT_v.exxon <- cpt.mean(v.t_exxon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.exxon)                                 # no changepoints detected 
+
+cpt.PELT_v.gm <- cpt.mean(v.t_gm,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.gm)                                    # no changepoints detected 
+
+
+cpt.PELT_v.ibm <- cpt.mean(v.t_ibm,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.ibm)                                   # no changepoints detected 
+
+
+cpt.PELT_v.facebook <- cpt.mean(v.t_facebook,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=300) 
+summary(cpt.PELT_v.facebook)                             
+t.PELT_v.facebook <- cpts(cpt.PELT_v.facebook)+1         # add 1 to keep changepoint time meaning same
+t.PELT_v.facebook                                        # 763
+data.facebook[t.PELT_v.facebook,]                        # date 20180111
+
+
+cpt.PELT_v.chevron <- cpt.mean(v.t_chevron,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=10)
+summary(cpt.PELT_v.chevron)                               # no changepoints detected
+
+
+cpt.PELT_v.apple <- cpt.mean(v.t_apple,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=100)
+summary(cpt.PELT_v.apple)
+t.PELT_v.apple <- cpts(cpt.PELT_v.apple)+1                # add 1 to keep changepoint time meaning same
+t.PELT_v.apple                                            # 764 922 1027
+data.apple[t.PELT_v.apple,]                               # 20180112 20180829 20190131
+
+
+cpt.PELT_v.alibaba <- cpt.mean(v.t_alibaba,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=120)
+summary(cpt.PELT_v.alibaba)                               
+t.PELT_v.alibaba <- cpts(cpt.PELT_v.alibaba)+1
+t.PELT_v.alibaba                                          # 612 764 1027
+data.alibaba[t.PELT_v.alibaba,]                           # 20170607 20180112 20190131
+
+
+cpt.PELT_v.pg <- cpt.mean(v.t_pg,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=10)
+summary(cpt.PELT_v.pg)                               
+t.PELT_v.pg <- cpts(cpt.PELT_v.pg)+1
+t.PELT_v.pg                                               # 951
+data.pg[t.PELT_v.pg,]                                     # 20181010
+
+
+cpt.PELT_v.pfizer <- cpt.mean(v.t_pfizer,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=10)
+summary(cpt.PELT_v.pfizer)                                # no changepoints detected
+
+
+cpt.PELT_v.johnson <- cpt.mean(v.t_johnson,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=100)
+summary(cpt.PELT_v.johnson)                               
+t.PELT_v.johnson <- cpts(cpt.PELT_v.johnson)+1
+t.PELT_v.johnson                                          # 760
+data.johnson[t.PELT_v.johnson,]                           # 20180108
+
+
+cpt.PELT_v.disney <- cpt.mean(v.t_disney,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=10)
+summary(cpt.PELT_v.disney)                               
+t.PELT_v.disney <- cpts(cpt.PELT_v.disney)+1
+t.PELT_v.disney                                           # 946
+data.disney[t.PELT_v.disney,]                             # 20181003
+
+
+cpt.PELT_v.wellsfargo <- cpt.mean(v.t_wellsfargo,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=10)
+summary(cpt.PELT_v.wellsfargo)                            # no changepoints detected
+
+
+cpt.PELT_v.jpmorgan <- cpt.mean(v.t_jpmorgan,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=100)
+summary(cpt.PELT_v.jpmorgan)                               
+t.PELT_v.jpmorgan <- cpts(cpt.PELT_v.jpmorgan)+1
+t.PELT_v.jpmorgan                                          # 732
+data.jpmorgan[t.PELT_v.jpmorgan,]                          # 20171127
+
+
+cpt.PELT_v.walmart <- cpt.mean(v.t_walmart,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=50)
+summary(cpt.PELT_v.walmart)                             
+t.PELT_v.walmart <- cpts(cpt.PELT_v.walmart)+1
+t.PELT_v.walmart                                          # 760
+data.walmart[t.PELT_v.walmart,]                           # 20180108
+
+
+cpt.PELT_v.intel <- cpt.mean(v.t_intel,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.intel)                                 # no change points detected  
+
+
+cpt.PELT_v.bankofa <- cpt.mean(v.t_bankofa,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.bankofa)                               # no change points detected 
+
+
+cpt.PELT_v.verizon <- cpt.mean(v.t_verizon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.verizon)                               # no change points detected
+
+cpt.PELT_v.att <- cpt.mean(v.t_att,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.att)                                   # no change points detected
+
+
+cpt.PELT_v.homedep <- cpt.mean(v.t_homedep,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=200)
 summary(cpt.PELT_v.homedep)
-
 t.PELT_v.homedep <- cpts(cpt.PELT_v.homedep)+1            # add 1 to keep changepoint time meaning same
-t.PELT_v.homedep                                          # 161  162  774  783  946 1005
+t.PELT_v.homedep                                          # 763
+data.homedep[t.PELT_v.homedep,]                           # 20180111
 
-data.microsoft[t.PELT_v.homedep,]
 
-cpt.PELT_v.netflix <- cpt.mean(v.t_netflix,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=260)
-summary(cpt.PELT_v.netflix)                               # 44 changepoints detected, seems high
-t.PELT_v.netflix <- cpts(cpt.PELT_v.netflix)+1 
+cpt.PELT_v.citi <- cpt.mean(v.t_citi,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.citi)                                  # no changepoints detected
 
-cpt.PELT_v.unhealth <- cpt.mean(v.t_unhealth,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.unhealth)                              # 160 161 685 773 777 778 782 833 949 987 1003 1074 1077 1079 1226 1227  
-t.PELT_v.unhealth <- cpts(cpt.PELT_v.unhealth)+1 
 
-cpt.PELT_v.visa <- cpt.mean(v.t_visa,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.visa)                                 # 51 160 161 777 782 946 1009
-t.PELT_v.visa <- cpts(cpt.PELT_v.visa)+1 
+cpt.PELT_v.amazon <- cpt.mean(v.t_amazon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=250)
+summary(cpt.PELT_v.amazon)                                 
+t.PELT_v.amazon <- cpts(cpt.PELT_v.amazon)+1 
+t.PELT_v.amazon                                           # 252 506 758 1008
+data.amazon[t.PELT_v.amazon,]                             # 20151231 20170104 20180104 20190103
+
+
+cpt.PELT_v.chinamob <- cpt.mean(v.t_chinamob,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.chinamob)                                 
+t.PELT_v.amazon <- cpts(cpt.PELT_v.amazon)+1              # no changepoints detected 
+
 
 cpt.PELT_v.taiwan <- cpt.mean(v.t_taiwan,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
 summary(cpt.PELT_v.taiwan)                                # no changepoints detected
 
-cpt.PELT_v.amazon <- cpt.mean(v.t_amazon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.amazon)                               # 331 change points detected    
-t.PELT_v.amazon <- cpts(cpt.PELT_v.amazon)+1 
+
+cpt.PELT_v.novartis <- cpt.mean(v.t_novartis,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
+summary(cpt.PELT_v.novartis)                              # no changepoints detected
 
 
-cpt.PELT_v.bankofa <- cpt.mean(v.t_bankofa,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.bankofa)                               # no change points detected  
+cpt.PELT_v.netflix <- cpt.mean(v.t_netflix,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=260)
+summary(cpt.PELT_v.netflix)                                
+t.PELT_v.netflix <- cpts(cpt.PELT_v.netflix)+1
+t.PELT_v.netflix                                           # 264 769
+data.netflix[t.PELT_v.netflix,]                            # 20160120 20180122
 
 
-cpt.PELT_v.intel <- cpt.mean(v.t_intel,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.intel)                               # no change points detected  
+cpt.PELT_v.visa <- cpt.mean(v.t_visa,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=150)
+summary(cpt.PELT_v.visa)                                 
+t.PELT_v.visa <- cpts(cpt.PELT_v.visa)+1 
+t.PELT_v.visa                                              # 165 776 
+data.visa[t.PELT_v.visa,]                                  # 20150827 20180131
 
 
-cpt.PELT_v.alibaba <- cpt.mean(v.t_alibaba,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.alibaba)                               # 611 614 775 782 1026  
-t.PELT_v.alibaba <- cpts(cpt.PELT_v.alibaba)+1
+cpt.PELT_v.unhealth <- cpt.mean(v.t_unhealth,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=260)
+summary(cpt.PELT_v.unhealth)                              
+t.PELT_v.unhealth <- cpts(cpt.PELT_v.unhealth)+1 
+t.PELT_v.unhealth                                          # 683 950
+data.unhealth[t.PELT_v.unhealth,]                          # 20170918 20181009
 
 
-cpt.PELT_v.exxon <- cpt.mean(v.t_exxon,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.exxon)                               # no changepoints detected 
+cpt.PELT_v.busch<- cpt.mean(v.t_busch,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=200)
+summary(cpt.PELT_v.busch)                              
+t.PELT_v.busch <- cpts(cpt.PELT_v.busch)+1                 # 400
+t.PELT_v.busch                        
+data.busch[t.PELT_v.busch,]                                # 20160803
 
 
-cpt.PELT_v.microsoft <- cpt.mean(v.t_microsoft,penalty="MBIC",method="PELT",test.stat="Normal",minseglen=1)
-summary(cpt.PELT_v.microsoft)                          # CAUTION 774 changepoints detected
 
 
 
-
-# Plotting volatility with change points
+# Plotting volatility with change points  
+# TODO: plot all 30 companies
 dev.new(width=12,height=6)                                # microsoft plot with changepoints
 par(mfrow=c(1,1),mex=0.75)
 plot.ts(v.t_microsoft,ylim=c(0,5),
@@ -542,7 +645,7 @@ abline(v=time(v.t_unhealth)[t.PELT_v.unhealth],col="red",lty=2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(1,1),mex=0.75)                               # Amazon plot with changepoints
-plot.ts(v.t_amazon,ylim=c(0,18),
+plot.ts(v.t_amazon,ylim=c(0,100),
         xlab="Year",ylab="GK volatility",main="Amazon Volatility 1/02/2015-12/31/2019")
 abline(v=time(v.t_amazon)[t.PELT_v.amazon],col="red",lty=2)
 
