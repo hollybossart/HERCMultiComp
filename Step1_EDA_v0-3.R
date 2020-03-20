@@ -69,12 +69,38 @@ n.yrs <- 5                                              # no of years
 n.day <- n.obs/n.yrs                                    # no of days per year
 n.day                                                   # 251.6
 
+
 ### Closing price time series for all 30 companies
 p.t_oracle     <- ts(data.oracle$PRC,     start=c(2015,1,1), frequency=n.day)
 p.t_microsoft  <- ts(data.microsoft$PRC,  start=c(2015,1,1), frequency=n.day)
 p.t_exxon      <- ts(data.exxon$PRC,      start=c(2015,1,1), frequency=n.day)
 p.t_gm         <- ts(data.gm$PRC,         start=c(2015,1,1), frequency=n.day)
 p.t_ibm        <- ts(data.ibm$PRC,        start=c(2015,1,1), frequency=n.day)
+p.t_facebook   <- ts(data.facebook$PRC,   start=c(2015,1,1), frequency=n.day)
+p.t_chevron    <- ts(data.chevron$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_apple      <- ts(data.apple$PRC,      start=c(2015,1,1), frequency=n.day)
+p.t_alibaba    <- ts(data.alibaba$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_pg         <- ts(data.pg$PRC,         start=c(2015,1,1), frequency=n.day)
+p.t_pfizer     <- ts(data.pfizer$PRC,     start=c(2015,1,1), frequency=n.day)
+p.t_johnson    <- ts(data.johnson$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_disney     <- ts(data.disney$PRC,     start=c(2015,1,1), frequency=n.day)
+p.t_wellsfargo <- ts(data.wellsfargo$PRC, start=c(2015,1,1), frequency=n.day)
+p.t_jpmorgan   <- ts(data.jpmorgan$PRC,   start=c(2015,1,1), frequency=n.day)
+p.t_walmart    <- ts(data.walmart$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_intel      <- ts(data.intel$PRC,      start=c(2015,1,1), frequency=n.day)
+p.t_bankofa    <- ts(data.bankofa$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_verizon    <- ts(data.verizon$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_att        <- ts(data.att$PRC,        start=c(2015,1,1), frequency=n.day)
+p.t_homedep    <- ts(data.homedep$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_citi       <- ts(data.citi$PRC,       start=c(2015,1,1), frequency=n.day)
+p.t_amazon     <- ts(data.amazon$PRC,     start=c(2015,1,1), frequency=n.day)
+p.t_chinamob   <- ts(data.chinamob$PRC,   start=c(2015,1,1), frequency=n.day)
+p.t_taiwan     <- ts(data.taiwan$PRC,     start=c(2015,1,1), frequency=n.day)
+p.t_novartis   <- ts(data.novartisPRC,    start=c(2015,1,1), frequency=n.day)
+p.t_netflix    <- ts(data.netflix$PRC,    start=c(2015,1,1), frequency=n.day)
+p.t_visa       <- ts(data.visa$PRC,       start=c(2015,1,1), frequency=n.day)
+p.t_unhealth   <- ts(data.unhealth$PRC,   start=c(2015,1,1), frequency=n.day)
+p.t_busch      <- ts(data.busch$PRC,      start=c(2015,1,1), frequency=n.day)
 
 
 
