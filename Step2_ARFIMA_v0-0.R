@@ -437,11 +437,137 @@ v.t_jpmorgan_2     <- window(v.t_jpmorgan,
                              start =start_2,
                              end =end_2)
 
+
 v.t_walmart_1      <- window(v.t_walmart,                      
                              start =2016,                    
                              end =2018)                       
 
-
 v.t_walmart_2      <- window(v.t_walmart,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_intel_1        <- window(v.t_intel,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_intel_2        <- window(v.t_intel,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_bankofa_1      <- window(v.t_bankofa,                      
+                             start =2016,                    
+                             end =2018)                       
+
+v.t_bankofa_2      <- window(v.t_bankofa,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_verizon_1      <- window(v.t_verizon,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_verizon_2      <- window(v.t_verizon,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_att_1          <- window(v.t_att,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_att_2          <- window(v.t_att,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_homedep_1      <- window(v.t_homedep,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_homedep_2      <- window(v.t_homedep,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_citi_1         <- window(v.t_citi,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_citi_2         <- window(v.t_citi,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_amazon_1       <- window(v.t_amazon,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_amazon_2       <- window(v.t_amazon,                      
+                             start =start_2,
+                             end =end_2)
+
+
+v.t_chinamob_1     <- window(v.t_chinamob,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_chinamob_2     <- window(v.t_chinamob,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_taiwan_1       <- window(v.t_taiwan,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_taiwan_2       <- window(v.t_taiwan,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_novartis_1     <- window(v.t_novartis,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_novartis_2     <- window(v.t_novartis,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_netflix_1      <- window(v.t_netflix,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_netflix_2      <- window(v.t_netflix,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_visa_1         <- window(v.t_visa,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_visa_2         <- window(v.t_visa,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_unhealth_1     <- window(v.t_unhealth,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_unhealth_2     <- window(v.t_unhealth,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_busch_1        <- window(v.t_busch,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_busch_2        <- window(v.t_busch,                      
                              start =start_2,
                              end =end_2)
