@@ -287,6 +287,7 @@ start_2           <- 2018 + 21*deltat(v.t_oracle)            # there were 21 tra
 
 end_2             <- tail(time(v.t_oracle), 1)               # retrieves the end time index
 
+
 v.t_oracle_1      <- window(v.t_oracle,                      
                             start =2016,                     # the beginning value will be on 2016/01/01
                             end =2018)                       # the end value will be on 2017/12/31
@@ -305,3 +306,47 @@ tsp(v.t_oracle_2)                                            # verifies start = 
                                                              # frequency = 251.4
 
 
+v.t_microsoft_1    <- window(v.t_microsoft,                      
+                               start =2016,                    
+                               end =2018)                       
+
+
+v.t_microsoft_2    <- window(v.t_microsoft,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_exxon_1        <- window(v.t_exxon,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_exxon_2        <- window(v.t_exxon,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_gm_1           <- window(v.t_gm,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_gm_2           <- window(v.t_gm,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_ibm_1          <- window(v.t_ibm,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_ibm_2          <- window(v.t_ibm,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_facebook_1     <- window(v.t_facebook,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_facebook_2     <- window(v.t_facebook,                      
+                             start =start_2,
+                             end =end_2)
