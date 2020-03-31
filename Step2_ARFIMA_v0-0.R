@@ -280,6 +280,13 @@ length(v.t_oracle)                                           # 1257 [CAUTION] We
 # part one: 2016/01/01 to 2017/12/31
 # part two: 2018/02/01 to 2019/12/31
 
+
+# calculating the start date for part 2 data sets to use window() function
+start_2           <- 2018 + 21*deltat(v.t_oracle)            # there were 21 trading days in january 2018
+                                                             # doing this calculation gives the start time for feb 1 2018
+
+end_2             <- tail(time(v.t_oracle), 1)               # retrieves the end time index
+
 v.t_oracle_1      <- window(v.t_oracle,                      
                             start =2016,                     # the beginning value will be on 2016/01/01
                             end =2018)                       # the end value will be on 2017/12/31
@@ -288,11 +295,13 @@ tsp(v.t_oracle_1)                                            # verifies start = 
                                                              # end = 2017.99
                                                              # frequency = 251.4
 
-nrow(filter(data.oracle, date>20151231 & date<20180101))     # according to original data, there are 503 obs in this time period
-length(v.t_oracle_1)                                         # matches with above 503
 
-v.t_oracle_2      <- window(v.t_oracle,                      
-                            start =2018.0477327)
+v.t_oracle_2       <- window(v.t_oracle,                      
+                             start =start_2,
+                             end =end_2)
+
+tsp(v.t_oracle_2)                                            # verifies start = 2018.087
+                                                             # end = 2019.996 
+                                                             # frequency = 251.4
 
 
-nrow(filter(data.oracle, date>=20180201))                    # there should be 403 obs in part 2 data
