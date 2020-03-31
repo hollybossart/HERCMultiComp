@@ -1,5 +1,5 @@
 #*[-----------------------------------------------------------------------------------------------]*#
-#*[ Objectives : This program splits the original data in two time periods.                       ]*#
+#*[ Objectives : This program splits the volatility data in two time periods.                     ]*#
 #*[ Last update: 03/31/2020                                                                       ]*#
 #*[ Author     : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
@@ -348,5 +348,100 @@ v.t_facebook_1     <- window(v.t_facebook,
 
 
 v.t_facebook_2     <- window(v.t_facebook,                      
+                             start =start_2,
+                             end =end_2)
+
+
+v.t_chevron_1      <- window(v.t_chevron,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_chevron_2      <- window(v.t_chevron,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_apple_1        <- window(v.t_apple,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_apple_2        <- window(v.t_apple,                      
+                             start =start_2,
+                             end =end_2)
+
+
+v.t_alibaba_1      <- window(v.t_alibaba,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_alibaba_2      <- window(v.t_alibaba,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_pg_1           <- window(v.t_pg,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_pg_2           <- window(v.t_pg,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_pfizer_1       <- window(v.t_pfizer,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_pfizer_2       <- window(v.t_pfizer,                      
+                             start =start_2,
+                             end =end_2)
+
+
+v.t_johnson_1      <- window(v.t_johnson,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_johnson_2      <- window(v.t_johnson,                      
+                             start =start_2,
+                             end =end_2)
+
+
+v.t_disney_1       <- window(v.t_disney,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_disney_2       <- window(v.t_disney,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_wellsfargo_1   <- window(v.t_wellsfargo,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_wellsfargo_2   <- window(v.t_wellsfargo,                      
+                             start =start_2,
+                             end =end_2)
+
+
+v.t_jpmorgan_1     <- window(v.t_jpmorgan,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_jpmorgan_2     <- window(v.t_jpmorgan,                      
+                             start =start_2,
+                             end =end_2)
+
+v.t_walmart_1      <- window(v.t_walmart,                      
+                             start =2016,                    
+                             end =2018)                       
+
+
+v.t_walmart_2      <- window(v.t_walmart,                      
                              start =start_2,
                              end =end_2)
