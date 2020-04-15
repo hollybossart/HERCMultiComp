@@ -1,0 +1,4 @@
+Models Used for Each Data Set 
+
+Microsoft_1: ARFIMA(0,0.276,0)
+Microsoft_2: ARFIMA

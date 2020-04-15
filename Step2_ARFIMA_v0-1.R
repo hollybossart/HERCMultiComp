@@ -307,7 +307,7 @@ v.t_busch_2      <- window(v.t_busch,     start=start_2,end=end_2)
 
 
 
-### ARFIMA modelling
+### ARFIMA modelling functions
 fracdiff.AICC <- function(fit) {               # This function computes AICC of a fitted ARFIMA model
   n.par <- length(c(fit$d,fit$ar,fit$ma))
   n <- fit$n
@@ -324,7 +324,7 @@ fracdiff.BIC <- function(fit) {                # This function computes BIC of a
 }
 
 
-# microsoft_1 ARFIMA model
+### microsoft_1 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
 plot.ts(v.t_microsoft_1,ylim=c(0,3),
@@ -344,20 +344,24 @@ summary(fit.microsoft_1.2d0)
 fit.microsoft_1.0d1 <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=0,nma=1,M=50)
 summary(fit.microsoft_1.0d1)
 
-fit.microsoft_1.1d1 <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=1,nma=1,M=30)         # unable to compute
+fit.microsoft_1.1d1 <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=1,nma=1,M=30)           # unable to compute
 summary(fit.microsoft_1.1d1)
 
-# Try other ARFIMA models...
+fit.microsoft_1.0d0_b <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=0,nma=0,M=30)         # changed M value to 30, results are the same as above
+summary(fit.microsoft_1.0d0)
 
-c(fracdiff.AICC(fit.microsoft_1.0d0),fracdiff.AIC(fit.microsoft_1.0d0),fracdiff.BIC(fit.microsoft_1.0d0))  # this minimizes AICC, AIC, BIC
+
+c(fracdiff.AICC(fit.microsoft_1.0d0),fracdiff.AIC(fit.microsoft_1.0d0),fracdiff.BIC(fit.microsoft_1.0d0))  
 c(fracdiff.AICC(fit.microsoft_1.1d0),fracdiff.AIC(fit.microsoft_1.1d0),fracdiff.BIC(fit.microsoft_1.1d0))
 c(fracdiff.AICC(fit.microsoft_1.0d1),fracdiff.AIC(fit.microsoft_1.0d1),fracdiff.BIC(fit.microsoft_1.0d1))
 
 
-### Model diagnostics: autocorrelation in residuals
-fit.microsoft_1.bst <- fit.microsoft_1.0d0
+### microsoft_1 model diagnostics: autocorrelation in residuals
+fit.microsoft_1.bst <- fit.microsoft_1.0d0                                                       # this minimizes AICC, AIC, BIC
 
 r.t_microsoft_1 <- fit.microsoft_1.bst$residuals
+summary(r.t_microsoft_1)                                                                         # min -0.48 max 1.76 mean 0
+
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
@@ -367,19 +371,92 @@ abline(h=0,col="blue",lty=2)
 acf(r.t_microsoft_1,lag.max=100,ylim=c(-0.2,1),main="")
 pacf(r.t_microsoft_1,lag.max=100,ylim=c(-0.2,1),main="")
 
-### Model diagnostics: normality check
+### microsoft_1 residual normality check
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
-hist(r.t_microsoft_1,freq=FALSE,                                              # histogram of residuals
-     breaks=seq(-4,4,0.25),
-     col="grey85",ylim=c(0,0.1),
-     main="Residual Histogram")
-z <- seq(-60,60,length=1000)
+hist(r.t_microsoft_1,                                                                           # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,2.5),
+     main="Residual Histogram")                                                                 # [Q] Density above 1 -- is this an issue?
+z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_microsoft_1),sd=sd(r.t_microsoft_1)),lty=1,col="red")             # add theoretical normal density
-qqnorm(r.t_microsoft_1)                                                       # normal Q-Q plot
+qqnorm(r.t_microsoft_1)                                                                         # normal Q-Q plot
 qqline(r.t_microsoft_1)
 
-shapiro.test(r.t_microsoft_1)                                                 # Shapiro-Wilk normality test
+shapiro.test(r.t_microsoft_1)                                                                   # Shapiro-Wilk normality test
 ks.test(r.t_microsoft_1,"pnorm",mean=mean(r.t_microsoft_1),sd=sd(r.t_microsoft_1))
+
+
+
+### microsoft_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_microsoft_2,ylim=c(0,5),
+        xlab="Year",ylab="GK volatility",main="Microsoft Volatility 2/01/2018-12/31/2019")      # acf appears to show long-memory
+acf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+fit.microsoft_2.0d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=50)
+summary(fit.microsoft_2.0d0)
+
+fit.microsoft_2.1d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=0,M=50)         # p value on AR param 0.965
+summary(fit.microsoft_2.1d0)
+
+fit.microsoft_2.2d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=0,M=50)         # AR terms not significant
+summary(fit.microsoft_2.2d0)
+
+fit.microsoft_2.0d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=1,M=50)         # MA term close to zero and not significant
+summary(fit.microsoft_2.0d1)
+
+fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=50)         # all terms significant
+summary(fit.microsoft_2.1d1)
+
+fit.microsoft_2.0d0_b <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=30)       # changed M value to 30, results are the same as above
+summary(fit.microsoft_2.0d0_b)
+
+fit.microsoft_2.2d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=1,M=50)         # received warning when computing correlation matrix
+summary(fit.microsoft_2.2d1)
+
+fit.microsoft_2.1d2 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=2,M=50)         # received warning when computing correlation matrix
+summary(fit.microsoft_2.1d2)
+
+
+### microsoft_2 model checking the AICC, AIC, BIC
+c(fracdiff.AICC(fit.microsoft_2.0d0),fracdiff.AIC(fit.microsoft_2.0d0),fracdiff.BIC(fit.microsoft_2.0d0))  
+c(fracdiff.AICC(fit.microsoft_2.1d0),fracdiff.AIC(fit.microsoft_2.1d0),fracdiff.BIC(fit.microsoft_2.1d0))
+c(fracdiff.AICC(fit.microsoft_2.0d1),fracdiff.AIC(fit.microsoft_2.0d1),fracdiff.BIC(fit.microsoft_2.0d1))
+c(fracdiff.AICC(fit.microsoft_2.1d1),fracdiff.AIC(fit.microsoft_2.1d1),fracdiff.BIC(fit.microsoft_2.1d1))
+
+### microsoft_1 model diagnostics: autocorrelation in residuals
+fit.microsoft_2.bst <- fit.microsoft_2.0d0                                                       # this minimizes AICC, AIC, BIC
+
+r.t_microsoft_2 <- fit.microsoft_2.bst$residuals
+summary(r.t_microsoft_2)                                                                        
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_microsoft_1,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Microsoft Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### microsoft_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_microsoft_2,                                                                           # histogram of residuals
+     breaks=seq(-4,4,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,1.5),
+     main="Residual Histogram")                                                                 # looks close to normal
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2)),lty=1,col="red")             # add theoretical normal density
+qqnorm(r.t_microsoft_2)                                                                         # normal Q-Q plot
+qqline(r.t_microsoft_2)
+
+shapiro.test(r.t_microsoft_2)                                                                   # Shapiro-Wilk test indicates normality
+ks.test(r.t_microsoft_2,"pnorm",mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2))              # Kolmogorov-Smirnov indicates normality
 
 
