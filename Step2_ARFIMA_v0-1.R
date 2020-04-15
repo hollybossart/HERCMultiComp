@@ -1,7 +1,7 @@
 #*[-----------------------------------------------------------------------------------------------]*#
 #*[ Objectives : This program splits the volatility data in two time periods and fits ARFIMA      ]*#
 #*[              models to each of two parts.                                                     ]*#
-#*[ Last update: 04/03/2020                                                                       ]*#
+#*[ Last update: 04/14/2020                                                                       ]*#
 #*[ Authors    : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
@@ -323,6 +323,8 @@ fracdiff.BIC <- function(fit) {                # This function computes BIC of a
   return(BIC(fit))
 }
 
+
+# microsoft_1 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
 plot.ts(v.t_microsoft_1,ylim=c(0,3),
@@ -342,12 +344,12 @@ summary(fit.microsoft_1.2d0)
 fit.microsoft_1.0d1 <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=0,nma=1,M=50)
 summary(fit.microsoft_1.0d1)
 
-fit.microsoft_1.1d1 <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=1,nma=1,M=30)
+fit.microsoft_1.1d1 <- fracdiff(v.t_microsoft_1-mean(v.t_microsoft_1),nar=1,nma=1,M=30)         # unable to compute
 summary(fit.microsoft_1.1d1)
 
 # Try other ARFIMA models...
 
-c(fracdiff.AICC(fit.microsoft_1.0d0),fracdiff.AIC(fit.microsoft_1.0d0),fracdiff.BIC(fit.microsoft_1.0d0))
+c(fracdiff.AICC(fit.microsoft_1.0d0),fracdiff.AIC(fit.microsoft_1.0d0),fracdiff.BIC(fit.microsoft_1.0d0))  # this minimizes AICC, AIC, BIC
 c(fracdiff.AICC(fit.microsoft_1.1d0),fracdiff.AIC(fit.microsoft_1.1d0),fracdiff.BIC(fit.microsoft_1.1d0))
 c(fracdiff.AICC(fit.microsoft_1.0d1),fracdiff.AIC(fit.microsoft_1.0d1),fracdiff.BIC(fit.microsoft_1.0d1))
 
