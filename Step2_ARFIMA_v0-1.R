@@ -495,7 +495,7 @@ summary(fit.oracle_1.0d0_b)
 c(fracdiff.AICC(fit.oracle_1.0d0),fracdiff.AIC(fit.oracle_1.0d0),fracdiff.BIC(fit.oracle_1.0d0))  
 c(fracdiff.AICC(fit.oracle_1.1d0),fracdiff.AIC(fit.oracle_1.1d0),fracdiff.BIC(fit.oracle_1.1d0))
 c(fracdiff.AICC(fit.oracle_1.0d1),fracdiff.AIC(fit.oracle_1.0d1),fracdiff.BIC(fit.oracle_1.0d1))
-# [Q] the three models above are very close -- if this is the case, which criterion is used?
+
 
 
 
@@ -525,7 +525,7 @@ hist(r.t_oracle_1,                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_oracle_1),sd=sd(r.t_oracle_1)),lty=1,col="red")                # add theoretical normal density
 qqnorm(r.t_oracle_1)                                                                         # [Q] Does this QQ plot support normality? Hard to tell at the ends
-
+qqline(r.t_oracle_1)
 shapiro.test(r.t_oracle_1)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_oracle_1,"pnorm",mean=mean(r.t_oracle_1),sd=sd(r.t_oracle_1))                    # KS test supports normality
 
@@ -589,7 +589,159 @@ hist(r.t_oracle_2,                                                              
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2)),lty=1,col="red")                # add theoretical normal density
-qqnorm(r.t_oracle_2)                                                                         # [Q] Does this QQ plot support normality? Hard to tell at the ends
+qqnorm(r.t_oracle_2)                                                                        
+qqline(r.t_oracle_2)
 
 shapiro.test(r.t_oracle_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_oracle_2,"pnorm",mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2))                    # KS test supports normality
+
+
+
+### exxon_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_exxon_1,ylim=c(0,3),                                                             # might have a slight downward linear trend?
+        xlab="Year",ylab="GK volatility",main="Exxon Volatility 1/01/2016-12/31/2017")
+acf(v.t_exxon_1,lag.max=100,ylim=c(-0.2,1),main="")                                          # looks like slow decrease of acf as lag increases
+pacf(v.t_exxon_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.exxon_1.0d0 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.exxon_1.0d0)
+
+fit.exxon_1.1d0 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=1,nma=0,M=50)                  # ar, d term significant
+summary(fit.exxon_1.1d0)
+
+fit.exxon_1.2d0 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=2,nma=0,M=50)                  # all terms significant
+summary(fit.exxon_1.2d0)
+
+fit.exxon_1.0d1 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=0,nma=1,M=50)                  # ma term significant
+summary(fit.exxon_1.0d1)
+
+fit.exxon_1.0d2 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=0,nma=2,M=50)                  # ma1 and ma2 term significant
+summary(fit.exxon_1.0d2)
+
+fit.exxon_1.1d1 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=1,nma=1,M=50)                  # all terms significant         
+summary(fit.exxon_1.1d1)
+
+fit.exxon_1.1d2 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.exxon_1.1d2)
+
+fit.exxon_1.2d1 <- fracdiff(v.t_exxon_1-mean(v.t_exxon_1),nar=2,nma=1,M=50)                  # ar2 term not significant            
+summary(fit.exxon_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.exxon_1.0d0),fracdiff.AIC(fit.exxon_1.0d0),fracdiff.BIC(fit.exxon_1.0d0))  
+c(fracdiff.AICC(fit.exxon_1.1d0),fracdiff.AIC(fit.exxon_1.1d0),fracdiff.BIC(fit.exxon_1.1d0))
+c(fracdiff.AICC(fit.exxon_1.0d1),fracdiff.AIC(fit.exxon_1.0d1),fracdiff.BIC(fit.exxon_1.0d1))
+c(fracdiff.AICC(fit.exxon_1.1d1),fracdiff.AIC(fit.exxon_1.1d1),fracdiff.BIC(fit.exxon_1.1d1))
+c(fracdiff.AICC(fit.exxon_1.2d0),fracdiff.AIC(fit.exxon_1.2d0),fracdiff.BIC(fit.exxon_1.2d0))
+c(fracdiff.AICC(fit.exxon_1.0d2),fracdiff.AIC(fit.exxon_1.0d2),fracdiff.BIC(fit.exxon_1.0d2))
+
+
+### exxon_1 model diagnostics: autocorrelation in residuals
+fit.exxon_1.bst <- fit.exxon_1.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
+
+r.t_exxon_1 <- fit.exxon_1.bst$residuals
+summary(r.t_exxon_1)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_exxon_1,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Exxon Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_exxon_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_exxon_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### exxon_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_exxon_1,                                                                            # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_exxon_1),sd=sd(r.t_exxon_1)),lty=1,col="red")                 # add theoretical normal density
+qqnorm(r.t_exxon_1)                                                                         
+qqline(r.t_exxon_1)
+
+shapiro.test(r.t_exxon_1)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_exxon_1,"pnorm",mean=mean(r.t_exxon_1),sd=sd(r.t_exxon_1))                      # KS test supports normality
+
+### exxon_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_exxon_2,ylim=c(0,3),                                                             # [Q] might need to cut of first few observations?
+        xlab="Year",ylab="GK volatility",main="Exxon Volatility 2/01/2018-12/31/2019")
+acf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                          # looks like slow decrease of acf as lag increases
+pacf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.exxon_2.0d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.exxon_2.0d0)
+
+fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar term not significant
+summary(fit.exxon_2.1d0)
+
+fit.exxon_2.2d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=0,M=50)                  # ar1 term almost significant, ar2 not sig
+summary(fit.exxon_2.2d0)
+
+fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term not significant
+summary(fit.exxon_2.0d1)
+
+fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1, ma2 not sig
+summary(fit.exxon_2.0d2)
+
+fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=50)                  # warning when computing       
+summary(fit.exxon_2.1d1)
+
+fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.exxon_2.1d2)
+
+fit.exxon_2.2d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=1,M=50)                  # ar2 term not significant            
+summary(fit.exxon_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.exxon_2.0d0),fracdiff.AIC(fit.exxon_2.0d0),fracdiff.BIC(fit.exxon_2.0d0))  
+c(fracdiff.AICC(fit.exxon_2.1d0),fracdiff.AIC(fit.exxon_2.1d0),fracdiff.BIC(fit.exxon_2.1d0))
+c(fracdiff.AICC(fit.exxon_2.0d1),fracdiff.AIC(fit.exxon_2.0d1),fracdiff.BIC(fit.exxon_2.0d1))
+c(fracdiff.AICC(fit.exxon_2.1d1),fracdiff.AIC(fit.exxon_2.1d1),fracdiff.BIC(fit.exxon_2.1d1))
+c(fracdiff.AICC(fit.exxon_2.2d0),fracdiff.AIC(fit.exxon_2.2d0),fracdiff.BIC(fit.exxon_2.2d0))
+c(fracdiff.AICC(fit.exxon_2.0d2),fracdiff.AIC(fit.exxon_2.0d2),fracdiff.BIC(fit.exxon_2.0d2))
+#[Q] if terms are not significant in the model, but it minimizes the AIC,AICC,BIC, is this still the model to select?
+
+
+
+
+### WARNING: the code below here has not been run yet as I haven't chose the best model
+### exxon_2 model diagnostics: autocorrelation in residuals
+fit.exxon_2.bst <- ## INSERT MODEL HERE
+r.t_exxon_2 <- fit.exxon_2.bst$residuals
+summary(r.t_exxon_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_exxon_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Exxon Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### exxon_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_exxon_2,                                                                            # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2)),lty=1,col="red")                 # add theoretical normal density
+qqnorm(r.t_exxon_2)                                                                         
+qqline(r.t_exxon_2)
+
+shapiro.test(r.t_exxon_2)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_exxon_2,"pnorm",mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2))                      # KS test supports normality
