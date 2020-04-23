@@ -1152,6 +1152,80 @@ ks.test(r.t_pfizer_1,"pnorm",mean=mean(r.t_pfizer_1),sd=sd(r.t_pfizer_1))       
 bst.models[nrow(bst.models)+1,] <- c("Pfizer", 1, 0, fit.pfizer_1.bst$d, 0)                           # adding to the table
 
 
+### johnson_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_johnson_1,ylim=c(0,4),                                                             
+        xlab="Year",ylab="GK volatility",main="Johnson Volatility 1/01/2016-12/31/2017")
+acf(v.t_johnson_1,lag.max=100,ylim=c(-0.2,1),main="")                                                  # definitely appears to be long-memory
+pacf(v.t_johnson_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.johnson_1.0d0 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=0,nma=0,M=50)                      # d term significant  
+summary(fit.johnson_1.0d0)
+
+fit.johnson_1.1d0 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=1,nma=0,M=50)                      # ar term not significant
+summary(fit.johnson_1.1d0)
+
+fit.johnson_1.2d0 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=2,nma=0,M=50)                      # ar terms sig
+summary(fit.johnson_1.2d0)
+
+fit.johnson_1.0d1 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=0,nma=1,M=50)                      # ma not sig
+summary(fit.johnson_1.0d1)
+
+fit.johnson_1.0d2 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=0,nma=2,M=50)                      # ma terms sig
+summary(fit.johnson_1.0d2)
+
+fit.johnson_1.1d1 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=1,nma=1,M=50)                      # only d sig
+summary(fit.johnson_1.1d1)
+
+fit.johnson_1.1d2 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=1,nma=2,M=50)                      # ma2 only sig
+summary(fit.johnson_1.1d2)
+
+fit.johnson_1.2d1 <- fracdiff(v.t_johnson_1-mean(v.t_johnson_1),nar=2,nma=1,M=50)                           
+summary(fit.johnson_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.johnson_1.0d0),fracdiff.AIC(fit.johnson_1.0d0),fracdiff.BIC(fit.johnson_1.0d0))
+c(fracdiff.AICC(fit.johnson_1.2d0),fracdiff.AIC(fit.johnson_1.2d0),fracdiff.BIC(fit.johnson_1.2d0)) 
+c(fracdiff.AICC(fit.johnson_1.0d2),fracdiff.AIC(fit.johnson_1.0d2),fracdiff.BIC(fit.johnson_1.0d2))
+                  
+
+
+### johnson_1 model diagnostics: autocorrelation in residuals
+fit.johnson_1.bst <- fit.johnson_1.0d0                                                         
+
+r.t_johnson_1 <- fit.johnson_1.bst$residuals
+summary(r.t_johnson_1)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_johnson_1,ylim=c(-1,3),
+        xlab="Year",ylab="GK volatility",main="Johnson Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_johnson_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_johnson_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### johnson_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_johnson_1,                                                                                   
+     breaks=seq(-3,3,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_johnson_1),sd=sd(r.t_johnson_1)),lty=1,col="red")               
+qqnorm(r.t_johnson_1)                                                                         
+qqline(r.t_johnson_1)
+
+shapiro.test(r.t_johnson_1)                                                                             # Shapiro-Wilk normality test supports normality
+ks.test(r.t_johnson_1,"pnorm",mean=mean(r.t_johnson_1),sd=sd(r.t_johnson_1))                            # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Johnson", 1, 0, fit.johnson_1.bst$d, 0)                           # adding to the table
+
+
 
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
