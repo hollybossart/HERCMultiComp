@@ -1080,6 +1080,78 @@ ks.test(r.t_pg_1,"pnorm",mean=mean(r.t_pg_1),sd=sd(r.t_pg_1))                   
 bst.models[nrow(bst.models)+1,] <- c("PG", 1, 0, fit.pg_1.bst$d, 0)                               # adding to the table
 
 
+### pfizer_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_pfizer_1,ylim=c(0,1.5),                                                             
+        xlab="Year",ylab="GK volatility",main="Pfizer Volatility 1/01/2016-12/31/2017")
+acf(v.t_pfizer_1,lag.max=100,ylim=c(-0.2,1),main="")                                                # definitely appears to be long-memory
+pacf(v.t_pfizer_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.pfizer_1.0d0 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=0,nma=0,M=50)                      # d term significant  
+summary(fit.pfizer_1.0d0)
+
+fit.pfizer_1.1d0 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=1,nma=0,M=50)                      # ar term not significant
+summary(fit.pfizer_1.1d0)
+
+fit.pfizer_1.2d0 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=2,nma=0,M=50)                      # ar terms not sig
+summary(fit.pfizer_1.2d0)
+
+fit.pfizer_1.0d1 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=0,nma=1,M=50)                      # ma not sig
+summary(fit.pfizer_1.0d1)
+
+fit.pfizer_1.0d2 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=0,nma=2,M=50)                      # ma terms not sig
+summary(fit.pfizer_1.0d2)
+
+fit.pfizer_1.1d1 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=1,nma=1,M=50)                      # ma almost significant
+summary(fit.pfizer_1.1d1)
+
+fit.pfizer_1.1d2 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=1,nma=2,M=50)                      # ma2 not sig
+summary(fit.pfizer_1.1d2)
+
+fit.pfizer_1.2d1 <- fracdiff(v.t_pfizer_1-mean(v.t_pfizer_1),nar=2,nma=1,M=50)                      # cannot compute correlation      
+summary(fit.pfizer_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.pfizer_1.0d0),fracdiff.AIC(fit.pfizer_1.0d0),fracdiff.BIC(fit.pfizer_1.0d0))                  
+c(fracdiff.AICC(fit.pfizer_1.1d2),fracdiff.AIC(fit.pfizer_1.1d2),fracdiff.BIC(fit.pfizer_1.1d2))                  
+
+
+### pfizer_1 model diagnostics: autocorrelation in residuals
+fit.pfizer_1.bst <- fit.pfizer_1.0d0                                                         
+
+r.t_pfizer_1 <- fit.pfizer_1.bst$residuals
+summary(r.t_pfizer_1)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_pfizer_1,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="Pfizer Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_pfizer_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_pfizer_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### pfizer_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_pfizer_1,                                                                                   
+     breaks=seq(-1,1,0.125),
+     freq=FALSE,
+     col="grey85",ylim=c(0,5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_pfizer_1),sd=sd(r.t_pfizer_1)),lty=1,col="red")               
+qqnorm(r.t_pfizer_1)                                                                         
+qqline(r.t_pfizer_1)
+
+shapiro.test(r.t_pfizer_1)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_pfizer_1,"pnorm",mean=mean(r.t_pfizer_1),sd=sd(r.t_pfizer_1))                             # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Pfizer", 1, 0, fit.pfizer_1.bst$d, 0)                           # adding to the table
+
+
 
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
