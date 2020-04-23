@@ -1,7 +1,7 @@
 #*[-----------------------------------------------------------------------------------------------]*#
 #*[ Objectives : This program splits the volatility data in two time periods and fits ARFIMA      ]*#
 #*[              models to each of two parts.                                                     ]*#
-#*[ Last update: 04/14/2020                                                                       ]*#
+#*[ Last update: 04/22/2020                                                                       ]*#
 #*[ Authors    : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
@@ -324,6 +324,9 @@ fracdiff.BIC <- function(fit) {                # This function computes BIC of a
 }
 
 
+
+### MODEL FITTING FOR PART 1 DATA--------------------------------------
+
 ### microsoft_1 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
@@ -387,77 +390,6 @@ qqline(r.t_microsoft_1)
 shapiro.test(r.t_microsoft_1)                                                                   # Shapiro-Wilk normality test
 ks.test(r.t_microsoft_1,"pnorm",mean=mean(r.t_microsoft_1),sd=sd(r.t_microsoft_1))
 
-
-
-### microsoft_2 ARFIMA model
-dev.new(width=12,height=6)
-par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_microsoft_2,ylim=c(0,5),
-        xlab="Year",ylab="GK volatility",main="Microsoft Volatility 2/01/2018-12/31/2019")      # acf appears to show long-memory
-acf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
-pacf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
-
-fit.microsoft_2.0d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=50)
-summary(fit.microsoft_2.0d0)
-
-fit.microsoft_2.1d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=0,M=50)         # p value on AR param 0.965
-summary(fit.microsoft_2.1d0)
-
-fit.microsoft_2.2d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=0,M=50)         # AR terms not significant
-summary(fit.microsoft_2.2d0)
-
-fit.microsoft_2.0d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=1,M=50)         # MA term close to zero and not significant
-summary(fit.microsoft_2.0d1)
-
-fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=50)         # all terms significant
-summary(fit.microsoft_2.1d1)
-
-fit.microsoft_2.0d0_b <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=30)       # changed M value to 30, results are the same as above
-summary(fit.microsoft_2.0d0_b)
-
-fit.microsoft_2.2d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=1,M=50)         # received warning when computing correlation matrix
-summary(fit.microsoft_2.2d1)
-
-fit.microsoft_2.1d2 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=2,M=50)         # received warning when computing correlation matrix
-summary(fit.microsoft_2.1d2)
-
-
-### microsoft_2 model checking the AICC, AIC, BIC
-c(fracdiff.AICC(fit.microsoft_2.0d0),fracdiff.AIC(fit.microsoft_2.0d0),fracdiff.BIC(fit.microsoft_2.0d0))  
-c(fracdiff.AICC(fit.microsoft_2.1d0),fracdiff.AIC(fit.microsoft_2.1d0),fracdiff.BIC(fit.microsoft_2.1d0))
-c(fracdiff.AICC(fit.microsoft_2.0d1),fracdiff.AIC(fit.microsoft_2.0d1),fracdiff.BIC(fit.microsoft_2.0d1))
-c(fracdiff.AICC(fit.microsoft_2.1d1),fracdiff.AIC(fit.microsoft_2.1d1),fracdiff.BIC(fit.microsoft_2.1d1))
-
-### microsoft_2 model diagnostics: autocorrelation in residuals
-fit.microsoft_2.bst <- fit.microsoft_2.0d0                                                       # this minimizes AICC, AIC, BIC
-
-r.t_microsoft_2 <- fit.microsoft_2.bst$residuals
-summary(r.t_microsoft_2)                                                                        
-
-
-dev.new(width=12,height=6)
-par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_microsoft_1,ylim=c(-2,2),
-        xlab="Year",ylab="GK volatility",main="Microsoft Volatility Residuals 2/01/2018-12/31/2019")
-abline(h=0,col="blue",lty=2)
-acf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
-pacf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
-
-### microsoft_2 residual normality check
-dev.new(height=6,width=12)
-par(mfrow=c(1,2),mex=0.75)
-hist(r.t_microsoft_2,                                                                           # histogram of residuals
-     breaks=seq(-4,4,0.25),
-     freq=FALSE,
-     col="grey85",ylim=c(0,1.5),
-     main="Residual Histogram")                                                                 # looks close to normal
-z <- seq(-60,60,length=1000)                                      
-lines(z,dnorm(z,mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2)),lty=1,col="red")             # add theoretical normal density
-qqnorm(r.t_microsoft_2)                                                                         # normal Q-Q plot
-qqline(r.t_microsoft_2)
-
-shapiro.test(r.t_microsoft_2)                                                                   # Shapiro-Wilk test indicates normality
-ks.test(r.t_microsoft_2,"pnorm",mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2))              # Kolmogorov-Smirnov indicates normality
 
 
 
@@ -560,40 +492,7 @@ summary(fit.oracle_2.1d2)
 c(fracdiff.AICC(fit.oracle_2.0d0),fracdiff.AIC(fit.oracle_2.0d0),fracdiff.BIC(fit.oracle_2.0d0))  
 c(fracdiff.AICC(fit.oracle_2.1d1),fracdiff.AIC(fit.oracle_2.1d1),fracdiff.BIC(fit.oracle_2.1d1))
 c(fracdiff.AICC(fit.oracle_2.0d1),fracdiff.AIC(fit.oracle_2.0d1),fracdiff.BIC(fit.oracle_2.0d1))
-# [Q] the three models above are very close -- if this is the case, which criterion is used? 
 
-
-
-### oracle_2 model diagnostics: autocorrelation in residuals
-fit.oracle_2.bst <- fit.oracle_2.0d0                                                          # this minimizes BIC but AICC and AIC are very close to min val
-
-r.t_oracle_2 <- fit.oracle_2.bst$residuals
-summary(r.t_oracle_2)                                                                         
-
-
-dev.new(width=12,height=6)
-par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_oracle_2,ylim=c(-2,2),
-        xlab="Year",ylab="GK volatility",main="Oracle Volatility Residuals 2/01/2018-12/31/2019")
-abline(h=0,col="blue",lty=2)
-acf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
-pacf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
-
-### oracle_2 residual normality check
-dev.new(height=6,width=12)
-par(mfrow=c(1,2),mex=0.75)
-hist(r.t_oracle_2,                                                                           # histogram of residuals
-     breaks=seq(-2,2,0.25),
-     freq=FALSE,
-     col="grey85",ylim=c(0,3),
-     main="Residual Histogram")                                                              
-z <- seq(-60,60,length=1000)                                      
-lines(z,dnorm(z,mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2)),lty=1,col="red")                # add theoretical normal density
-qqnorm(r.t_oracle_2)                                                                        
-qqline(r.t_oracle_2)
-
-shapiro.test(r.t_oracle_2)                                                                   # Shapiro-Wilk normality test supports normality
-ks.test(r.t_oracle_2,"pnorm",mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2))                    # KS test supports normality
 
 
 
@@ -670,78 +569,121 @@ qqline(r.t_exxon_1)
 shapiro.test(r.t_exxon_1)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_exxon_1,"pnorm",mean=mean(r.t_exxon_1),sd=sd(r.t_exxon_1))                      # KS test supports normality
 
-### exxon_2 ARFIMA model
+
+
+
+
+
+
+
+
+
+
+
+### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
+
+### microsoft_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_exxon_2,ylim=c(0,3),                                                             # [Q] might need to cut of first few observations?
-        xlab="Year",ylab="GK volatility",main="Exxon Volatility 2/01/2018-12/31/2019")
-acf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                          # looks like slow decrease of acf as lag increases
-pacf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+plot.ts(v.t_microsoft_2,ylim=c(0,5),
+        xlab="Year",ylab="GK volatility",main="Microsoft Volatility 2/01/2018-12/31/2019")      # acf appears to show long-memory
+acf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
 
-fit.exxon_2.0d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=0,M=50)                  # d term significant  
-summary(fit.exxon_2.0d0)
+fit.microsoft_2.0d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=50)
+summary(fit.microsoft_2.0d0)
 
-fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar term not significant
-summary(fit.exxon_2.1d0)
+fit.microsoft_2.1d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=0,M=50)         # p value on AR param 0.965
+summary(fit.microsoft_2.1d0)
 
-fit.exxon_2.2d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=0,M=50)                  # ar1 term almost significant, ar2 not sig
-summary(fit.exxon_2.2d0)
+fit.microsoft_2.2d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=0,M=50)         # AR terms not significant
+summary(fit.microsoft_2.2d0)
 
-fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term not significant
-summary(fit.exxon_2.0d1)
+fit.microsoft_2.0d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=1,M=50)         # MA term close to zero and not significant
+summary(fit.microsoft_2.0d1)
 
-fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1, ma2 not sig
-summary(fit.exxon_2.0d2)
+fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=50)         # all terms significant
+summary(fit.microsoft_2.1d1)
 
-fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=50)                  # warning when computing       
-summary(fit.exxon_2.1d1)
+fit.microsoft_2.0d0_b <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=30)       # changed M value to 30, results are the same as above
+summary(fit.microsoft_2.0d0_b)
 
-fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
-summary(fit.exxon_2.1d2)
+fit.microsoft_2.2d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=1,M=50)         # received warning when computing correlation matrix
+summary(fit.microsoft_2.2d1)
 
-fit.exxon_2.2d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=1,M=50)                  # ar2 term not significant            
-summary(fit.exxon_2.2d1)
-
-
-
-c(fracdiff.AICC(fit.exxon_2.0d0),fracdiff.AIC(fit.exxon_2.0d0),fracdiff.BIC(fit.exxon_2.0d0))  
-c(fracdiff.AICC(fit.exxon_2.1d0),fracdiff.AIC(fit.exxon_2.1d0),fracdiff.BIC(fit.exxon_2.1d0))
-c(fracdiff.AICC(fit.exxon_2.0d1),fracdiff.AIC(fit.exxon_2.0d1),fracdiff.BIC(fit.exxon_2.0d1))
-c(fracdiff.AICC(fit.exxon_2.1d1),fracdiff.AIC(fit.exxon_2.1d1),fracdiff.BIC(fit.exxon_2.1d1))
-c(fracdiff.AICC(fit.exxon_2.2d0),fracdiff.AIC(fit.exxon_2.2d0),fracdiff.BIC(fit.exxon_2.2d0))
-c(fracdiff.AICC(fit.exxon_2.0d2),fracdiff.AIC(fit.exxon_2.0d2),fracdiff.BIC(fit.exxon_2.0d2))
-#[Q] if terms are not significant in the model, but it minimizes the AIC,AICC,BIC, is this still the model to select?
+fit.microsoft_2.1d2 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=2,M=50)         # received warning when computing correlation matrix
+summary(fit.microsoft_2.1d2)
 
 
+### microsoft_2 model checking the AICC, AIC, BIC
+c(fracdiff.AICC(fit.microsoft_2.0d0),fracdiff.AIC(fit.microsoft_2.0d0),fracdiff.BIC(fit.microsoft_2.0d0))  
+c(fracdiff.AICC(fit.microsoft_2.1d0),fracdiff.AIC(fit.microsoft_2.1d0),fracdiff.BIC(fit.microsoft_2.1d0))
+c(fracdiff.AICC(fit.microsoft_2.0d1),fracdiff.AIC(fit.microsoft_2.0d1),fracdiff.BIC(fit.microsoft_2.0d1))
+c(fracdiff.AICC(fit.microsoft_2.1d1),fracdiff.AIC(fit.microsoft_2.1d1),fracdiff.BIC(fit.microsoft_2.1d1))
 
+### microsoft_2 model diagnostics: autocorrelation in residuals
+fit.microsoft_2.bst <- fit.microsoft_2.0d0                                                       # this minimizes AICC, AIC, BIC
 
-### WARNING: the code below here has not been run yet as I haven't chose the best model
-### exxon_2 model diagnostics: autocorrelation in residuals
-fit.exxon_2.bst <- ## INSERT MODEL HERE
-r.t_exxon_2 <- fit.exxon_2.bst$residuals
-summary(r.t_exxon_2)                                                                         
+r.t_microsoft_2 <- fit.microsoft_2.bst$residuals
+summary(r.t_microsoft_2)                                                                        
 
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_exxon_2,ylim=c(-2,2),
-        xlab="Year",ylab="GK volatility",main="Exxon Volatility Residuals 1/01/2016-12/31/2017")
+plot.ts(r.t_microsoft_1,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Microsoft Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
-acf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
-pacf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
+acf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
 
-### exxon_2 residual normality check
+### microsoft_2 residual normality check
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
-hist(r.t_exxon_2,                                                                            # histogram of residuals
+hist(r.t_microsoft_2,                                                                           # histogram of residuals
+     breaks=seq(-4,4,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,1.5),
+     main="Residual Histogram")                                                                 # looks close to normal
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2)),lty=1,col="red")             # add theoretical normal density
+qqnorm(r.t_microsoft_2)                                                                         # normal Q-Q plot
+qqline(r.t_microsoft_2)
+
+shapiro.test(r.t_microsoft_2)                                                                   # Shapiro-Wilk test indicates normality
+ks.test(r.t_microsoft_2,"pnorm",mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2))              # Kolmogorov-Smirnov indicates normality
+
+
+
+### oracle_2 model diagnostics: autocorrelation in residuals
+fit.oracle_2.bst <- fit.oracle_2.0d0                                                          # this minimizes BIC but AICC and AIC are very close to min val
+
+r.t_oracle_2 <- fit.oracle_2.bst$residuals
+summary(r.t_oracle_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_oracle_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Oracle Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### oracle_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_oracle_2,                                                                           # histogram of residuals
      breaks=seq(-2,2,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,3),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
-lines(z,dnorm(z,mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2)),lty=1,col="red")                 # add theoretical normal density
-qqnorm(r.t_exxon_2)                                                                         
-qqline(r.t_exxon_2)
+lines(z,dnorm(z,mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2)),lty=1,col="red")                # add theoretical normal density
+qqnorm(r.t_oracle_2)                                                                        
+qqline(r.t_oracle_2)
 
-shapiro.test(r.t_exxon_2)                                                                   # Shapiro-Wilk normality test supports normality
-ks.test(r.t_exxon_2,"pnorm",mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2))                      # KS test supports normality
+shapiro.test(r.t_oracle_2)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_oracle_2,"pnorm",mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2))                    # KS test supports normality
+
+
+
