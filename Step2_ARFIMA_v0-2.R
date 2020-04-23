@@ -936,6 +936,76 @@ bst.models[nrow(bst.models)+1,] <- c("Apple", 1, 0, fit.apple_1.bst$d, 0)       
 
 
 
+### alibaba_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_alibaba_1,ylim=c(0,7),                                                             
+        xlab="Year",ylab="GK volatility",main="Alibaba Volatility 1/01/2016-12/31/2017")
+acf(v.t_alibaba_1,lag.max=100,ylim=c(-0.2,1),main="")                                              # definitely appears to be long-memory
+pacf(v.t_alibaba_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.alibaba_1.0d0 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.alibaba_1.0d0)
+
+fit.alibaba_1.1d0 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=1,nma=0,M=50)                  # ar term not significant
+summary(fit.alibaba_1.1d0)
+
+fit.alibaba_1.2d0 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=2,nma=0,M=50)                  # ar terms not sig
+summary(fit.alibaba_1.2d0)
+
+fit.alibaba_1.0d1 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=0,nma=1,M=50)                  # ma not sig
+summary(fit.alibaba_1.0d1)
+
+fit.alibaba_1.0d2 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=0,nma=2,M=50)                  # ma terms not sig
+summary(fit.alibaba_1.0d2)
+
+fit.alibaba_1.1d1 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=1,nma=1,M=50)                  # can't compute correlation 
+summary(fit.alibaba_1.1d1)
+
+fit.alibaba_1.1d2 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=1,nma=2,M=50)                  # can't compute correlation
+summary(fit.alibaba_1.1d2)
+
+fit.alibaba_1.2d1 <- fracdiff(v.t_alibaba_1-mean(v.t_alibaba_1),nar=2,nma=1,M=50)                  # warning when computing corr         
+summary(fit.alibaba_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.alibaba_1.0d0),fracdiff.AIC(fit.alibaba_1.0d0),fracdiff.BIC(fit.alibaba_1.0d0))    # only model with all terms significant  
+
+
+### alibaba_1 model diagnostics: autocorrelation in residuals
+fit.alibaba_1.bst <- fit.alibaba_1.0d0                                                         
+
+r.t_alibaba_1 <- fit.alibaba_1.bst$residuals
+summary(r.t_alibaba_1)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_alibaba_1,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="Alibaba Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_alibaba_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_alibaba_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### alibaba_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_alibaba_1,                                                                                    # [Q] some outliers? right skewed
+     breaks=seq(-2,6.5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_alibaba_1),sd=sd(r.t_alibaba_1)),lty=1,col="red")               
+qqnorm(r.t_alibaba_1)                                                                         
+qqline(r.t_alibaba_1)
+
+shapiro.test(r.t_alibaba_1)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_alibaba_1,"pnorm",mean=mean(r.t_alibaba_1),sd=sd(r.t_alibaba_1))                           # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Alibaba", 1, 0, fit.alibaba_1.bst$d, 0)                          # adding to the table
+
 
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
