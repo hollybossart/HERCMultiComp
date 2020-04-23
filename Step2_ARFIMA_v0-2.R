@@ -401,7 +401,7 @@ shapiro.test(r.t_microsoft_1)                                                   
 ks.test(r.t_microsoft_1,"pnorm",mean=mean(r.t_microsoft_1),sd=sd(r.t_microsoft_1))
 
 ### add model to table
-bst.models[nrow(bst.models)+1,] <- c("Microsoft", 1, 0, fit.microsoft_2.bst$d, 0)
+bst.models[nrow(bst.models)+1,] <- c("Microsoft", 1, 0, fit.microsoft_1.bst$d, 0)
 
 
 
@@ -473,37 +473,7 @@ shapiro.test(r.t_oracle_1)                                                      
 ks.test(r.t_oracle_1,"pnorm",mean=mean(r.t_oracle_1),sd=sd(r.t_oracle_1))                    # KS test supports normality
 
 
-### oracle_2 ARFIMA model
-dev.new(width=12,height=6)
-par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_oracle_2,ylim=c(0,3),
-        xlab="Year",ylab="GK volatility",main="Oracle Volatility 2/01/2018-12/31/2019")
-acf(v.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
-pacf(v.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
-
-fit.oracle_2.0d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=0,M=50)                # d term significant  
-summary(fit.oracle_2.0d0)
-
-fit.oracle_2.1d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=0,M=50)                # ar term not significant
-summary(fit.oracle_2.1d0)
-
-fit.oracle_2.0d1 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=1,M=50)                # ma term almost significant (p=0.0633)
-summary(fit.oracle_2.0d1)
-
-fit.oracle_2.0d2 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=2,M=50)                # ma1 term significant
-summary(fit.oracle_2.0d2)
-
-fit.oracle_2.1d1 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=1,M=50)                # all three terms significant      
-summary(fit.oracle_2.1d1)
-
-fit.oracle_2.1d2 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=2,M=50)                # warning when calculating correlation matrix    
-summary(fit.oracle_2.1d2)
-
-
-c(fracdiff.AICC(fit.oracle_2.0d0),fracdiff.AIC(fit.oracle_2.0d0),fracdiff.BIC(fit.oracle_2.0d0))  
-c(fracdiff.AICC(fit.oracle_2.1d1),fracdiff.AIC(fit.oracle_2.1d1),fracdiff.BIC(fit.oracle_2.1d1))
-c(fracdiff.AICC(fit.oracle_2.0d1),fracdiff.AIC(fit.oracle_2.0d1),fracdiff.BIC(fit.oracle_2.0d1))
-
+bst.models[nrow(bst.models)+1,] <- c("Oracle", 1, 0, fit.oracle_1.bst$d, 0)
 
 
 
@@ -580,11 +550,83 @@ qqline(r.t_exxon_1)
 shapiro.test(r.t_exxon_1)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_exxon_1,"pnorm",mean=mean(r.t_exxon_1),sd=sd(r.t_exxon_1))                      # KS test supports normality
 
+bst.models[nrow(bst.models)+1,] <- c("Exxon", 1, 0, fit.exxon_1.bst$d, 0)                   # adding to the table
+
+
+
+### gm_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_gm_1,ylim=c(0,2),                                                             
+        xlab="Year",ylab="GK volatility",main="GM Volatility 1/01/2016-12/31/2017")
+acf(v.t_gm_1,lag.max=100,ylim=c(-0.2,1),main="")                                         
+pacf(v.t_gm_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.gm_1.0d0 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.gm_1.0d0)
+
+fit.gm_1.1d0 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=1,nma=0,M=50)                  # ar, d term significant
+summary(fit.gm_1.1d0)
+
+fit.gm_1.2d0 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=2,nma=0,M=50)                  # ar2 not sig
+summary(fit.gm_1.2d0)
+
+fit.gm_1.0d1 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=0,nma=1,M=50)                  # d, ma term significant
+summary(fit.gm_1.0d1)
+
+fit.gm_1.0d2 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=0,nma=2,M=50)                  # ma2 not sig
+summary(fit.gm_1.0d2)
+
+fit.gm_1.1d1 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=1,nma=1,M=50)                  # warning when computing corr      
+summary(fit.gm_1.1d1)
+
+fit.gm_1.1d2 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.gm_1.1d2)
+
+fit.gm_1.2d1 <- fracdiff(v.t_gm_1-mean(v.t_gm_1),nar=2,nma=1,M=50)                  # ar2 term not significant            
+summary(fit.gm_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.gm_1.0d0),fracdiff.AIC(fit.gm_1.0d0),fracdiff.BIC(fit.gm_1.0d0))  
+c(fracdiff.AICC(fit.gm_1.1d0),fracdiff.AIC(fit.gm_1.1d0),fracdiff.BIC(fit.gm_1.1d0))
+c(fracdiff.AICC(fit.gm_1.0d1),fracdiff.AIC(fit.gm_1.0d1),fracdiff.BIC(fit.gm_1.0d1))
 
 
 
 
+### gm_1 model diagnostics: autocorrelation in residuals
+fit.gm_1.bst <- fit.gm_1.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
 
+r.t_gm_1 <- fit.gm_1.bst$residuals
+summary(r.t_gm_1)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_gm_1,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="General Motors Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_gm_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_gm_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### gm_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_gm_1,                                                                           # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_gm_1),sd=sd(r.t_gm_1)),lty=1,col="red")                    # add theoretical normal density
+qqnorm(r.t_gm_1)                                                                         
+qqline(r.t_gm_1)
+
+shapiro.test(r.t_gm_1)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_gm_1,"pnorm",mean=mean(r.t_gm_1),sd=sd(r.t_gm_1))                            # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("General Motors", 1, 0, fit.gm_1.bst$d, 0)          # adding to the table
 
 
 
