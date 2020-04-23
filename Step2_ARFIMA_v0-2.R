@@ -327,6 +327,14 @@ fracdiff.BIC <- function(fit) {                # This function computes BIC of a
 
 ### MODEL FITTING FOR PART 1 DATA--------------------------------------
 
+bst.models <- data.frame(Company = factor(),
+                         Part = numeric(),
+                         p = numeric(), 
+                         d = numeric(),
+                         q = numeric())
+
+
+
 ### microsoft_1 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
