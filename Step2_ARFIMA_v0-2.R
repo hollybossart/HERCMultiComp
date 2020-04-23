@@ -327,11 +327,13 @@ fracdiff.BIC <- function(fit) {                # This function computes BIC of a
 
 ### MODEL FITTING FOR PART 1 DATA--------------------------------------
 
-bst.models <- data.frame(Company = factor(),
-                         Part = numeric(),
-                         p = numeric(), 
-                         d = numeric(),
-                         q = numeric())
+bst.models <- data.frame("Company" = character(),  # this data frame will hold all of the model specifications for the best model
+                         "Part" = numeric(),
+                         "p" = numeric(), 
+                         "d" = numeric(),
+                         "q" = numeric(),
+                         stringsAsFactors = FALSE)
+colnames(bst.models) <- c("Company", "Part", "p", "d", "q")
 
 
 
@@ -389,7 +391,7 @@ hist(r.t_microsoft_1,                                                           
      breaks=seq(-2,2,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,2.5),
-     main="Residual Histogram")                                                                 # [Q] Density above 1 -- is this an issue?
+     main="Residual Histogram")                                                                 
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_microsoft_1),sd=sd(r.t_microsoft_1)),lty=1,col="red")             # add theoretical normal density
 qqnorm(r.t_microsoft_1)                                                                         # normal Q-Q plot
@@ -398,7 +400,8 @@ qqline(r.t_microsoft_1)
 shapiro.test(r.t_microsoft_1)                                                                   # Shapiro-Wilk normality test
 ks.test(r.t_microsoft_1,"pnorm",mean=mean(r.t_microsoft_1),sd=sd(r.t_microsoft_1))
 
-
+### add model to table
+bst.models[nrow(bst.models)+1,] <- c("Microsoft", 1, 0, fit.microsoft_2.bst$d, 0)
 
 
 
