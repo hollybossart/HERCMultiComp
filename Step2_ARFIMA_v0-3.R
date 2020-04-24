@@ -2271,7 +2271,83 @@ qqline(r.t_novartis_1)
 shapiro.test(r.t_novartis_1)                                                              # Shapiro-Wilk normality test supports normality
 ks.test(r.t_novartis_1,"pnorm",mean=mean(r.t_novartis_1),sd=sd(r.t_novartis_1))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Novartis", 1, 0, fit.novartis_1.bst$d, 0)   
+bst.models[nrow(bst.models)+1,] <- c("Novartis", 1, 0, fit.novartis_1.bst$d, 0)  
+
+
+### netflix_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_netflix_1,ylim=c(0,8),                                                             
+        xlab="Year",ylab="GK volatility",main="Netflix Volatility 1/01/2016-12/31/2017")              
+acf(v.t_netflix_1,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_netflix_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.netflix_1.0d0 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=0,nma=0,M=50)                        # d sig
+summary(fit.netflix_1.0d0)
+
+fit.netflix_1.1d0 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=1,nma=0,M=50)                        # ar sig
+summary(fit.netflix_1.1d0)
+
+fit.netflix_1.2d0 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=2,nma=0,M=50)                        # all terms sig
+summary(fit.netflix_1.2d0)
+
+fit.netflix_1.0d1 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=0,nma=1,M=50)                        # warning
+summary(fit.netflix_1.0d1)
+
+fit.netflix_1.0d2 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=0,nma=2,M=50)                        # all sig
+summary(fit.netflix_1.0d2)
+
+fit.netflix_1.1d1 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=1,nma=1,M=50)                        # warning
+summary(fit.netflix_1.1d1)
+
+fit.netflix_1.1d2 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=1,nma=2,M=50)                        # warning
+summary(fit.netflix_1.1d2)
+
+fit.netflix_1.2d1 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=2,nma=1,M=50)                        # all sig
+summary(fit.netflix_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.netflix_1.0d0),fracdiff.AIC(fit.netflix_1.0d0),fracdiff.BIC(fit.netflix_1.0d0))
+c(fracdiff.AICC(fit.netflix_1.1d0),fracdiff.AIC(fit.netflix_1.1d0),fracdiff.BIC(fit.netflix_1.1d0)) 
+c(fracdiff.AICC(fit.netflix_1.2d0),fracdiff.AIC(fit.netflix_1.2d0),fracdiff.BIC(fit.netflix_1.2d0))
+c(fracdiff.AICC(fit.netflix_1.0d2),fracdiff.AIC(fit.netflix_1.0d2),fracdiff.BIC(fit.netflix_1.0d2))
+c(fracdiff.AICC(fit.netflix_1.2d1),fracdiff.AIC(fit.netflix_1.2d1),fracdiff.BIC(fit.netflix_1.2d1)) 
+
+
+
+### netflix_1 model diagnostics: autocorrelation in residuals
+fit.netflix_1.bst <- fit.netflix_1.2d1                                                      # NOTE: not an ARFIMA(0,d,0)                                                           
+
+r.t_netflix_1 <- fit.netflix_1.bst$residuals
+summary(r.t_netflix_1)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_netflix_1,ylim=c(-3,5),
+        xlab="Year",ylab="GK volatility",main="Netflix Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_netflix_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_netflix_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### netflix_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_netflix_1,                                                                                   
+     breaks=seq(-2,7,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,1),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_netflix_1),sd=sd(r.t_netflix_1)),lty=1,col="red")               
+qqnorm(r.t_netflix_1)                                                                         
+qqline(r.t_netflix_1)
+
+shapiro.test(r.t_netflix_1)                                                                # Shapiro-Wilk normality test supports normality
+ks.test(r.t_netflix_1,"pnorm",mean=mean(r.t_netflix_1),sd=sd(r.t_netflix_1))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Netflix", 1, 2, fit.netflix_1.bst$d, 1)
 
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
