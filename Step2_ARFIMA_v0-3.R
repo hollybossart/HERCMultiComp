@@ -2045,6 +2045,85 @@ bst.models[nrow(bst.models)+1,] <- c("Amazon", 1, 0, fit.amazon_1.bst$d, 0)
 
 
 
+### chinamob_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_chinamob_1,ylim=c(0,1.5),                                                             
+        xlab="Year",ylab="GK volatility",main="China Mobile Volatility 1/01/2016-12/31/2017")               # slight downward linear trend?
+acf(v.t_chinamob_1,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_chinamob_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.chinamob_1.0d0 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=0,nma=0,M=50)                        # d sig
+summary(fit.chinamob_1.0d0)
+
+fit.chinamob_1.1d0 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=1,nma=0,M=50)                        # ar sig
+summary(fit.chinamob_1.1d0)
+
+fit.chinamob_1.2d0 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=2,nma=0,M=50)                        # all terms sig
+summary(fit.chinamob_1.2d0)
+
+fit.chinamob_1.0d1 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=0,nma=1,M=50)                        # all terms sig
+summary(fit.chinamob_1.0d1)
+
+fit.chinamob_1.0d2 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=0,nma=2,M=50)                        # all terms sig
+summary(fit.chinamob_1.0d2)
+
+fit.chinamob_1.1d1 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=1,nma=1,M=50)                        # all sig
+summary(fit.chinamob_1.1d1)
+
+fit.chinamob_1.1d2 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=1,nma=2,M=50)                        # warning
+summary(fit.chinamob_1.1d2)
+
+fit.chinamob_1.2d1 <- fracdiff(v.t_chinamob_1-mean(v.t_chinamob_1),nar=2,nma=1,M=50)                        # ar2 not sig   
+summary(fit.chinamob_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.chinamob_1.0d0),fracdiff.AIC(fit.chinamob_1.0d0),fracdiff.BIC(fit.chinamob_1.0d0))
+c(fracdiff.AICC(fit.chinamob_1.1d0),fracdiff.AIC(fit.chinamob_1.1d0),fracdiff.BIC(fit.chinamob_1.1d0))
+c(fracdiff.AICC(fit.chinamob_1.2d0),fracdiff.AIC(fit.chinamob_1.2d0),fracdiff.BIC(fit.chinamob_1.2d0))
+c(fracdiff.AICC(fit.chinamob_1.0d1),fracdiff.AIC(fit.chinamob_1.0d1),fracdiff.BIC(fit.chinamob_1.0d1))
+c(fracdiff.AICC(fit.chinamob_1.0d2),fracdiff.AIC(fit.chinamob_1.0d2),fracdiff.BIC(fit.chinamob_1.0d2))
+c(fracdiff.AICC(fit.chinamob_1.1d1),fracdiff.AIC(fit.chinamob_1.1d1),fracdiff.BIC(fit.chinamob_1.1d1)) 
+
+
+
+### chinamob_1 model diagnostics: autocorrelation in residuals
+fit.chinamob_1.bst <- fit.chinamob_1.1d1                                                                  # NOTE not an ARFIMA(0,d,0)!                                                         
+
+r.t_chinamob_1 <- fit.chinamob_1.bst$residuals
+summary(r.t_chinamob_1)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_chinamob_1,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="China Mobile Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_chinamob_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_chinamob_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### chinamob_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_chinamob_1,                                                                                   
+     breaks=seq(-1,1,0.125),
+     freq=FALSE,
+     col="grey85",ylim=c(0,4),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_chinamob_1),sd=sd(r.t_chinamob_1)),lty=1,col="red")               
+qqnorm(r.t_chinamob_1)                                                                         
+qqline(r.t_chinamob_1)
+
+shapiro.test(r.t_chinamob_1)                                                                  # Shapiro-Wilk normality test supports normality
+ks.test(r.t_chinamob_1,"pnorm",mean=mean(r.t_chinamob_1),sd=sd(r.t_chinamob_1))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("China Mobile", 1, 1, fit.chinamob_1.bst$d, 1)     
+
+
+
+
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
 ### microsoft_2 ARFIMA model
