@@ -2124,6 +2124,83 @@ bst.models[nrow(bst.models)+1,] <- c("China Mobile", 1, 1, fit.chinamob_1.bst$d,
 
 
 
+
+
+### taiwan_1 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_taiwan_1,ylim=c(0,1.0),                                                             
+        xlab="Year",ylab="GK volatility",main="Taiwan Semiconductors Volatility 1/01/2016-12/31/2017")              
+acf(v.t_taiwan_1,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_taiwan_1,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.taiwan_1.0d0 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=0,nma=0,M=50)                        # d sig
+summary(fit.taiwan_1.0d0)
+
+fit.taiwan_1.1d0 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=1,nma=0,M=50)                        # ar not sig
+summary(fit.taiwan_1.1d0)
+
+fit.taiwan_1.2d0 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.taiwan_1.2d0)
+
+fit.taiwan_1.0d1 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=0,nma=1,M=50)                        # ma term not sig
+summary(fit.taiwan_1.0d1)
+
+fit.taiwan_1.0d2 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=0,nma=2,M=50)                        # no terms sig
+summary(fit.taiwan_1.0d2)
+
+fit.taiwan_1.1d1 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=1,nma=1,M=50)                        # all sig
+summary(fit.taiwan_1.1d1)
+
+fit.taiwan_1.1d2 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=1,nma=2,M=50)                        # ma2 not sig
+summary(fit.taiwan_1.1d2)
+
+fit.taiwan_1.2d1 <- fracdiff(v.t_taiwan_1-mean(v.t_taiwan_1),nar=2,nma=1,M=50)                        # warning 
+summary(fit.taiwan_1.2d1)
+
+
+
+c(fracdiff.AICC(fit.taiwan_1.0d0),fracdiff.AIC(fit.taiwan_1.0d0),fracdiff.BIC(fit.taiwan_1.0d0))
+c(fracdiff.AICC(fit.taiwan_1.1d1),fracdiff.AIC(fit.taiwan_1.1d1),fracdiff.BIC(fit.taiwan_1.1d1)) 
+
+
+
+### taiwan_1 model diagnostics: autocorrelation in residuals
+fit.taiwan_1.bst <- fit.taiwan_1.0d0                                                                                                                        
+
+r.t_taiwan_1 <- fit.taiwan_1.bst$residuals
+summary(r.t_taiwan_1)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_taiwan_1,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="Taiwan Semiconductors Volatility Residuals 1/01/2016-12/31/2017")
+abline(h=0,col="blue",lty=2)
+acf(r.t_taiwan_1,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_taiwan_1,lag.max=100,ylim=c(-0.2,1),main="")
+
+### taiwan_1 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_taiwan_1,                                                                                   
+     breaks=seq(-1,1,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_taiwan_1),sd=sd(r.t_taiwan_1)),lty=1,col="red")               
+qqnorm(r.t_taiwan_1)                                                                         
+qqline(r.t_taiwan_1)
+
+shapiro.test(r.t_taiwan_1)                                                              # Shapiro-Wilk normality test supports normality
+ks.test(r.t_taiwan_1,"pnorm",mean=mean(r.t_taiwan_1),sd=sd(r.t_taiwan_1))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Taiwan Semiconductors", 1, 0, fit.taiwan_1.bst$d, 0)     
+
+
+
+
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
 ### microsoft_2 ARFIMA model
