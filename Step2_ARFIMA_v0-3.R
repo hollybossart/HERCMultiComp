@@ -2572,7 +2572,7 @@ bst.models[nrow(bst.models)+1,] <- c("Busch", 1, 0, fit.busch_1.bst$d, 0)
 
 
 ## writing best models to a CSV file
-write.table(bst.models, file = 'bestmodels.csv')
+write.csv(bst.models, file = 'models_table_1.csv', row.names = FALSE)
 
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
