@@ -2089,7 +2089,7 @@ c(fracdiff.AICC(fit.chinamob_1.1d1),fracdiff.AIC(fit.chinamob_1.1d1),fracdiff.BI
 
 
 ### chinamob_1 model diagnostics: autocorrelation in residuals
-fit.chinamob_1.bst <- fit.chinamob_1.1d1                                                                  # NOTE not an ARFIMA(0,d,0)!                                                         
+fit.chinamob_1.bst <- fit.chinamob_1.0d0                                                                                                                      
 
 r.t_chinamob_1 <- fit.chinamob_1.bst$residuals
 summary(r.t_chinamob_1)                                                                                                                               
@@ -2291,7 +2291,7 @@ summary(fit.netflix_1.1d0)
 fit.netflix_1.2d0 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=2,nma=0,M=50)                        # all terms sig
 summary(fit.netflix_1.2d0)
 
-fit.netflix_1.0d1 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=0,nma=1,M=50)                        # warning
+fit.netflix_1.0d1 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=0,nma=1,M=100)                        # warning
 summary(fit.netflix_1.0d1)
 
 fit.netflix_1.0d2 <- fracdiff(v.t_netflix_1-mean(v.t_netflix_1),nar=0,nma=2,M=50)                        # all sig
@@ -2309,6 +2309,7 @@ summary(fit.netflix_1.2d1)
 
 
 c(fracdiff.AICC(fit.netflix_1.0d0),fracdiff.AIC(fit.netflix_1.0d0),fracdiff.BIC(fit.netflix_1.0d0))
+c(fracdiff.AICC(fit.netflix_1.0d1),fracdiff.AIC(fit.netflix_1.0d1),fracdiff.BIC(fit.netflix_1.0d1))
 c(fracdiff.AICC(fit.netflix_1.1d0),fracdiff.AIC(fit.netflix_1.1d0),fracdiff.BIC(fit.netflix_1.1d0)) 
 c(fracdiff.AICC(fit.netflix_1.2d0),fracdiff.AIC(fit.netflix_1.2d0),fracdiff.BIC(fit.netflix_1.2d0))
 c(fracdiff.AICC(fit.netflix_1.0d2),fracdiff.AIC(fit.netflix_1.0d2),fracdiff.BIC(fit.netflix_1.0d2))
