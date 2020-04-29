@@ -3004,7 +3004,7 @@ pacf(r.t_facebook_2,lag.max=100,ylim=c(-0.2,1),main="")
 ### facebook_2 residual normality check
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
-hist(r.t_facebook_2,                                                                                # [Q] some outliers?
+hist(r.t_facebook_2,                                                                              
      breaks=seq(-6,6,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,0.75),
@@ -3024,7 +3024,7 @@ bst.models[nrow(bst.models)+1,] <- c("Facebook", 1, 0, fit.facebook_2.bst$d, 0) 
 ### chevron_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_chevron_2,ylim=c(0,5),                                                             
+plot.ts(v.t_chevron_2,ylim=c(0,8),                                                             
         xlab="Year",ylab="GK volatility",main="Chevron Volatility 2/01/2018-12/31/2019")
 acf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")                                              # definitely appears to be long-memory
 pacf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3032,37 +3032,37 @@ pacf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.chevron_2.0d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=0,M=50)                  # d term significant  
 summary(fit.chevron_2.0d0)
 
-fit.chevron_2.1d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=0,M=50)                  # ar significant
+fit.chevron_2.1d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=0,M=50)                  # ar not significant
 summary(fit.chevron_2.1d0)
 
-fit.chevron_2.2d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=0,M=50)                  # all terms significant
+fit.chevron_2.2d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=0,M=50)                  # ar not sig
 summary(fit.chevron_2.2d0)
 
 fit.chevron_2.0d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=1,M=50)                  # ma sig
 summary(fit.chevron_2.0d1)
 
-fit.chevron_2.0d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=2,M=50)                  # warning when computing correlation
+fit.chevron_2.0d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=2,M=50)                  # ma terms not sig
 summary(fit.chevron_2.0d2)
 
-fit.chevron_2.1d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=1,M=50)                  # warning   
+fit.chevron_2.1d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=1,M=50)                  # all terms sig, but have very close ar/ma params  
 summary(fit.chevron_2.1d1)
 
-fit.chevron_2.1d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+fit.chevron_2.1d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=2,M=50)                  # only d sig        
 summary(fit.chevron_2.1d2)
 
-fit.chevron_2.2d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+fit.chevron_2.2d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=1,M=50)                  # d, ma sig        
 summary(fit.chevron_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.chevron_2.0d0),fracdiff.AIC(fit.chevron_2.0d0),fracdiff.BIC(fit.chevron_2.0d0))  
-c(fracdiff.AICC(fit.chevron_2.1d0),fracdiff.AIC(fit.chevron_2.1d0),fracdiff.BIC(fit.chevron_2.1d0))
+c(fracdiff.AICC(fit.chevron_2.1d1),fracdiff.AIC(fit.chevron_2.1d1),fracdiff.BIC(fit.chevron_2.1d1))
 c(fracdiff.AICC(fit.chevron_2.2d0),fracdiff.AIC(fit.chevron_2.2d0),fracdiff.BIC(fit.chevron_2.2d0))
 c(fracdiff.AICC(fit.chevron_2.0d1),fracdiff.AIC(fit.chevron_2.0d1),fracdiff.BIC(fit.chevron_2.0d1))
 
 
 ### chevron_2 model diagnostics: autocorrelation in residuals
-fit.chevron_2.bst <- fit.chevron_2.0d0                                                         
+fit.chevron_2.bst <- fit.chevron_2.1d1                                                         
 
 r.t_chevron_2 <- fit.chevron_2.bst$residuals
 summary(r.t_chevron_2)                                                                         
@@ -3070,7 +3070,7 @@ summary(r.t_chevron_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_chevron_2,ylim=c(-2,5),
+plot.ts(r.t_chevron_2,ylim=c(-2,6),
         xlab="Year",ylab="GK volatility",main="Chevron Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3079,20 +3079,20 @@ pacf(r.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")
 ### chevron_2 residual normality check
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
-hist(r.t_chevron_2,                                                                                # [Q] some outliers?
-     breaks=seq(-2,5,0.25),
+hist(r.t_chevron_2,                                                                              
+     breaks=seq(-6,6,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,3),
+     col="grey85",ylim=c(0,2),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2)),lty=1,col="red")               
 qqnorm(r.t_chevron_2)                                                                         
 qqline(r.t_chevron_2)
 
-shapiro.test(r.t_chevron_2)                                                                        # Shapiro-Wilk normality test supports normality
-ks.test(r.t_chevron_2,"pnorm",mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2))                     # KS test supports normality
+shapiro.test(r.t_chevron_2)                                                                       # Shapiro-Wilk normality test supports normality
+ks.test(r.t_chevron_2,"pnorm",mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2))                      # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Chevron", 1, 0, fit.chevron_2.bst$d, 0)                     # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("Chevron", 1, 1, fit.chevron_2.bst$d, 1)                     # adding to the table
 
 
 
