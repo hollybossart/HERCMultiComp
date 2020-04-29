@@ -3247,7 +3247,7 @@ bst.models[nrow(bst.models)+1,] <- c("Alibaba", 2, 0, fit.alibaba_2.bst$d, 0)   
 ### pg_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_pg_2,ylim=c(0,2),                                                             
+plot.ts(v.t_pg_2,ylim=c(0,3),                                                             
         xlab="Year",ylab="GK volatility",main="PG Volatility 2/01/2018-12/31/2019")
 acf(v.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")                                                       # definitely appears to be long-memory
 pacf(v.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3255,31 +3255,33 @@ pacf(v.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.pg_2.0d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=0,M=50)                                     # d term significant  
 summary(fit.pg_2.0d0)
 
-fit.pg_2.1d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=0,M=50)                                     # ar term not significant
+fit.pg_2.1d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=0,M=50)                                     # ar term sig
 summary(fit.pg_2.1d0)
 
-fit.pg_2.2d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=2,nma=0,M=50)                                     # ar terms sig
+fit.pg_2.2d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=2,nma=0,M=50)                                     # ar2 term not sig
 summary(fit.pg_2.2d0)
 
-fit.pg_2.0d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=1,M=50)                                     # ma not sig
+fit.pg_2.0d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=1,M=50)                                     # ma sig
 summary(fit.pg_2.0d1)
 
-fit.pg_2.0d2 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=2,M=50)                                     # ma terms sig
+fit.pg_2.0d2 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=2,M=50)                                     # ma 2 term not sig
 summary(fit.pg_2.0d2)
 
-fit.pg_2.1d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=1,M=50)                                     # can't compute correlation 
+fit.pg_2.1d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=1,M=50)                                     # all sig
 summary(fit.pg_2.1d1)
 
-fit.pg_2.1d2 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=2,M=50)                                     # ma not sig
+fit.pg_2.1d2 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=2,M=50)                                     # only d sig
 summary(fit.pg_2.1d2)
 
-fit.pg_2.2d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=2,nma=1,M=50)                                     # all terms significant       
+fit.pg_2.2d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=2,nma=1,M=50)                                     # ar terms not sig     
 summary(fit.pg_2.2d1)
 
 
 
-c(fracdiff.AICC(fit.pg_2.0d0),fracdiff.AIC(fit.pg_2.0d0),fracdiff.BIC(fit.pg_2.0d0))                  
-c(fracdiff.AICC(fit.pg_2.2d1),fracdiff.AIC(fit.pg_2.2d1),fracdiff.BIC(fit.pg_2.2d1))                  
+c(fracdiff.AICC(fit.pg_2.0d0),fracdiff.AIC(fit.pg_2.0d0),fracdiff.BIC(fit.pg_2.0d0))                   # values are quite close but 0,d,0 minimizes BIC
+c(fracdiff.AICC(fit.pg_2.1d0),fracdiff.AIC(fit.pg_2.1d0),fracdiff.BIC(fit.pg_2.1d0))
+c(fracdiff.AICC(fit.pg_2.0d1),fracdiff.AIC(fit.pg_2.0d1),fracdiff.BIC(fit.pg_2.0d1)) 
+c(fracdiff.AICC(fit.pg_2.1d1),fracdiff.AIC(fit.pg_2.1d1),fracdiff.BIC(fit.pg_2.1d1))                  
 
 
 ### pg_2 model diagnostics: autocorrelation in residuals
@@ -3291,7 +3293,7 @@ summary(r.t_pg_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_pg_2,ylim=c(-2,5),
+plot.ts(r.t_pg_2,ylim=c(-2.5,2.5),
         xlab="Year",ylab="GK volatility",main="PG Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3301,7 +3303,7 @@ pacf(r.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_pg_2,                                                                                   
-     breaks=seq(-2,3,0.25),
+     breaks=seq(-2.5,2.5,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,3),
      main="Residual Histogram")                                                              
@@ -3313,7 +3315,7 @@ qqline(r.t_pg_2)
 shapiro.test(r.t_pg_2)                                                                            # Shapiro-Wilk normality test supports normality
 ks.test(r.t_pg_2,"pnorm",mean=mean(r.t_pg_2),sd=sd(r.t_pg_2))                                     # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("PG", 1, 0, fit.pg_2.bst$d, 0)                               # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("PG", 2, 0, fit.pg_2.bst$d, 0)                               # adding to the table
 
 
 ### pfizer_2 ARFIMA model
