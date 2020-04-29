@@ -2577,55 +2577,49 @@ write.csv(bst.models, file = 'models_table_1.csv', row.names = FALSE)
 
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
+
 ### microsoft_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_microsoft_2,ylim=c(0,5),
-        xlab="Year",ylab="GK volatility",main="Microsoft Volatility 2/01/2018-12/31/2019")      # acf appears to show long-memory
+plot.ts(v.t_microsoft_2,ylim=c(0,4.5),
+        xlab="Year",ylab="GK volatility",main="Microsoft Volatility 2/01/2018-12/31/2019")
 acf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
 pacf(v.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
 
 fit.microsoft_2.0d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=50)
 summary(fit.microsoft_2.0d0)
 
-fit.microsoft_2.1d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=0,M=50)         # p value on AR param 0.965
+fit.microsoft_2.1d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=0,M=50)           # ar not sig
 summary(fit.microsoft_2.1d0)
 
-fit.microsoft_2.2d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=0,M=50)         # AR terms not significant
+fit.microsoft_2.2d0 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=0,M=50)           # ar terms not sig
 summary(fit.microsoft_2.2d0)
 
-fit.microsoft_2.0d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=1,M=50)         # MA term close to zero and not significant
+fit.microsoft_2.0d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=1,M=50)           # ma not sig
 summary(fit.microsoft_2.0d1)
 
-fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=50)         # all terms significant
+fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=30)           # all terms sig
 summary(fit.microsoft_2.1d1)
 
-fit.microsoft_2.0d0_b <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=30)       # changed M value to 30, results are the same as above
-summary(fit.microsoft_2.0d0_b)
-
-fit.microsoft_2.2d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=2,nma=1,M=50)         # received warning when computing correlation matrix
-summary(fit.microsoft_2.2d1)
-
-fit.microsoft_2.1d2 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=2,M=50)         # received warning when computing correlation matrix
-summary(fit.microsoft_2.1d2)
+fit.microsoft_2.0d0_b <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=30)         # changed M value to 30, results are the same as above
+summary(fit.microsoft_2.0d0)
 
 
-### microsoft_2 model checking the AICC, AIC, BIC
 c(fracdiff.AICC(fit.microsoft_2.0d0),fracdiff.AIC(fit.microsoft_2.0d0),fracdiff.BIC(fit.microsoft_2.0d0))  
-c(fracdiff.AICC(fit.microsoft_2.1d0),fracdiff.AIC(fit.microsoft_2.1d0),fracdiff.BIC(fit.microsoft_2.1d0))
-c(fracdiff.AICC(fit.microsoft_2.0d1),fracdiff.AIC(fit.microsoft_2.0d1),fracdiff.BIC(fit.microsoft_2.0d1))
 c(fracdiff.AICC(fit.microsoft_2.1d1),fracdiff.AIC(fit.microsoft_2.1d1),fracdiff.BIC(fit.microsoft_2.1d1))
+
+
 
 ### microsoft_2 model diagnostics: autocorrelation in residuals
 fit.microsoft_2.bst <- fit.microsoft_2.0d0                                                       # this minimizes AICC, AIC, BIC
 
 r.t_microsoft_2 <- fit.microsoft_2.bst$residuals
-summary(r.t_microsoft_2)                                                                        
+summary(r.t_microsoft_2)                                                                         # min -0.48 max 1.76 mean 0
 
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_microsoft_1,ylim=c(-2,2),
+plot.ts(r.t_microsoft_2,ylim=c(-3,3),
         xlab="Year",ylab="GK volatility",main="Microsoft Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -2635,17 +2629,2188 @@ pacf(r.t_microsoft_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_microsoft_2,                                                                           # histogram of residuals
-     breaks=seq(-4,4,0.25),
+     breaks=seq(-3,3,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,1.5),
-     main="Residual Histogram")                                                                 # looks close to normal
+     main="Residual Histogram")                                                                 
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2)),lty=1,col="red")             # add theoretical normal density
 qqnorm(r.t_microsoft_2)                                                                         # normal Q-Q plot
 qqline(r.t_microsoft_2)
 
-shapiro.test(r.t_microsoft_2)                                                                   # Shapiro-Wilk test indicates normality
-ks.test(r.t_microsoft_2,"pnorm",mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2))              # Kolmogorov-Smirnov indicates normality
+shapiro.test(r.t_microsoft_2)                                                                   # Shapiro-Wilk normality test
+ks.test(r.t_microsoft_2,"pnorm",mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2))
+
+### add model to table
+bst.models[nrow(bst.models)+1,] <- c("Microsoft", 1, 0, fit.microsoft_2.bst$d, 0)
 
 
+
+
+
+
+### oracle_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_oracle_2,ylim=c(0,3),
+        xlab="Year",ylab="GK volatility",main="Oracle Volatility 2/01/2018-12/31/2019")
+acf(v.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(v.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+fit.oracle_2.0d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.oracle_2.0d0)
+
+fit.oracle_2.1d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=0,M=50)                  # ar not sig
+summary(fit.oracle_2.1d0)
+
+fit.oracle_2.2d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=2,nma=0,M=50)                  # only d, ar1 term significant
+summary(fit.oracle_2.2d0)
+
+fit.oracle_2.0d1 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=1,M=50)                  # ma term significant
+summary(fit.oracle_2.0d1)
+
+fit.oracle_2.0d2 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=2,M=50)                  # ma2 term not significant
+summary(fit.oracle_2.0d2)
+
+fit.oracle_2.1d1 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=1,M=50)                  # all sig        
+summary(fit.oracle_2.1d1)
+
+fit.oracle_2.0d0_b <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=0,M=30)                # changed M value to 30, results are the same as above
+summary(fit.oracle_2.0d0_b)
+
+
+c(fracdiff.AICC(fit.oracle_2.0d0),fracdiff.AIC(fit.oracle_2.0d0),fracdiff.BIC(fit.oracle_2.0d0))  
+c(fracdiff.AICC(fit.oracle_2.1d1),fracdiff.AIC(fit.oracle_2.1d1),fracdiff.BIC(fit.oracle_2.1d1))
+c(fracdiff.AICC(fit.oracle_2.0d1),fracdiff.AIC(fit.oracle_2.0d1),fracdiff.BIC(fit.oracle_2.0d1))
+
+
+
+
+### oracle_2 model diagnostics: autocorrelation in residuals
+fit.oracle_2.bst <- fit.oracle_2.0d0                                                          # this minimizes BIC but AICC and AIC are very close to min val
+
+r.t_oracle_2 <- fit.oracle_2.bst$residuals
+summary(r.t_oracle_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_oracle_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Oracle Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### oracle_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_oracle_2,                                                                            # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2)),lty=1,col="red")                # add theoretical normal density
+qqnorm(r.t_oracle_2)                                                                         # [Q] Does this QQ plot support normality? Hard to tell at the ends
+qqline(r.t_oracle_2)
+shapiro.test(r.t_oracle_2)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_oracle_2,"pnorm",mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2))                    # KS test supports normality
+
+
+bst.models[nrow(bst.models)+1,] <- c("Oracle", 2, 0, fit.oracle_2.bst$d, 0)
+
+
+
+### exxon_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_exxon_2,ylim=c(0,3),                                                             # might have a slight downward linear trend?
+        xlab="Year",ylab="GK volatility",main="Exxon Volatility 2/01/2018-12/31/2019")
+acf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                          # looks like slow decrease of acf as lag increases
+pacf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.exxon_2.0d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.exxon_2.0d0)
+
+fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar, d term significant
+summary(fit.exxon_2.1d0)
+
+fit.exxon_2.2d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=0,M=50)                  # all terms significant
+summary(fit.exxon_2.2d0)
+
+fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term significant
+summary(fit.exxon_2.0d1)
+
+fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1 and ma2 term significant
+summary(fit.exxon_2.0d2)
+
+fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=50)                  # all terms significant         
+summary(fit.exxon_2.1d1)
+
+fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.exxon_2.1d2)
+
+fit.exxon_2.2d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=1,M=50)                  # ar2 term not significant            
+summary(fit.exxon_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.exxon_2.0d0),fracdiff.AIC(fit.exxon_2.0d0),fracdiff.BIC(fit.exxon_2.0d0))  
+c(fracdiff.AICC(fit.exxon_2.1d0),fracdiff.AIC(fit.exxon_2.1d0),fracdiff.BIC(fit.exxon_2.1d0))
+c(fracdiff.AICC(fit.exxon_2.0d1),fracdiff.AIC(fit.exxon_2.0d1),fracdiff.BIC(fit.exxon_2.0d1))
+c(fracdiff.AICC(fit.exxon_2.1d1),fracdiff.AIC(fit.exxon_2.1d1),fracdiff.BIC(fit.exxon_2.1d1))
+c(fracdiff.AICC(fit.exxon_2.2d0),fracdiff.AIC(fit.exxon_2.2d0),fracdiff.BIC(fit.exxon_2.2d0))
+c(fracdiff.AICC(fit.exxon_2.0d2),fracdiff.AIC(fit.exxon_2.0d2),fracdiff.BIC(fit.exxon_2.0d2))
+
+
+### exxon_2 model diagnostics: autocorrelation in residuals
+fit.exxon_2.bst <- fit.exxon_2.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
+
+r.t_exxon_2 <- fit.exxon_2.bst$residuals
+summary(r.t_exxon_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_exxon_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Exxon Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### exxon_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_exxon_2,                                                                            # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2)),lty=1,col="red")                 # add theoretical normal density
+qqnorm(r.t_exxon_2)                                                                         
+qqline(r.t_exxon_2)
+
+shapiro.test(r.t_exxon_2)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_exxon_2,"pnorm",mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2))                      # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Exxon", 1, 0, fit.exxon_2.bst$d, 0)                   # adding to the table
+
+
+
+### gm_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_gm_2,ylim=c(0,2),                                                             
+        xlab="Year",ylab="GK volatility",main="GM Volatility 2/01/2018-12/31/2019")
+acf(v.t_gm_2,lag.max=100,ylim=c(-0.2,1),main="")                                         
+pacf(v.t_gm_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.gm_2.0d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.gm_2.0d0)
+
+fit.gm_2.1d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=0,M=50)                  # ar, d term significant
+summary(fit.gm_2.1d0)
+
+fit.gm_2.2d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=2,nma=0,M=50)                  # ar2 not sig
+summary(fit.gm_2.2d0)
+
+fit.gm_2.0d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=1,M=50)                  # d, ma term significant
+summary(fit.gm_2.0d1)
+
+fit.gm_2.0d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=2,M=50)                  # ma2 not sig
+summary(fit.gm_2.0d2)
+
+fit.gm_2.1d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=1,M=50)                  # warning when computing corr      
+summary(fit.gm_2.1d1)
+
+fit.gm_2.1d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.gm_2.1d2)
+
+fit.gm_2.2d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=2,nma=1,M=50)                  # ar2 term not significant            
+summary(fit.gm_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.gm_2.0d0),fracdiff.AIC(fit.gm_2.0d0),fracdiff.BIC(fit.gm_2.0d0))  
+c(fracdiff.AICC(fit.gm_2.1d0),fracdiff.AIC(fit.gm_2.1d0),fracdiff.BIC(fit.gm_2.1d0))
+c(fracdiff.AICC(fit.gm_2.0d1),fracdiff.AIC(fit.gm_2.0d1),fracdiff.BIC(fit.gm_2.0d1))
+
+
+
+
+### gm_2 model diagnostics: autocorrelation in residuals
+fit.gm_2.bst <- fit.gm_2.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
+
+r.t_gm_2 <- fit.gm_2.bst$residuals
+summary(r.t_gm_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_gm_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="General Motors Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_gm_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_gm_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### gm_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_gm_2,                                                                           # histogram of residuals
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_gm_2),sd=sd(r.t_gm_2)),lty=1,col="red")                    # add theoretical normal density
+qqnorm(r.t_gm_2)                                                                         
+qqline(r.t_gm_2)
+
+shapiro.test(r.t_gm_2)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_gm_2,"pnorm",mean=mean(r.t_gm_2),sd=sd(r.t_gm_2))                            # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("General Motors", 1, 0, fit.gm_2.bst$d, 0)          # adding to the table
+
+
+
+### ibm_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_ibm_2,ylim=c(0,4),                                                             
+        xlab="Year",ylab="GK volatility",main="IBM Volatility 2/01/2018-12/31/2019")
+acf(v.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")                                         
+pacf(v.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.ibm_2.0d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.ibm_2.0d0)
+
+fit.ibm_2.1d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=0,M=50)                  # ar significant
+summary(fit.ibm_2.1d0)
+
+fit.ibm_2.2d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=2,nma=0,M=50)                  # ar1/2 significant
+summary(fit.ibm_2.2d0)
+
+fit.ibm_2.0d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=1,M=50)                  # ma not sig
+summary(fit.ibm_2.0d1)
+
+fit.ibm_2.0d2 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=2,M=50)                  # all significant
+summary(fit.ibm_2.0d2)
+
+fit.ibm_2.1d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=1,M=50)                  # warning when computing corr      
+summary(fit.ibm_2.1d1)
+
+fit.ibm_2.1d2 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.ibm_2.1d2)
+
+fit.ibm_2.2d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+summary(fit.ibm_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.ibm_2.0d0),fracdiff.AIC(fit.ibm_2.0d0),fracdiff.BIC(fit.ibm_2.0d0))  
+c(fracdiff.AICC(fit.ibm_2.1d0),fracdiff.AIC(fit.ibm_2.1d0),fracdiff.BIC(fit.ibm_2.1d0))
+c(fracdiff.AICC(fit.ibm_2.2d0),fracdiff.AIC(fit.ibm_2.2d0),fracdiff.BIC(fit.ibm_2.2d0))
+c(fracdiff.AICC(fit.ibm_2.0d2),fracdiff.AIC(fit.ibm_2.0d2),fracdiff.BIC(fit.ibm_2.0d2))
+
+
+
+
+### ibm_2 model diagnostics: autocorrelation in residuals
+fit.ibm_2.bst <- fit.ibm_2.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
+
+r.t_ibm_2 <- fit.ibm_2.bst$residuals
+summary(r.t_ibm_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_ibm_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="IBM Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### ibm_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_ibm_2,                                                                           # one outlier
+     breaks=seq(-2,5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_ibm_2),sd=sd(r.t_ibm_2)),lty=1,col="red")                   # add theoretical normal density
+qqnorm(r.t_ibm_2)                                                                         
+qqline(r.t_ibm_2)
+
+shapiro.test(r.t_ibm_2)                                                                   # Shapiro-Wilk normality test supports normality
+ks.test(r.t_ibm_2,"pnorm",mean=mean(r.t_ibm_2),sd=sd(r.t_ibm_2))                          # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("IBM", 1, 0, fit.ibm_2.bst$d, 0)                     # adding to the table
+
+
+
+
+### facebook_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_facebook_2,ylim=c(0,5),                                                             
+        xlab="Year",ylab="GK volatility",main="Facebook Volatility 2/01/2018-12/31/2019")
+acf(v.t_facebook_2,lag.max=100,ylim=c(-0.2,1),main="")                                         
+pacf(v.t_facebook_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.facebook_2.0d0 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.facebook_2.0d0)
+
+fit.facebook_2.1d0 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=1,nma=0,M=50)                  # ar significant
+summary(fit.facebook_2.1d0)
+
+fit.facebook_2.2d0 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=2,nma=0,M=50)                  # ar2 not sig
+summary(fit.facebook_2.2d0)
+
+fit.facebook_2.0d1 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=0,nma=1,M=50)                  # ma sig
+summary(fit.facebook_2.0d1)
+
+fit.facebook_2.0d2 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=0,nma=2,M=50)                  # ma1 sig
+summary(fit.facebook_2.0d2)
+
+fit.facebook_2.1d1 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=1,nma=1,M=50)                  # all sig     
+summary(fit.facebook_2.1d1)
+
+fit.facebook_2.1d2 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.facebook_2.1d2)
+
+fit.facebook_2.2d1 <- fracdiff(v.t_facebook_2-mean(v.t_facebook_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+summary(fit.facebook_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.facebook_2.0d0),fracdiff.AIC(fit.facebook_2.0d0),fracdiff.BIC(fit.facebook_2.0d0))  
+c(fracdiff.AICC(fit.facebook_2.1d0),fracdiff.AIC(fit.facebook_2.1d0),fracdiff.BIC(fit.facebook_2.1d0))
+c(fracdiff.AICC(fit.facebook_2.2d0),fracdiff.AIC(fit.facebook_2.2d0),fracdiff.BIC(fit.facebook_2.2d0))
+c(fracdiff.AICC(fit.facebook_2.0d2),fracdiff.AIC(fit.facebook_2.0d2),fracdiff.BIC(fit.facebook_2.0d2))
+c(fracdiff.AICC(fit.facebook_2.1d1),fracdiff.AIC(fit.facebook_2.1d1),fracdiff.BIC(fit.facebook_2.1d1))
+c(fracdiff.AICC(fit.facebook_2.0d1),fracdiff.AIC(fit.facebook_2.0d1),fracdiff.BIC(fit.facebook_2.0d1))
+
+
+### facebook_2 model diagnostics: autocorrelation in residuals
+fit.facebook_2.bst <- fit.facebook_2.0d0                                                         
+
+r.t_facebook_2 <- fit.facebook_2.bst$residuals
+summary(r.t_facebook_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_facebook_2,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="Facebook Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_facebook_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_facebook_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### facebook_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_facebook_2,                                                                                # [Q] some outliers?
+     breaks=seq(-2,5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_facebook_2),sd=sd(r.t_facebook_2)),lty=1,col="red")               
+qqnorm(r.t_facebook_2)                                                                         
+qqline(r.t_facebook_2)
+
+shapiro.test(r.t_facebook_2)                                                                        # Shapiro-Wilk normality test supports normality
+ks.test(r.t_facebook_2,"pnorm",mean=mean(r.t_facebook_2),sd=sd(r.t_facebook_2))                     # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Facebook", 1, 0, fit.facebook_2.bst$d, 0)                     # adding to the table
+
+
+
+### chevron_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_chevron_2,ylim=c(0,5),                                                             
+        xlab="Year",ylab="GK volatility",main="Chevron Volatility 2/01/2018-12/31/2019")
+acf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")                                              # definitely appears to be long-memory
+pacf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.chevron_2.0d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.chevron_2.0d0)
+
+fit.chevron_2.1d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=0,M=50)                  # ar significant
+summary(fit.chevron_2.1d0)
+
+fit.chevron_2.2d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=0,M=50)                  # all terms significant
+summary(fit.chevron_2.2d0)
+
+fit.chevron_2.0d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=1,M=50)                  # ma sig
+summary(fit.chevron_2.0d1)
+
+fit.chevron_2.0d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=2,M=50)                  # warning when computing correlation
+summary(fit.chevron_2.0d2)
+
+fit.chevron_2.1d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=1,M=50)                  # warning   
+summary(fit.chevron_2.1d1)
+
+fit.chevron_2.1d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+summary(fit.chevron_2.1d2)
+
+fit.chevron_2.2d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+summary(fit.chevron_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.chevron_2.0d0),fracdiff.AIC(fit.chevron_2.0d0),fracdiff.BIC(fit.chevron_2.0d0))  
+c(fracdiff.AICC(fit.chevron_2.1d0),fracdiff.AIC(fit.chevron_2.1d0),fracdiff.BIC(fit.chevron_2.1d0))
+c(fracdiff.AICC(fit.chevron_2.2d0),fracdiff.AIC(fit.chevron_2.2d0),fracdiff.BIC(fit.chevron_2.2d0))
+c(fracdiff.AICC(fit.chevron_2.0d1),fracdiff.AIC(fit.chevron_2.0d1),fracdiff.BIC(fit.chevron_2.0d1))
+
+
+### chevron_2 model diagnostics: autocorrelation in residuals
+fit.chevron_2.bst <- fit.chevron_2.0d0                                                         
+
+r.t_chevron_2 <- fit.chevron_2.bst$residuals
+summary(r.t_chevron_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_chevron_2,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="Chevron Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### chevron_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_chevron_2,                                                                                # [Q] some outliers?
+     breaks=seq(-2,5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2)),lty=1,col="red")               
+qqnorm(r.t_chevron_2)                                                                         
+qqline(r.t_chevron_2)
+
+shapiro.test(r.t_chevron_2)                                                                        # Shapiro-Wilk normality test supports normality
+ks.test(r.t_chevron_2,"pnorm",mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2))                     # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Chevron", 1, 0, fit.chevron_2.bst$d, 0)                     # adding to the table
+
+
+
+
+### apple_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_apple_2,ylim=c(0,6),                                                             
+        xlab="Year",ylab="GK volatility",main="Apple Volatility 2/01/2018-12/31/2019")
+acf(v.t_apple_2,lag.max=100,ylim=c(-0.2,1),main="")                                          # definitely appears to be long-memory
+pacf(v.t_apple_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.apple_2.0d0 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.apple_2.0d0)
+
+fit.apple_2.1d0 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=1,nma=0,M=50)                  # ar significant
+summary(fit.apple_2.1d0)
+
+fit.apple_2.2d0 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=2,nma=0,M=50)                  # all terms significant
+summary(fit.apple_2.2d0)
+
+fit.apple_2.0d1 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=0,nma=1,M=50)                  # ma sig
+summary(fit.apple_2.0d1)
+
+fit.apple_2.0d2 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=0,nma=2,M=50)                  # ma2 not significant
+summary(fit.apple_2.0d2)
+
+fit.apple_2.1d1 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=1,nma=1,M=50)                  # all terms sig  
+summary(fit.apple_2.1d1)
+
+fit.apple_2.1d2 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=1,nma=2,M=50)                  # ma 2 not sig     
+summary(fit.apple_2.1d2)
+
+fit.apple_2.2d1 <- fracdiff(v.t_apple_2-mean(v.t_apple_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+summary(fit.apple_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.apple_2.0d0),fracdiff.AIC(fit.apple_2.0d0),fracdiff.BIC(fit.apple_2.0d0))  
+c(fracdiff.AICC(fit.apple_2.1d0),fracdiff.AIC(fit.apple_2.1d0),fracdiff.BIC(fit.apple_2.1d0))
+c(fracdiff.AICC(fit.apple_2.2d0),fracdiff.AIC(fit.apple_2.2d0),fracdiff.BIC(fit.apple_2.2d0))
+c(fracdiff.AICC(fit.apple_2.0d1),fracdiff.AIC(fit.apple_2.0d1),fracdiff.BIC(fit.apple_2.0d1))
+c(fracdiff.AICC(fit.apple_2.1d1),fracdiff.AIC(fit.apple_2.1d1),fracdiff.BIC(fit.apple_2.1d1))
+
+### apple_2 model diagnostics: autocorrelation in residuals
+fit.apple_2.bst <- fit.apple_2.0d0                                                         
+
+r.t_apple_2 <- fit.apple_2.bst$residuals
+summary(r.t_apple_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_apple_2,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="Apple Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_apple_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_apple_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### apple_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_apple_2,                                                                                # [Q] some outliers?
+     breaks=seq(-2,5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_apple_2),sd=sd(r.t_apple_2)),lty=1,col="red")               
+qqnorm(r.t_apple_2)                                                                         
+qqline(r.t_apple_2)
+
+shapiro.test(r.t_apple_2)                                                                        # Shapiro-Wilk normality test supports normality
+ks.test(r.t_apple_2,"pnorm",mean=mean(r.t_apple_2),sd=sd(r.t_apple_2))                           # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Apple", 1, 0, fit.apple_2.bst$d, 0)                        # adding to the table
+
+
+
+### alibaba_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_alibaba_2,ylim=c(0,7),                                                             
+        xlab="Year",ylab="GK volatility",main="Alibaba Volatility 2/01/2018-12/31/2019")
+acf(v.t_alibaba_2,lag.max=100,ylim=c(-0.2,1),main="")                                              # definitely appears to be long-memory
+pacf(v.t_alibaba_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.alibaba_2.0d0 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=0,nma=0,M=50)                  # d term significant  
+summary(fit.alibaba_2.0d0)
+
+fit.alibaba_2.1d0 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=1,nma=0,M=50)                  # ar term not significant
+summary(fit.alibaba_2.1d0)
+
+fit.alibaba_2.2d0 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=2,nma=0,M=50)                  # ar terms not sig
+summary(fit.alibaba_2.2d0)
+
+fit.alibaba_2.0d1 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=0,nma=1,M=50)                  # ma not sig
+summary(fit.alibaba_2.0d1)
+
+fit.alibaba_2.0d2 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=0,nma=2,M=50)                  # ma terms not sig
+summary(fit.alibaba_2.0d2)
+
+fit.alibaba_2.1d1 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=1,nma=1,M=50)                  # can't compute correlation 
+summary(fit.alibaba_2.1d1)
+
+fit.alibaba_2.1d2 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=1,nma=2,M=50)                  # can't compute correlation
+summary(fit.alibaba_2.1d2)
+
+fit.alibaba_2.2d1 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+summary(fit.alibaba_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.alibaba_2.0d0),fracdiff.AIC(fit.alibaba_2.0d0),fracdiff.BIC(fit.alibaba_2.0d0))    # only model with all terms significant  
+
+
+### alibaba_2 model diagnostics: autocorrelation in residuals
+fit.alibaba_2.bst <- fit.alibaba_2.0d0                                                         
+
+r.t_alibaba_2 <- fit.alibaba_2.bst$residuals
+summary(r.t_alibaba_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_alibaba_2,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="Alibaba Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_alibaba_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_alibaba_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### alibaba_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_alibaba_2,                                                                                    # [Q] some outliers? right skewed
+     breaks=seq(-2,6.5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_alibaba_2),sd=sd(r.t_alibaba_2)),lty=1,col="red")               
+qqnorm(r.t_alibaba_2)                                                                         
+qqline(r.t_alibaba_2)
+
+shapiro.test(r.t_alibaba_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_alibaba_2,"pnorm",mean=mean(r.t_alibaba_2),sd=sd(r.t_alibaba_2))                           # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Alibaba", 1, 0, fit.alibaba_2.bst$d, 0)                          # adding to the table
+
+
+
+### pg_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_pg_2,ylim=c(0,2),                                                             
+        xlab="Year",ylab="GK volatility",main="PG Volatility 2/01/2018-12/31/2019")
+acf(v.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")                                                       # definitely appears to be long-memory
+pacf(v.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.pg_2.0d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=0,M=50)                                     # d term significant  
+summary(fit.pg_2.0d0)
+
+fit.pg_2.1d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=0,M=50)                                     # ar term not significant
+summary(fit.pg_2.1d0)
+
+fit.pg_2.2d0 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=2,nma=0,M=50)                                     # ar terms sig
+summary(fit.pg_2.2d0)
+
+fit.pg_2.0d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=1,M=50)                                     # ma not sig
+summary(fit.pg_2.0d1)
+
+fit.pg_2.0d2 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=0,nma=2,M=50)                                     # ma terms sig
+summary(fit.pg_2.0d2)
+
+fit.pg_2.1d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=1,M=50)                                     # can't compute correlation 
+summary(fit.pg_2.1d1)
+
+fit.pg_2.1d2 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=1,nma=2,M=50)                                     # ma not sig
+summary(fit.pg_2.1d2)
+
+fit.pg_2.2d1 <- fracdiff(v.t_pg_2-mean(v.t_pg_2),nar=2,nma=1,M=50)                                     # all terms significant       
+summary(fit.pg_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.pg_2.0d0),fracdiff.AIC(fit.pg_2.0d0),fracdiff.BIC(fit.pg_2.0d0))                  
+c(fracdiff.AICC(fit.pg_2.2d1),fracdiff.AIC(fit.pg_2.2d1),fracdiff.BIC(fit.pg_2.2d1))                  
+
+
+### pg_2 model diagnostics: autocorrelation in residuals
+fit.pg_2.bst <- fit.pg_2.0d0                                                         
+
+r.t_pg_2 <- fit.pg_2.bst$residuals
+summary(r.t_pg_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_pg_2,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="PG Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_pg_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### pg_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_pg_2,                                                                                   
+     breaks=seq(-2,3,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_pg_2),sd=sd(r.t_pg_2)),lty=1,col="red")               
+qqnorm(r.t_pg_2)                                                                         
+qqline(r.t_pg_2)
+
+shapiro.test(r.t_pg_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_pg_2,"pnorm",mean=mean(r.t_pg_2),sd=sd(r.t_pg_2))                                     # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("PG", 1, 0, fit.pg_2.bst$d, 0)                               # adding to the table
+
+
+### pfizer_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_pfizer_2,ylim=c(0,1.5),                                                             
+        xlab="Year",ylab="GK volatility",main="Pfizer Volatility 2/01/2018-12/31/2019")
+acf(v.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")                                                # definitely appears to be long-memory
+pacf(v.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.pfizer_2.0d0 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=0,nma=0,M=50)                      # d term significant  
+summary(fit.pfizer_2.0d0)
+
+fit.pfizer_2.1d0 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=0,M=50)                      # ar term not significant
+summary(fit.pfizer_2.1d0)
+
+fit.pfizer_2.2d0 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=2,nma=0,M=50)                      # ar terms not sig
+summary(fit.pfizer_2.2d0)
+
+fit.pfizer_2.0d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=0,nma=1,M=50)                      # ma not sig
+summary(fit.pfizer_2.0d1)
+
+fit.pfizer_2.0d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=0,nma=2,M=50)                      # ma terms not sig
+summary(fit.pfizer_2.0d2)
+
+fit.pfizer_2.1d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=1,M=50)                      # ma almost significant
+summary(fit.pfizer_2.1d1)
+
+fit.pfizer_2.1d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=2,M=50)                      # ma2 not sig
+summary(fit.pfizer_2.1d2)
+
+fit.pfizer_2.2d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=2,nma=1,M=50)                      # cannot compute correlation      
+summary(fit.pfizer_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.pfizer_2.0d0),fracdiff.AIC(fit.pfizer_2.0d0),fracdiff.BIC(fit.pfizer_2.0d0))                  
+c(fracdiff.AICC(fit.pfizer_2.1d2),fracdiff.AIC(fit.pfizer_2.1d2),fracdiff.BIC(fit.pfizer_2.1d2))                  
+
+
+### pfizer_2 model diagnostics: autocorrelation in residuals
+fit.pfizer_2.bst <- fit.pfizer_2.0d0                                                         
+
+r.t_pfizer_2 <- fit.pfizer_2.bst$residuals
+summary(r.t_pfizer_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_pfizer_2,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="Pfizer Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### pfizer_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_pfizer_2,                                                                                   
+     breaks=seq(-1,1,0.125),
+     freq=FALSE,
+     col="grey85",ylim=c(0,5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_pfizer_2),sd=sd(r.t_pfizer_2)),lty=1,col="red")               
+qqnorm(r.t_pfizer_2)                                                                         
+qqline(r.t_pfizer_2)
+
+shapiro.test(r.t_pfizer_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_pfizer_2,"pnorm",mean=mean(r.t_pfizer_2),sd=sd(r.t_pfizer_2))                             # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Pfizer", 1, 0, fit.pfizer_2.bst$d, 0)                           # adding to the table
+
+
+### johnson_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_johnson_2,ylim=c(0,4),                                                             
+        xlab="Year",ylab="GK volatility",main="Johnson Volatility 2/01/2018-12/31/2019")
+acf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  # definitely appears to be long-memory
+pacf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.johnson_2.0d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=0,M=50)                      # d term significant  
+summary(fit.johnson_2.0d0)
+
+fit.johnson_2.1d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=0,M=50)                      # ar term not significant
+summary(fit.johnson_2.1d0)
+
+fit.johnson_2.2d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=2,nma=0,M=50)                      # ar terms sig
+summary(fit.johnson_2.2d0)
+
+fit.johnson_2.0d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=1,M=50)                      # ma not sig
+summary(fit.johnson_2.0d1)
+
+fit.johnson_2.0d2 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=2,M=50)                      # ma terms sig
+summary(fit.johnson_2.0d2)
+
+fit.johnson_2.1d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=1,M=50)                      # only d sig
+summary(fit.johnson_2.1d1)
+
+fit.johnson_2.1d2 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=2,M=50)                      # ma2 only sig
+summary(fit.johnson_2.1d2)
+
+fit.johnson_2.2d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=2,nma=1,M=50)                           
+summary(fit.johnson_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.johnson_2.0d0),fracdiff.AIC(fit.johnson_2.0d0),fracdiff.BIC(fit.johnson_2.0d0))
+c(fracdiff.AICC(fit.johnson_2.2d0),fracdiff.AIC(fit.johnson_2.2d0),fracdiff.BIC(fit.johnson_2.2d0)) 
+c(fracdiff.AICC(fit.johnson_2.0d2),fracdiff.AIC(fit.johnson_2.0d2),fracdiff.BIC(fit.johnson_2.0d2))
+
+
+
+### johnson_2 model diagnostics: autocorrelation in residuals
+fit.johnson_2.bst <- fit.johnson_2.0d0                                                         
+
+r.t_johnson_2 <- fit.johnson_2.bst$residuals
+summary(r.t_johnson_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_johnson_2,ylim=c(-1,3),
+        xlab="Year",ylab="GK volatility",main="Johnson Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### johnson_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_johnson_2,                                                                                   
+     breaks=seq(-3,3,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_johnson_2),sd=sd(r.t_johnson_2)),lty=1,col="red")               
+qqnorm(r.t_johnson_2)                                                                         
+qqline(r.t_johnson_2)
+
+shapiro.test(r.t_johnson_2)                                                                             # Shapiro-Wilk normality test supports normality
+ks.test(r.t_johnson_2,"pnorm",mean=mean(r.t_johnson_2),sd=sd(r.t_johnson_2))                            # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Johnson", 1, 0, fit.johnson_2.bst$d, 0)                           # adding to the table
+
+
+
+### disney_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_disney_2,ylim=c(0,4),                                                             
+        xlab="Year",ylab="GK volatility",main="Disney Volatility 2/01/2018-12/31/2019")
+acf(v.t_disney_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  # definitely appears to be long-memory
+pacf(v.t_disney_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.disney_2.0d0 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=0,nma=0,M=50)                       # d term significant  
+summary(fit.disney_2.0d0)
+
+fit.disney_2.1d0 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=1,nma=0,M=50)                       # ar term not significant
+summary(fit.disney_2.1d0)
+
+fit.disney_2.2d0 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=2,nma=0,M=50)                       # aonly d sig
+summary(fit.disney_2.2d0)
+
+fit.disney_2.0d1 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=0,nma=1,M=50)                       # ma not sig
+summary(fit.disney_2.0d1)
+
+fit.disney_2.0d2 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=0,nma=2,M=50)                       # only d sig
+summary(fit.disney_2.0d2)
+
+fit.disney_2.1d1 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=1,nma=1,M=50)                       # warning
+summary(fit.disney_2.1d1)
+
+fit.disney_2.1d2 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=1,nma=2,M=50)                       # warning
+summary(fit.disney_2.1d2)
+
+fit.disney_2.2d1 <- fracdiff(v.t_disney_2-mean(v.t_disney_2),nar=2,nma=1,M=50)                           
+summary(fit.disney_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.disney_2.0d0),fracdiff.AIC(fit.disney_2.0d0),fracdiff.BIC(fit.disney_2.0d0))
+c(fracdiff.AICC(fit.disney_2.2d0),fracdiff.AIC(fit.disney_2.2d0),fracdiff.BIC(fit.disney_2.2d0)) 
+c(fracdiff.AICC(fit.disney_2.0d2),fracdiff.AIC(fit.disney_2.0d2),fracdiff.BIC(fit.disney_2.0d2))
+
+
+
+### disney_2 model diagnostics: autocorrelation in residuals
+fit.disney_2.bst <- fit.disney_2.0d0                                                         
+
+r.t_disney_2 <- fit.disney_2.bst$residuals
+summary(r.t_disney_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_disney_2,ylim=c(-1,3),
+        xlab="Year",ylab="GK volatility",main="Disney Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_disney_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_disney_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### disney_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_disney_2,                                                                                   
+     breaks=seq(-3,3,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,2),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_disney_2),sd=sd(r.t_disney_2)),lty=1,col="red")               
+qqnorm(r.t_disney_2)                                                                         
+qqline(r.t_disney_2)
+
+shapiro.test(r.t_disney_2)                                                                             # Shapiro-Wilk normality test supports normality
+ks.test(r.t_disney_2,"pnorm",mean=mean(r.t_disney_2),sd=sd(r.t_disney_2))                              # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Disney", 1, 0, fit.disney_2.bst$d, 0)                            # adding to the table
+
+
+
+### wellsfargo_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_wellsfargo_2,ylim=c(0,2),                                                             
+        xlab="Year",ylab="GK volatility",main="Wells Fargo Volatility 2/01/2018-12/31/2019")
+acf(v.t_wellsfargo_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  # definitely appears to be long-memory
+pacf(v.t_wellsfargo_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.wellsfargo_2.0d0 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=0,nma=0,M=50)                # d term significant  
+summary(fit.wellsfargo_2.0d0)
+
+fit.wellsfargo_2.1d0 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=1,nma=0,M=50)                # ar term not significant
+summary(fit.wellsfargo_2.1d0)
+
+fit.wellsfargo_2.2d0 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=2,nma=0,M=50)                # ar2 not sig
+summary(fit.wellsfargo_2.2d0)
+
+fit.wellsfargo_2.0d1 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=0,nma=1,M=50)                # ma sig
+summary(fit.wellsfargo_2.0d1)
+
+fit.wellsfargo_2.0d2 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=0,nma=2,M=50)                # ma2 not sig
+summary(fit.wellsfargo_2.0d2)
+
+fit.wellsfargo_2.1d1 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=1,nma=1,M=50)                # warning
+summary(fit.wellsfargo_2.1d1)
+
+fit.wellsfargo_2.1d2 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=1,nma=2,M=50)                 # warning
+summary(fit.wellsfargo_2.1d2)
+
+fit.wellsfargo_2.2d1 <- fracdiff(v.t_wellsfargo_2-mean(v.t_wellsfargo_2),nar=2,nma=1,M=50)                # ar 2 not sig        
+summary(fit.wellsfargo_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.wellsfargo_2.0d0),fracdiff.AIC(fit.wellsfargo_2.0d0),fracdiff.BIC(fit.wellsfargo_2.0d0))
+c(fracdiff.AICC(fit.wellsfargo_2.1d0),fracdiff.AIC(fit.wellsfargo_2.1d0),fracdiff.BIC(fit.wellsfargo_2.1d0)) 
+c(fracdiff.AICC(fit.wellsfargo_2.0d1),fracdiff.AIC(fit.wellsfargo_2.0d1),fracdiff.BIC(fit.wellsfargo_2.0d1))
+
+
+
+### wellsfargo_2 model diagnostics: autocorrelation in residuals
+fit.wellsfargo_2.bst <- fit.wellsfargo_2.0d0                                                         
+
+r.t_wellsfargo_2 <- fit.wellsfargo_2.bst$residuals
+summary(r.t_wellsfargo_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_wellsfargo_2,ylim=c(-1,1.5),
+        xlab="Year",ylab="GK volatility",main="Wells Fargo Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_wellsfargo_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_wellsfargo_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### wellsfargo_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_wellsfargo_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_wellsfargo_2),sd=sd(r.t_wellsfargo_2)),lty=1,col="red")               
+qqnorm(r.t_wellsfargo_2)                                                                         
+qqline(r.t_wellsfargo_2)
+
+shapiro.test(r.t_wellsfargo_2)                                                                                # Shapiro-Wilk normality test supports normality
+ks.test(r.t_wellsfargo_2,"pnorm",mean=mean(r.t_wellsfargo_2),sd=sd(r.t_wellsfargo_2))                         # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Wells Fargo", 1, 0, fit.wellsfargo_2.bst$d, 0)     
+
+
+### jpmorgan_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_jpmorgan_2,ylim=c(0,3),                                                             
+        xlab="Year",ylab="GK volatility",main="JP Morgan Volatility 2/01/2018-12/31/2019")
+acf(v.t_jpmorgan_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_jpmorgan_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.jpmorgan_2.0d0 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.jpmorgan_2.0d0)
+
+fit.jpmorgan_2.1d0 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=1,nma=0,M=50)                        # ar term significant
+summary(fit.jpmorgan_2.1d0)
+
+fit.jpmorgan_2.2d0 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=2,nma=0,M=50)                        # ar2 not sig
+summary(fit.jpmorgan_2.2d0)
+
+fit.jpmorgan_2.0d1 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=0,nma=1,M=50)                        # ma sig
+summary(fit.jpmorgan_2.0d1)
+
+fit.jpmorgan_2.0d2 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=0,nma=2,M=50)                       # all sig
+summary(fit.jpmorgan_2.0d2)
+
+fit.jpmorgan_2.1d1 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=1,nma=1,M=50)                       # only d sig
+summary(fit.jpmorgan_2.1d1)
+
+fit.jpmorgan_2.1d2 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=1,nma=2,M=50)                       # d, ma2 sig
+summary(fit.jpmorgan_2.1d2)
+
+fit.jpmorgan_2.2d1 <- fracdiff(v.t_jpmorgan_2-mean(v.t_jpmorgan_2),nar=2,nma=1,M=50)                       # d, ar1 sig      
+summary(fit.jpmorgan_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.jpmorgan_2.0d0),fracdiff.AIC(fit.jpmorgan_2.0d0),fracdiff.BIC(fit.jpmorgan_2.0d0))
+c(fracdiff.AICC(fit.jpmorgan_2.1d0),fracdiff.AIC(fit.jpmorgan_2.1d0),fracdiff.BIC(fit.jpmorgan_2.1d0)) 
+c(fracdiff.AICC(fit.jpmorgan_2.0d1),fracdiff.AIC(fit.jpmorgan_2.0d1),fracdiff.BIC(fit.jpmorgan_2.0d1))
+c(fracdiff.AICC(fit.jpmorgan_2.0d2),fracdiff.AIC(fit.jpmorgan_2.0d2),fracdiff.BIC(fit.jpmorgan_2.0d2))
+
+
+### jpmorgan_2 model diagnostics: autocorrelation in residuals
+fit.jpmorgan_2.bst <- fit.jpmorgan_2.0d0                                                         
+
+r.t_jpmorgan_2 <- fit.jpmorgan_2.bst$residuals
+summary(r.t_jpmorgan_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_jpmorgan_2,ylim=c(-1,1.5),
+        xlab="Year",ylab="GK volatility",main="JP Morgan Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_jpmorgan_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_jpmorgan_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### jpmorgan_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_jpmorgan_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_jpmorgan_2),sd=sd(r.t_jpmorgan_2)),lty=1,col="red")               
+qqnorm(r.t_jpmorgan_2)                                                                         
+qqline(r.t_jpmorgan_2)
+
+shapiro.test(r.t_jpmorgan_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_jpmorgan_2,"pnorm",mean=mean(r.t_jpmorgan_2),sd=sd(r.t_jpmorgan_2))                         # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("JP Morgan", 1, 0, fit.jpmorgan_2.bst$d, 0)     
+
+
+
+### walmart_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_walmart_2,ylim=c(0,3),                                                             
+        xlab="Year",ylab="GK volatility",main="Walmart Volatility 2/01/2018-12/31/2019")
+acf(v.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.walmart_2.0d0 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.walmart_2.0d0)
+
+fit.walmart_2.1d0 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=0,M=50)                        # ar term not significant
+summary(fit.walmart_2.1d0)
+
+fit.walmart_2.2d0 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.walmart_2.2d0)
+
+fit.walmart_2.0d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=1,M=50)                        # ma not sig
+summary(fit.walmart_2.0d1)
+
+fit.walmart_2.0d2 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=2,M=50)                       # only d sig
+summary(fit.walmart_2.0d2)
+
+fit.walmart_2.1d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=1,M=50)                       # all sig
+summary(fit.walmart_2.1d1)
+
+fit.walmart_2.1d2 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=2,M=50)                       # warning
+summary(fit.walmart_2.1d2)
+
+fit.walmart_2.2d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=2,nma=1,M=50)                       # all sig  
+summary(fit.walmart_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.walmart_2.0d0),fracdiff.AIC(fit.walmart_2.0d0),fracdiff.BIC(fit.walmart_2.0d0))
+c(fracdiff.AICC(fit.walmart_2.1d1),fracdiff.AIC(fit.walmart_2.1d1),fracdiff.BIC(fit.walmart_2.1d1)) 
+c(fracdiff.AICC(fit.walmart_2.2d1),fracdiff.AIC(fit.walmart_2.2d1),fracdiff.BIC(fit.walmart_2.2d1))
+
+
+
+### walmart_2 model diagnostics: autocorrelation in residuals
+fit.walmart_2.bst <- fit.walmart_2.0d0                                                         
+
+r.t_walmart_2 <- fit.walmart_2.bst$residuals
+summary(r.t_walmart_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_walmart_2,ylim=c(-1,1.5),
+        xlab="Year",ylab="GK volatility",main="Walmart Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### walmart_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_walmart_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_walmart_2),sd=sd(r.t_walmart_2)),lty=1,col="red")               
+qqnorm(r.t_walmart_2)                                                                         
+qqline(r.t_walmart_2)
+
+shapiro.test(r.t_walmart_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_walmart_2,"pnorm",mean=mean(r.t_walmart_2),sd=sd(r.t_walmart_2))                           # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Walmart", 1, 0, fit.walmart_2.bst$d, 0)     
+
+
+
+### intel_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_intel_2,ylim=c(0,1.5),                                                             
+        xlab="Year",ylab="GK volatility",main="Intel Volatility 2/01/2018-12/31/2019")
+acf(v.t_intel_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_intel_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.intel_2.0d0 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.intel_2.0d0)
+
+fit.intel_2.1d0 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=1,nma=0,M=50)                        # ar term not significant
+summary(fit.intel_2.1d0)
+
+fit.intel_2.2d0 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.intel_2.2d0)
+
+fit.intel_2.0d1 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=0,nma=1,M=50)                        # ma not sig
+summary(fit.intel_2.0d1)
+
+fit.intel_2.0d2 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=0,nma=2,M=50)                        # only d sig
+summary(fit.intel_2.0d2)
+
+fit.intel_2.1d1 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.intel_2.1d1)
+
+fit.intel_2.1d2 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=1,nma=2,M=50)                        # ma2 not sig
+summary(fit.intel_2.1d2)
+
+fit.intel_2.2d1 <- fracdiff(v.t_intel_2-mean(v.t_intel_2),nar=2,nma=1,M=50)                        # warning   
+summary(fit.intel_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.intel_2.0d0),fracdiff.AIC(fit.intel_2.0d0),fracdiff.BIC(fit.intel_2.0d0))
+c(fracdiff.AICC(fit.intel_2.1d1),fracdiff.AIC(fit.intel_2.1d1),fracdiff.BIC(fit.intel_2.1d1)) 
+
+
+
+### intel_2 model diagnostics: autocorrelation in residuals
+fit.intel_2.bst <- fit.intel_2.0d0                                                         
+
+r.t_intel_2 <- fit.intel_2.bst$residuals
+summary(r.t_intel_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_intel_2,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="Intel Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_intel_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_intel_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### intel_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_intel_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_intel_2),sd=sd(r.t_intel_2)),lty=1,col="red")               
+qqnorm(r.t_intel_2)                                                                         
+qqline(r.t_intel_2)
+
+shapiro.test(r.t_intel_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_intel_2,"pnorm",mean=mean(r.t_intel_2),sd=sd(r.t_intel_2))                               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Intel", 1, 0, fit.intel_2.bst$d, 0)     
+
+
+### bankofa_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_bankofa_2,ylim=c(0,1),                                                             
+        xlab="Year",ylab="GK volatility",main="Bank of America Volatility 2/01/2018-12/31/2019")
+acf(v.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.bankofa_2.0d0 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.bankofa_2.0d0)
+
+fit.bankofa_2.1d0 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=1,nma=0,M=50)                        # ar term not sig
+summary(fit.bankofa_2.1d0)
+
+fit.bankofa_2.2d0 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.bankofa_2.2d0)
+
+fit.bankofa_2.0d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=0,nma=1,M=50)                        # ma not sig
+summary(fit.bankofa_2.0d1)
+
+fit.bankofa_2.0d2 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=0,nma=2,M=50)                        # ma terms not sig
+summary(fit.bankofa_2.0d2)
+
+fit.bankofa_2.1d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.bankofa_2.1d1)
+
+fit.bankofa_2.1d2 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=1,nma=2,M=50)                        # ma 2 not sig
+summary(fit.bankofa_2.1d2)
+
+fit.bankofa_2.2d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=2,nma=1,M=50)                        # ar2 not sig   
+summary(fit.bankofa_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.bankofa_2.0d0),fracdiff.AIC(fit.bankofa_2.0d0),fracdiff.BIC(fit.bankofa_2.0d0))
+c(fracdiff.AICC(fit.bankofa_2.1d1),fracdiff.AIC(fit.bankofa_2.1d1),fracdiff.BIC(fit.bankofa_2.1d1)) 
+
+
+
+### bankofa_2 model diagnostics: autocorrelation in residuals
+fit.bankofa_2.bst <- fit.bankofa_2.0d0                                                         
+
+r.t_bankofa_2 <- fit.bankofa_2.bst$residuals
+summary(r.t_bankofa_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_bankofa_2,ylim=c(-0.5,0.5),
+        xlab="Year",ylab="GK volatility",main="Bank of America Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### bankofa_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_bankofa_2,                                                                                   
+     breaks=seq(-1,1,0.125),
+     freq=FALSE,
+     col="grey85",ylim=c(0,5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_bankofa_2),sd=sd(r.t_bankofa_2)),lty=1,col="red")               
+qqnorm(r.t_bankofa_2)                                                                         
+qqline(r.t_bankofa_2)
+
+shapiro.test(r.t_bankofa_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_bankofa_2,"pnorm",mean=mean(r.t_bankofa_2),sd=sd(r.t_bankofa_2))                           # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Bank of America", 1, 0, fit.bankofa_2.bst$d, 0)     
+
+
+
+### verizon_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_verizon_2,ylim=c(0,2),                                                             
+        xlab="Year",ylab="GK volatility",main="Verizon Volatility 2/01/2018-12/31/2019")
+acf(v.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.verizon_2.0d0 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=0,nma=0,M=50)                       # d term significant  
+summary(fit.verizon_2.0d0)
+
+fit.verizon_2.1d0 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=0,M=50)                       # ar term not significant
+summary(fit.verizon_2.1d0)
+
+fit.verizon_2.2d0 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=2,nma=0,M=50)                       # ar terms sig
+summary(fit.verizon_2.2d0)
+
+fit.verizon_2.0d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=0,nma=1,M=50)                       # ma not sig
+summary(fit.verizon_2.0d1)
+
+fit.verizon_2.0d2 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=0,nma=2,M=50)                       # all sig
+summary(fit.verizon_2.0d2)
+
+fit.verizon_2.1d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=1,M=50)                       # warning
+summary(fit.verizon_2.1d1)
+
+fit.verizon_2.1d2 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=2,M=50)                       # all sig
+summary(fit.verizon_2.1d2)
+
+fit.verizon_2.2d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=2,nma=1,M=50)                       # ar2 not sig    
+summary(fit.verizon_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.verizon_2.0d0),fracdiff.AIC(fit.verizon_2.0d0),fracdiff.BIC(fit.verizon_2.0d0))
+c(fracdiff.AICC(fit.verizon_2.2d0),fracdiff.AIC(fit.verizon_2.2d0),fracdiff.BIC(fit.verizon_2.2d0)) 
+c(fracdiff.AICC(fit.verizon_2.1d2),fracdiff.AIC(fit.verizon_2.1d2),fracdiff.BIC(fit.verizon_2.1d2))
+c(fracdiff.AICC(fit.verizon_2.0d2),fracdiff.AIC(fit.verizon_2.0d2),fracdiff.BIC(fit.verizon_2.0d2))
+
+
+### verizon_2 model diagnostics: autocorrelation in residuals
+fit.verizon_2.bst <- fit.verizon_2.0d0                                                         
+
+r.t_verizon_2 <- fit.verizon_2.bst$residuals
+summary(r.t_verizon_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_verizon_2,ylim=c(-1,1.5),
+        xlab="Year",ylab="GK volatility",main="Verizon Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### verizon_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_verizon_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_verizon_2),sd=sd(r.t_verizon_2)),lty=1,col="red")               
+qqnorm(r.t_verizon_2)                                                                         
+qqline(r.t_verizon_2)
+
+shapiro.test(r.t_verizon_2)                                                                           # Shapiro-Wilk normality test supports normality
+ks.test(r.t_verizon_2,"pnorm",mean=mean(r.t_verizon_2),sd=sd(r.t_verizon_2))                         # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Verizon", 1, 0, fit.verizon_2.bst$d, 0)     
+
+
+
+### att_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_att_2,ylim=c(0,1.5),                                                             
+        xlab="Year",ylab="GK volatility",main="ATT Volatility 2/01/2018-12/31/2019")
+acf(v.t_att_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_att_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.att_2.0d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.att_2.0d0)
+
+fit.att_2.1d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=0,M=50)                        # ar term significant
+summary(fit.att_2.1d0)
+
+fit.att_2.2d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=2,nma=0,M=50)                        # ar1 ar2 not sig
+summary(fit.att_2.2d0)
+
+fit.att_2.0d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=1,M=50)                        # ma sig
+summary(fit.att_2.0d1)
+
+fit.att_2.0d2 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=2,M=50)                        # ma1 not sig
+summary(fit.att_2.0d2)
+
+fit.att_2.1d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.att_2.1d1)
+
+fit.att_2.1d2 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=2,M=50)                        # ma2 not sig
+summary(fit.att_2.1d2)
+
+fit.att_2.2d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=2,nma=1,M=50)                        # ar2 not sig     
+summary(fit.att_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.att_2.0d0),fracdiff.AIC(fit.att_2.0d0),fracdiff.BIC(fit.att_2.0d0))
+c(fracdiff.AICC(fit.att_2.1d0),fracdiff.AIC(fit.att_2.1d0),fracdiff.BIC(fit.att_2.1d0)) 
+c(fracdiff.AICC(fit.att_2.0d1),fracdiff.AIC(fit.att_2.0d1),fracdiff.BIC(fit.att_2.0d1))
+c(fracdiff.AICC(fit.att_2.1d1),fracdiff.AIC(fit.att_2.1d1),fracdiff.BIC(fit.att_2.1d1))
+
+
+### att_2 model diagnostics: autocorrelation in residuals
+fit.att_2.bst <- fit.att_2.0d0                                                         
+
+r.t_att_2 <- fit.att_2.bst$residuals
+summary(r.t_att_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_att_2,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="ATT Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_att_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_att_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### att_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_att_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_att_2),sd=sd(r.t_att_2)),lty=1,col="red")               
+qqnorm(r.t_att_2)                                                                         
+qqline(r.t_att_2)
+
+shapiro.test(r.t_att_2)                                                                            # Shapiro-Wilk normality test supports normality
+ks.test(r.t_att_2,"pnorm",mean=mean(r.t_att_2),sd=sd(r.t_att_2))                                   # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("ATT", 1, 0, fit.att_2.bst$d, 0)     
+
+
+### homedep_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_homedep_2,ylim=c(0,4),                                                             
+        xlab="Year",ylab="GK volatility",main="Home Depot Volatility 2/01/2018-12/31/2019")
+acf(v.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.homedep_2.0d0 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.homedep_2.0d0)
+
+fit.homedep_2.1d0 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=0,M=50)                        # ar term not sig
+summary(fit.homedep_2.1d0)
+
+fit.homedep_2.2d0 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.homedep_2.2d0)
+
+fit.homedep_2.0d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=1,M=50)                        # ma not sig
+summary(fit.homedep_2.0d1)
+
+fit.homedep_2.0d2 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=2,M=50)                        # ma terms not sig
+summary(fit.homedep_2.0d2)
+
+fit.homedep_2.1d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=1,M=50)                        # all terms sig
+summary(fit.homedep_2.1d1)
+
+fit.homedep_2.1d2 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=2,M=50)                        # warning
+summary(fit.homedep_2.1d2)
+
+fit.homedep_2.2d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=2,nma=1,M=50)                        # ar2 not sig  
+summary(fit.homedep_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.homedep_2.0d0),fracdiff.AIC(fit.homedep_2.0d0),fracdiff.BIC(fit.homedep_2.0d0))
+c(fracdiff.AICC(fit.homedep_2.1d1),fracdiff.AIC(fit.homedep_2.1d1),fracdiff.BIC(fit.homedep_2.1d1)) 
+
+
+### homedep_2 model diagnostics: autocorrelation in residuals
+fit.homedep_2.bst <- fit.homedep_2.0d0                                                         
+
+r.t_homedep_2 <- fit.homedep_2.bst$residuals
+summary(r.t_homedep_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_homedep_2,ylim=c(-2,2),
+        xlab="Year",ylab="GK volatility",main="Home Depot Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### homedep_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_homedep_2,                                                                                   
+     breaks=seq(-3,3,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,1.5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_homedep_2),sd=sd(r.t_homedep_2)),lty=1,col="red")               
+qqnorm(r.t_homedep_2)                                                                         
+qqline(r.t_homedep_2)
+
+shapiro.test(r.t_homedep_2)                                                                      # Shapiro-Wilk normality test supports normality
+ks.test(r.t_homedep_2,"pnorm",mean=mean(r.t_homedep_2),sd=sd(r.t_homedep_2))                     # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Home Depot", 1, 0, fit.homedep_2.bst$d, 0)    
+
+
+### citi_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_citi_2,ylim=c(0,3),                                                             
+        xlab="Year",ylab="GK volatility",main="Citi Volatility 2/01/2018-12/31/2019")
+acf(v.t_citi_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_citi_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.citi_2.0d0 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=0,nma=0,M=50)                        # d term significant  
+summary(fit.citi_2.0d0)
+
+fit.citi_2.1d0 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=1,nma=0,M=50)                        # ar term not sig
+summary(fit.citi_2.1d0)
+
+fit.citi_2.2d0 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.citi_2.2d0)
+
+fit.citi_2.0d1 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=0,nma=1,M=50)                        # only d sig
+summary(fit.citi_2.0d1)
+
+fit.citi_2.0d2 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=0,nma=2,M=50)                        # only d sig
+summary(fit.citi_2.0d2)
+
+fit.citi_2.1d1 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=1,nma=1,M=50)                        # warning
+summary(fit.citi_2.1d1)
+
+fit.citi_2.1d2 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=1,nma=2,M=50)                        # d sig
+summary(fit.citi_2.1d2)
+
+fit.citi_2.2d1 <- fracdiff(v.t_citi_2-mean(v.t_citi_2),nar=2,nma=1,M=50)                        # d, ma sig     
+summary(fit.citi_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.citi_2.0d0),fracdiff.AIC(fit.citi_2.0d0),fracdiff.BIC(fit.citi_2.0d0))
+c(fracdiff.AICC(fit.citi_2.1d0),fracdiff.AIC(fit.citi_2.1d0),fracdiff.BIC(fit.citi_2.1d0)) 
+c(fracdiff.AICC(fit.citi_2.0d1),fracdiff.AIC(fit.citi_2.0d1),fracdiff.BIC(fit.citi_2.0d1))
+c(fracdiff.AICC(fit.citi_2.0d2),fracdiff.AIC(fit.citi_2.0d2),fracdiff.BIC(fit.citi_2.0d2))
+
+
+### citi_2 model diagnostics: autocorrelation in residuals
+fit.citi_2.bst <- fit.citi_2.0d0                                                         
+
+r.t_citi_2 <- fit.citi_2.bst$residuals
+summary(r.t_citi_2)                                                                         
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_citi_2,ylim=c(-1,1.5),
+        xlab="Year",ylab="GK volatility",main="Citi Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_citi_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_citi_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### citi_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_citi_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_citi_2),sd=sd(r.t_citi_2)),lty=1,col="red")               
+qqnorm(r.t_citi_2)                                                                         
+qqline(r.t_citi_2)
+
+shapiro.test(r.t_citi_2)                                                                                    # Shapiro-Wilk normality test supports normality
+ks.test(r.t_citi_2,"pnorm",mean=mean(r.t_citi_2),sd=sd(r.t_citi_2))                                         # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Citi", 1, 0, fit.citi_2.bst$d, 0)     
+
+
+
+
+### amazon_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_amazon_2,ylim=c(0,40),                                                             
+        xlab="Year",ylab="GK volatility",main="Amazon Volatility 2/01/2018-12/31/2019")               # note the very large jump in range from other companies
+acf(v.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.amazon_2.0d0 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.amazon_2.0d0)
+
+fit.amazon_2.1d0 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=0,M=50)                        # ar term not sig
+summary(fit.amazon_2.1d0)
+
+fit.amazon_2.2d0 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.amazon_2.2d0)
+
+fit.amazon_2.0d1 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=0,nma=1,M=50)                        # d term sig
+summary(fit.amazon_2.0d1)
+
+fit.amazon_2.0d2 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=0,nma=2,M=50)                        # ma2 not sig
+summary(fit.amazon_2.0d2)
+
+fit.amazon_2.1d1 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.amazon_2.1d1)
+
+fit.amazon_2.1d2 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=2,M=50)                        # warning
+summary(fit.amazon_2.1d2)
+
+fit.amazon_2.2d1 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=2,nma=1,M=50)                        # warnings    
+summary(fit.amazon_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.amazon_2.0d0),fracdiff.AIC(fit.amazon_2.0d0),fracdiff.BIC(fit.amazon_2.0d0))
+c(fracdiff.AICC(fit.amazon_2.1d1),fracdiff.AIC(fit.amazon_2.1d1),fracdiff.BIC(fit.amazon_2.1d1)) 
+
+
+
+### amazon_2 model diagnostics: autocorrelation in residuals
+fit.amazon_2.bst <- fit.amazon_2.0d0                                                         
+
+r.t_amazon_2 <- fit.amazon_2.bst$residuals
+summary(r.t_amazon_2)                                                                   # [Q] a few large outliers -- one residual is 53                                                 
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_amazon_2,ylim=c(-8,53),
+        xlab="Year",ylab="GK volatility",main="Amazon Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### amazon_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_amazon_2,                                                                                   
+     breaks=seq(-8,53,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,0.3),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_amazon_2),sd=sd(r.t_amazon_2)),lty=1,col="red")               
+qqnorm(r.t_amazon_2)                                                                         
+qqline(r.t_amazon_2)
+
+shapiro.test(r.t_amazon_2)                                                              # Shapiro-Wilk normality test supports normality
+ks.test(r.t_amazon_2,"pnorm",mean=mean(r.t_amazon_2),sd=sd(r.t_amazon_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Amazon", 1, 0, fit.amazon_2.bst$d, 0)     
+
+
+
+
+### chinamob_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_chinamob_2,ylim=c(0,1.5),                                                             
+        xlab="Year",ylab="GK volatility",main="China Mobile Volatility 2/01/2018-12/31/2019")               # slight downward linear trend?
+acf(v.t_chinamob_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_chinamob_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.chinamob_2.0d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.chinamob_2.0d0)
+
+fit.chinamob_2.1d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=0,M=50)                        # ar sig
+summary(fit.chinamob_2.1d0)
+
+fit.chinamob_2.2d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=2,nma=0,M=50)                        # all terms sig
+summary(fit.chinamob_2.2d0)
+
+fit.chinamob_2.0d1 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=1,M=50)                        # all terms sig
+summary(fit.chinamob_2.0d1)
+
+fit.chinamob_2.0d2 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=2,M=50)                        # all terms sig
+summary(fit.chinamob_2.0d2)
+
+fit.chinamob_2.1d1 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.chinamob_2.1d1)
+
+fit.chinamob_2.1d2 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=2,M=50)                        # warning
+summary(fit.chinamob_2.1d2)
+
+fit.chinamob_2.2d1 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=2,nma=1,M=50)                        # ar2 not sig   
+summary(fit.chinamob_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.chinamob_2.0d0),fracdiff.AIC(fit.chinamob_2.0d0),fracdiff.BIC(fit.chinamob_2.0d0))
+c(fracdiff.AICC(fit.chinamob_2.1d0),fracdiff.AIC(fit.chinamob_2.1d0),fracdiff.BIC(fit.chinamob_2.1d0))
+c(fracdiff.AICC(fit.chinamob_2.2d0),fracdiff.AIC(fit.chinamob_2.2d0),fracdiff.BIC(fit.chinamob_2.2d0))
+c(fracdiff.AICC(fit.chinamob_2.0d1),fracdiff.AIC(fit.chinamob_2.0d1),fracdiff.BIC(fit.chinamob_2.0d1))
+c(fracdiff.AICC(fit.chinamob_2.0d2),fracdiff.AIC(fit.chinamob_2.0d2),fracdiff.BIC(fit.chinamob_2.0d2))
+c(fracdiff.AICC(fit.chinamob_2.1d1),fracdiff.AIC(fit.chinamob_2.1d1),fracdiff.BIC(fit.chinamob_2.1d1)) 
+
+
+
+### chinamob_2 model diagnostics: autocorrelation in residuals
+fit.chinamob_2.bst <- fit.chinamob_2.0d0                                                                                                                      
+
+r.t_chinamob_2 <- fit.chinamob_2.bst$residuals
+summary(r.t_chinamob_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_chinamob_2,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="China Mobile Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_chinamob_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_chinamob_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### chinamob_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_chinamob_2,                                                                                   
+     breaks=seq(-1,1,0.125),
+     freq=FALSE,
+     col="grey85",ylim=c(0,4),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_chinamob_2),sd=sd(r.t_chinamob_2)),lty=1,col="red")               
+qqnorm(r.t_chinamob_2)                                                                         
+qqline(r.t_chinamob_2)
+
+shapiro.test(r.t_chinamob_2)                                                                  # Shapiro-Wilk normality test supports normality
+ks.test(r.t_chinamob_2,"pnorm",mean=mean(r.t_chinamob_2),sd=sd(r.t_chinamob_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("China Mobile", 1, 0, fit.chinamob_2.bst$d, 0)     
+
+
+
+
+
+
+### taiwan_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_taiwan_2,ylim=c(0,1.0),                                                             
+        xlab="Year",ylab="GK volatility",main="Taiwan Semiconductors Volatility 2/01/2018-12/31/2019")              
+acf(v.t_taiwan_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_taiwan_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.taiwan_2.0d0 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.taiwan_2.0d0)
+
+fit.taiwan_2.1d0 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=0,M=50)                        # ar not sig
+summary(fit.taiwan_2.1d0)
+
+fit.taiwan_2.2d0 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=2,nma=0,M=50)                        # ar terms not sig
+summary(fit.taiwan_2.2d0)
+
+fit.taiwan_2.0d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=0,nma=1,M=50)                        # ma term not sig
+summary(fit.taiwan_2.0d1)
+
+fit.taiwan_2.0d2 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=0,nma=2,M=50)                        # no terms sig
+summary(fit.taiwan_2.0d2)
+
+fit.taiwan_2.1d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.taiwan_2.1d1)
+
+fit.taiwan_2.1d2 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=2,M=50)                        # ma2 not sig
+summary(fit.taiwan_2.1d2)
+
+fit.taiwan_2.2d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=2,nma=1,M=50)                        # warning 
+summary(fit.taiwan_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.taiwan_2.0d0),fracdiff.AIC(fit.taiwan_2.0d0),fracdiff.BIC(fit.taiwan_2.0d0))
+c(fracdiff.AICC(fit.taiwan_2.1d1),fracdiff.AIC(fit.taiwan_2.1d1),fracdiff.BIC(fit.taiwan_2.1d1)) 
+
+
+
+### taiwan_2 model diagnostics: autocorrelation in residuals
+fit.taiwan_2.bst <- fit.taiwan_2.0d0                                                                                                                        
+
+r.t_taiwan_2 <- fit.taiwan_2.bst$residuals
+summary(r.t_taiwan_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_taiwan_2,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="Taiwan Semiconductors Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_taiwan_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_taiwan_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### taiwan_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_taiwan_2,                                                                                   
+     breaks=seq(-1,1,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_taiwan_2),sd=sd(r.t_taiwan_2)),lty=1,col="red")               
+qqnorm(r.t_taiwan_2)                                                                         
+qqline(r.t_taiwan_2)
+
+shapiro.test(r.t_taiwan_2)                                                              # Shapiro-Wilk normality test supports normality
+ks.test(r.t_taiwan_2,"pnorm",mean=mean(r.t_taiwan_2),sd=sd(r.t_taiwan_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Taiwan Semiconductors", 1, 0, fit.taiwan_2.bst$d, 0)     
+
+
+
+
+### novartis_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_novartis_2,ylim=c(0,2),                                                             
+        xlab="Year",ylab="GK volatility",main="Novartis Volatility 2/01/2018-12/31/2019")              
+acf(v.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.novartis_2.0d0 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.novartis_2.0d0)
+
+fit.novartis_2.1d0 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=0,M=50)                        # ar not sig
+summary(fit.novartis_2.1d0)
+
+fit.novartis_2.2d0 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=2,nma=0,M=50)                        # ar2 term sig
+summary(fit.novartis_2.2d0)
+
+fit.novartis_2.0d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=0,nma=1,M=50)                        # ma term not sig
+summary(fit.novartis_2.0d1)
+
+fit.novartis_2.0d2 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=0,nma=2,M=50)                        # ma2 sig
+summary(fit.novartis_2.0d2)
+
+fit.novartis_2.1d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=1,M=50)                        # ar not sig
+summary(fit.novartis_2.1d1)
+
+fit.novartis_2.1d2 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=2,M=50)                        # ar/ma1 not sig
+summary(fit.novartis_2.1d2)
+
+fit.novartis_2.2d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=2,nma=1,M=50)                        # warning 
+summary(fit.novartis_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.novartis_2.0d0),fracdiff.AIC(fit.novartis_2.0d0),fracdiff.BIC(fit.novartis_2.0d0))
+c(fracdiff.AICC(fit.novartis_2.1d1),fracdiff.AIC(fit.novartis_2.1d1),fracdiff.BIC(fit.novartis_2.1d1)) 
+
+
+
+### novartis_2 model diagnostics: autocorrelation in residuals
+fit.novartis_2.bst <- fit.novartis_2.0d0                                                                                                                        
+
+r.t_novartis_2 <- fit.novartis_2.bst$residuals
+summary(r.t_novartis_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_novartis_2,ylim=c(-1,1),
+        xlab="Year",ylab="GK volatility",main="Novartis Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### novartis_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_novartis_2,                                                                                   
+     breaks=seq(-2,2,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,2.5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_novartis_2),sd=sd(r.t_novartis_2)),lty=1,col="red")               
+qqnorm(r.t_novartis_2)                                                                         
+qqline(r.t_novartis_2)
+
+shapiro.test(r.t_novartis_2)                                                              # Shapiro-Wilk normality test supports normality
+ks.test(r.t_novartis_2,"pnorm",mean=mean(r.t_novartis_2),sd=sd(r.t_novartis_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Novartis", 1, 0, fit.novartis_2.bst$d, 0)  
+
+
+### netflix_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_netflix_2,ylim=c(0,8),                                                             
+        xlab="Year",ylab="GK volatility",main="Netflix Volatility 2/01/2018-12/31/2019")              
+acf(v.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.netflix_2.0d0 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.netflix_2.0d0)
+
+fit.netflix_2.1d0 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=0,M=50)                        # ar sig
+summary(fit.netflix_2.1d0)
+
+fit.netflix_2.2d0 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=2,nma=0,M=50)                        # all terms sig
+summary(fit.netflix_2.2d0)
+
+fit.netflix_2.0d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=1,M=100)                        # warning
+summary(fit.netflix_2.0d1)
+
+fit.netflix_2.0d2 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=2,M=50)                        # all sig
+summary(fit.netflix_2.0d2)
+
+fit.netflix_2.1d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=1,M=50)                        # warning
+summary(fit.netflix_2.1d1)
+
+fit.netflix_2.1d2 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=2,M=50)                        # warning
+summary(fit.netflix_2.1d2)
+
+fit.netflix_2.2d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=2,nma=1,M=50)                        # all sig
+summary(fit.netflix_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.netflix_2.0d0),fracdiff.AIC(fit.netflix_2.0d0),fracdiff.BIC(fit.netflix_2.0d0))
+c(fracdiff.AICC(fit.netflix_2.0d1),fracdiff.AIC(fit.netflix_2.0d1),fracdiff.BIC(fit.netflix_2.0d1))
+c(fracdiff.AICC(fit.netflix_2.1d0),fracdiff.AIC(fit.netflix_2.1d0),fracdiff.BIC(fit.netflix_2.1d0)) 
+c(fracdiff.AICC(fit.netflix_2.2d0),fracdiff.AIC(fit.netflix_2.2d0),fracdiff.BIC(fit.netflix_2.2d0))
+c(fracdiff.AICC(fit.netflix_2.0d2),fracdiff.AIC(fit.netflix_2.0d2),fracdiff.BIC(fit.netflix_2.0d2))
+c(fracdiff.AICC(fit.netflix_2.2d1),fracdiff.AIC(fit.netflix_2.2d1),fracdiff.BIC(fit.netflix_2.2d1)) 
+
+
+
+### netflix_2 model diagnostics: autocorrelation in residuals
+fit.netflix_2.bst <- fit.netflix_2.0d0                                                                                                                 
+
+r.t_netflix_2 <- fit.netflix_2.bst$residuals
+summary(r.t_netflix_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_netflix_2,ylim=c(-3,5),
+        xlab="Year",ylab="GK volatility",main="Netflix Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### netflix_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_netflix_2,                                                                                   
+     breaks=seq(-2,7,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,1),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_netflix_2),sd=sd(r.t_netflix_2)),lty=1,col="red")               
+qqnorm(r.t_netflix_2)                                                                         
+qqline(r.t_netflix_2)
+
+shapiro.test(r.t_netflix_2)                                                                # Shapiro-Wilk normality test supports normality
+ks.test(r.t_netflix_2,"pnorm",mean=mean(r.t_netflix_2),sd=sd(r.t_netflix_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Netflix", 1, 0, fit.netflix_2.bst$d, 0)
+
+
+
+### visa_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_visa_2,ylim=c(0,4),                                                             
+        xlab="Year",ylab="GK volatility",main="Visa Volatility 2/01/2018-12/31/2019")              
+acf(v.t_visa_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_visa_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.visa_2.0d0 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.visa_2.0d0)
+
+fit.visa_2.1d0 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=0,M=50)                        # ar not sig
+summary(fit.visa_2.1d0)
+
+fit.visa_2.2d0 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=2,nma=0,M=50)                        # ar2 term not sig
+summary(fit.visa_2.2d0)
+
+fit.visa_2.0d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=0,nma=1,M=50)                        # ma term not sig
+summary(fit.visa_2.0d1)
+
+fit.visa_2.0d2 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=0,nma=2,M=50)                        # ma2 not sig
+summary(fit.visa_2.0d2)
+
+fit.visa_2.1d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=1,M=50)                        # ar ma not sig
+summary(fit.visa_2.1d1)
+
+fit.visa_2.1d2 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=2,M=50)                        # ar/ma1 sig
+summary(fit.visa_2.1d2)
+
+fit.visa_2.2d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=2,nma=1,M=50)                        # warning 
+summary(fit.visa_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.visa_2.0d0),fracdiff.AIC(fit.visa_2.0d0),fracdiff.BIC(fit.visa_2.0d0))
+
+
+
+
+### visa_2 model diagnostics: autocorrelation in residuals
+fit.visa_2.bst <- fit.visa_2.0d0                                                                                                                        
+
+r.t_visa_2 <- fit.visa_2.bst$residuals
+summary(r.t_visa_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_visa_2,ylim=c(-1,4),
+        xlab="Year",ylab="GK volatility",main="Visa Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_visa_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_visa_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### visa_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_visa_2,                                                                                   
+     breaks=seq(-4,4,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,2.5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_visa_2),sd=sd(r.t_visa_2)),lty=1,col="red")               
+qqnorm(r.t_visa_2)                                                                         
+qqline(r.t_visa_2)
+
+shapiro.test(r.t_visa_2)                                                              # Shapiro-Wilk normality test supports normality
+ks.test(r.t_visa_2,"pnorm",mean=mean(r.t_visa_2),sd=sd(r.t_visa_2))                   # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Visa", 1, 0, fit.visa_2.bst$d, 0)
+
+
+### unhealth_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_unhealth_2,ylim=c(0,7),                                                             
+        xlab="Year",ylab="GK volatility",main="United Health Volatility 2/01/2018-12/31/2019")              
+acf(v.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.unhealth_2.0d0 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.unhealth_2.0d0)
+
+fit.unhealth_2.1d0 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=0,M=50)                        # ar not sig
+summary(fit.unhealth_2.1d0)
+
+fit.unhealth_2.2d0 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=2,nma=0,M=50)                        # ar2 term not sig
+summary(fit.unhealth_2.2d0)
+
+fit.unhealth_2.0d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=0,nma=1,M=50)                        # ma term not sig
+summary(fit.unhealth_2.0d1)
+
+fit.unhealth_2.0d2 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=0,nma=2,M=50)                        # ma2 not sig
+summary(fit.unhealth_2.0d2)
+
+fit.unhealth_2.1d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=1,M=50)                        # all sig
+summary(fit.unhealth_2.1d1)
+
+fit.unhealth_2.1d2 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=2,M=50)                        # ma2 not sig
+summary(fit.unhealth_2.1d2)
+
+fit.unhealth_2.2d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=2,nma=1,M=50)                        # warning 
+summary(fit.unhealth_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.unhealth_2.0d0),fracdiff.AIC(fit.unhealth_2.0d0),fracdiff.BIC(fit.unhealth_2.0d0))
+c(fracdiff.AICC(fit.unhealth_2.1d1),fracdiff.AIC(fit.unhealth_2.1d1),fracdiff.BIC(fit.unhealth_2.1d1)) 
+
+
+
+### unhealth_2 model diagnostics: autocorrelation in residuals
+fit.unhealth_2.bst <- fit.unhealth_2.0d0                                                                                                                        
+
+r.t_unhealth_2 <- fit.unhealth_2.bst$residuals
+summary(r.t_unhealth_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_unhealth_2,ylim=c(-2,5),
+        xlab="Year",ylab="GK volatility",main="United Health Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### unhealth_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_unhealth_2,                                                                                   
+     breaks=seq(-2,5,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,1),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_unhealth_2),sd=sd(r.t_unhealth_2)),lty=1,col="red")               
+qqnorm(r.t_unhealth_2)                                                                         
+qqline(r.t_unhealth_2)
+
+shapiro.test(r.t_unhealth_2)                                                                  # Shapiro-Wilk normality test supports normality
+ks.test(r.t_unhealth_2,"pnorm",mean=mean(r.t_unhealth_2),sd=sd(r.t_unhealth_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("United Health", 1, 0, fit.unhealth_2.bst$d, 0)
+
+
+### busch_2 ARFIMA model
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(v.t_busch_2,ylim=c(0,5),                                                             
+        xlab="Year",ylab="GK volatility",main="Busch Volatility 2/01/2018-12/31/2019")              
+acf(v.t_busch_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
+pacf(v.t_busch_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
+
+fit.busch_2.0d0 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=0,nma=0,M=50)                        # d sig
+summary(fit.busch_2.0d0)
+
+fit.busch_2.1d0 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=1,nma=0,M=50)                        # ar not sig
+summary(fit.busch_2.1d0)
+
+fit.busch_2.2d0 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=2,nma=0,M=50)                        # all terms sig
+summary(fit.busch_2.2d0)
+
+fit.busch_2.0d1 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=0,nma=1,M=50)                        # ma term not sig
+summary(fit.busch_2.0d1)
+
+fit.busch_2.0d2 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=0,nma=2,M=50)                        # all terms sig
+summary(fit.busch_2.0d2)
+
+fit.busch_2.1d1 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=1,nma=1,M=50)                        # ar not sig
+summary(fit.busch_2.1d1)
+
+fit.busch_2.1d2 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=1,nma=2,M=50)                        # all terms sig
+summary(fit.busch_2.1d2)
+
+fit.busch_2.2d1 <- fracdiff(v.t_busch_2-mean(v.t_busch_2),nar=2,nma=1,M=50)                        # all sig
+summary(fit.busch_2.2d1)
+
+
+
+c(fracdiff.AICC(fit.busch_2.0d0),fracdiff.AIC(fit.busch_2.0d0),fracdiff.BIC(fit.busch_2.0d0))
+c(fracdiff.AICC(fit.busch_2.1d2),fracdiff.AIC(fit.busch_2.1d2),fracdiff.BIC(fit.busch_2.1d2)) 
+
+
+
+### busch_2 model diagnostics: autocorrelation in residuals
+fit.busch_2.bst <- fit.busch_2.0d0                                                                                                                        
+
+r.t_busch_2 <- fit.busch_2.bst$residuals
+summary(r.t_busch_2)                                                                                                                               
+
+
+dev.new(width=12,height=6)
+par(mfrow=c(3,1),mex=0.75)
+plot.ts(r.t_busch_2,ylim=c(-3,4),
+        xlab="Year",ylab="GK volatility",main="Busch Volatility Residuals 2/01/2018-12/31/2019")
+abline(h=0,col="blue",lty=2)
+acf(r.t_busch_2,lag.max=100,ylim=c(-0.2,1),main="")
+pacf(r.t_busch_2,lag.max=100,ylim=c(-0.2,1),main="")
+
+### busch_2 residual normality check
+dev.new(height=6,width=12)
+par(mfrow=c(1,2),mex=0.75)
+hist(r.t_busch_2,                                                                                   
+     breaks=seq(-4,4,0.25),
+     freq=FALSE,
+     col="grey85",ylim=c(0,2.5),
+     main="Residual Histogram")                                                              
+z <- seq(-60,60,length=1000)                                      
+lines(z,dnorm(z,mean=mean(r.t_busch_2),sd=sd(r.t_busch_2)),lty=1,col="red")               
+qqnorm(r.t_busch_2)                                                                         
+qqline(r.t_busch_2)
+
+shapiro.test(r.t_busch_2)                                                              # Shapiro-Wilk normality test supports normality
+ks.test(r.t_busch_2,"pnorm",mean=mean(r.t_busch_2),sd=sd(r.t_busch_2))               # KS test supports normality
+
+bst.models[nrow(bst.models)+1,] <- c("Busch", 1, 0, fit.busch_2.bst$d, 0)
 
