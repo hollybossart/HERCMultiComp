@@ -2642,11 +2642,7 @@ shapiro.test(r.t_microsoft_2)                                                   
 ks.test(r.t_microsoft_2,"pnorm",mean=mean(r.t_microsoft_2),sd=sd(r.t_microsoft_2))
 
 ### add model to table
-bst.models[nrow(bst.models)+1,] <- c("Microsoft", 1, 0, fit.microsoft_2.bst$d, 0)
-
-
-
-
+bst.models[nrow(bst.models)+1,] <- c("Microsoft", 2, 0, fit.microsoft_2.bst$d, 0)
 
 
 ### oracle_2 ARFIMA model
@@ -2724,7 +2720,7 @@ bst.models[nrow(bst.models)+1,] <- c("Oracle", 2, 0, fit.oracle_2.bst$d, 0)
 ### exxon_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_exxon_2,ylim=c(0,3),                                                             # might have a slight downward linear trend?
+plot.ts(v.t_exxon_2,ylim=c(0,4),                                                             # might have a slight downward linear trend?
         xlab="Year",ylab="GK volatility",main="Exxon Volatility 2/01/2018-12/31/2019")
 acf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                          # looks like slow decrease of acf as lag increases
 pacf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -2732,22 +2728,22 @@ pacf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.exxon_2.0d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=0,M=50)                  # d term significant  
 summary(fit.exxon_2.0d0)
 
-fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar, d term significant
+fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar not sig
 summary(fit.exxon_2.1d0)
 
-fit.exxon_2.2d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=0,M=50)                  # all terms significant
+fit.exxon_2.2d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=0,M=50)                  # ar2 not sig
 summary(fit.exxon_2.2d0)
 
-fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term significant
+fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term not significant
 summary(fit.exxon_2.0d1)
 
-fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1 and ma2 term significant
+fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1 and ma2 term not significant
 summary(fit.exxon_2.0d2)
 
-fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=50)                  # all terms significant         
+fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=25)                  # all terms significant, had to change M value      
 summary(fit.exxon_2.1d1)
 
-fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # ma2 not sig      
 summary(fit.exxon_2.1d2)
 
 fit.exxon_2.2d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=1,M=50)                  # ar2 term not significant            
@@ -2756,15 +2752,12 @@ summary(fit.exxon_2.2d1)
 
 
 c(fracdiff.AICC(fit.exxon_2.0d0),fracdiff.AIC(fit.exxon_2.0d0),fracdiff.BIC(fit.exxon_2.0d0))  
-c(fracdiff.AICC(fit.exxon_2.1d0),fracdiff.AIC(fit.exxon_2.1d0),fracdiff.BIC(fit.exxon_2.1d0))
-c(fracdiff.AICC(fit.exxon_2.0d1),fracdiff.AIC(fit.exxon_2.0d1),fracdiff.BIC(fit.exxon_2.0d1))
 c(fracdiff.AICC(fit.exxon_2.1d1),fracdiff.AIC(fit.exxon_2.1d1),fracdiff.BIC(fit.exxon_2.1d1))
-c(fracdiff.AICC(fit.exxon_2.2d0),fracdiff.AIC(fit.exxon_2.2d0),fracdiff.BIC(fit.exxon_2.2d0))
-c(fracdiff.AICC(fit.exxon_2.0d2),fracdiff.AIC(fit.exxon_2.0d2),fracdiff.BIC(fit.exxon_2.0d2))
+
 
 
 ### exxon_2 model diagnostics: autocorrelation in residuals
-fit.exxon_2.bst <- fit.exxon_2.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
+fit.exxon_2.bst <- fit.exxon_2.1d1                                                          # NOT a 0,d,0 model!
 
 r.t_exxon_2 <- fit.exxon_2.bst$residuals
 summary(r.t_exxon_2)                                                                         
