@@ -2757,7 +2757,7 @@ c(fracdiff.AICC(fit.exxon_2.1d1),fracdiff.AIC(fit.exxon_2.1d1),fracdiff.BIC(fit.
 
 
 ### exxon_2 model diagnostics: autocorrelation in residuals
-fit.exxon_2.bst <- fit.exxon_2.1d1                                                          # NOT a 0,d,0 model!
+fit.exxon_2.bst <- fit.exxon_2.1d1                                                          # NOT a 0,d,0 model! ar, ma values quite close though
 
 r.t_exxon_2 <- fit.exxon_2.bst$residuals
 summary(r.t_exxon_2)                                                                         
@@ -2802,10 +2802,10 @@ pacf(v.t_gm_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.gm_2.0d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=0,M=50)                  # d term significant  
 summary(fit.gm_2.0d0)
 
-fit.gm_2.1d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=0,M=50)                  # ar, d term significant
+fit.gm_2.1d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=0,M=50)                  # ar not sig
 summary(fit.gm_2.1d0)
 
-fit.gm_2.2d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=2,nma=0,M=50)                  # ar2 not sig
+fit.gm_2.2d0 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=2,nma=0,M=50)                  # ar1, ar2 not sig
 summary(fit.gm_2.2d0)
 
 fit.gm_2.0d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=1,M=50)                  # d, ma term significant
@@ -2814,19 +2814,19 @@ summary(fit.gm_2.0d1)
 fit.gm_2.0d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=2,M=50)                  # ma2 not sig
 summary(fit.gm_2.0d2)
 
-fit.gm_2.1d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=1,M=50)                  # warning when computing corr      
+fit.gm_2.1d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=1,M=20)                  # all sig, had to change the M value  
 summary(fit.gm_2.1d1)
 
-fit.gm_2.1d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+fit.gm_2.1d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=2,M=50)                  # ma2 not sig        
 summary(fit.gm_2.1d2)
 
-fit.gm_2.2d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=2,nma=1,M=50)                  # ar2 term not significant            
+fit.gm_2.2d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=2,nma=1,M=20)                  # unable to compute correlation matrix            
 summary(fit.gm_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.gm_2.0d0),fracdiff.AIC(fit.gm_2.0d0),fracdiff.BIC(fit.gm_2.0d0))  
-c(fracdiff.AICC(fit.gm_2.1d0),fracdiff.AIC(fit.gm_2.1d0),fracdiff.BIC(fit.gm_2.1d0))
+c(fracdiff.AICC(fit.gm_2.1d1),fracdiff.AIC(fit.gm_2.1d1),fracdiff.BIC(fit.gm_2.1d1))
 c(fracdiff.AICC(fit.gm_2.0d1),fracdiff.AIC(fit.gm_2.0d1),fracdiff.BIC(fit.gm_2.0d1))
 
 
@@ -2863,7 +2863,7 @@ qqline(r.t_gm_2)
 shapiro.test(r.t_gm_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_gm_2,"pnorm",mean=mean(r.t_gm_2),sd=sd(r.t_gm_2))                            # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("General Motors", 1, 0, fit.gm_2.bst$d, 0)          # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("General Motors", 2, 0, fit.gm_2.bst$d, 0)          # adding to the table
 
 
 
