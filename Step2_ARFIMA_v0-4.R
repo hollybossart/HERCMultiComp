@@ -2765,7 +2765,7 @@ summary(r.t_exxon_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_exxon_2,ylim=c(-2,2),
+plot.ts(r.t_exxon_2,ylim=c(-2.5,2.5),
         xlab="Year",ylab="GK volatility",main="Exxon Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -2775,7 +2775,7 @@ pacf(r.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_exxon_2,                                                                            # histogram of residuals
-     breaks=seq(-2,2,0.25),
+     breaks=seq(-2.5,2.5,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,3),
      main="Residual Histogram")                                                              
@@ -2787,7 +2787,7 @@ qqline(r.t_exxon_2)
 shapiro.test(r.t_exxon_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_exxon_2,"pnorm",mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2))                      # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Exxon", 1, 0, fit.exxon_2.bst$d, 0)                   # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("Exxon", 2, 1, fit.exxon_2.bst$d, 1)                   # adding to the table
 
 
 
