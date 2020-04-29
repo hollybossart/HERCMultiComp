@@ -2870,7 +2870,7 @@ bst.models[nrow(bst.models)+1,] <- c("General Motors", 2, 0, fit.gm_2.bst$d, 0) 
 ### ibm_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_ibm_2,ylim=c(0,4),                                                             
+plot.ts(v.t_ibm_2,ylim=c(0,6),                                                             
         xlab="Year",ylab="GK volatility",main="IBM Volatility 2/01/2018-12/31/2019")
 acf(v.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")                                         
 pacf(v.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -2878,39 +2878,38 @@ pacf(v.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.ibm_2.0d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=0,M=50)                  # d term significant  
 summary(fit.ibm_2.0d0)
 
-fit.ibm_2.1d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=0,M=50)                  # ar significant
+fit.ibm_2.1d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=0,M=50)                  # ar not significant
 summary(fit.ibm_2.1d0)
 
-fit.ibm_2.2d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=2,nma=0,M=50)                  # ar1/2 significant
+fit.ibm_2.2d0 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=2,nma=0,M=50)                  # ar2 significant
 summary(fit.ibm_2.2d0)
 
-fit.ibm_2.0d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=1,M=50)                  # ma not sig
+fit.ibm_2.0d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=1,M=30)                  # ma not sig, had to change M value
 summary(fit.ibm_2.0d1)
 
-fit.ibm_2.0d2 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=2,M=50)                  # all significant
+fit.ibm_2.0d2 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=0,nma=2,M=50)                  # ma terms not sig
 summary(fit.ibm_2.0d2)
 
-fit.ibm_2.1d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=1,M=50)                  # warning when computing corr      
+fit.ibm_2.1d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=1,M=30)                  # sig, but both ar, ma params close to each other      
 summary(fit.ibm_2.1d1)
 
-fit.ibm_2.1d2 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=2,M=50)                  # warning when computing correlation        
+fit.ibm_2.1d2 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=1,nma=2,M=30)                  # only d sig     
 summary(fit.ibm_2.1d2)
 
-fit.ibm_2.2d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=2,nma=1,M=50)                  # warning when computing corr         
+fit.ibm_2.2d1 <- fracdiff(v.t_ibm_2-mean(v.t_ibm_2),nar=2,nma=1,M=30)                  # only d sig        
 summary(fit.ibm_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.ibm_2.0d0),fracdiff.AIC(fit.ibm_2.0d0),fracdiff.BIC(fit.ibm_2.0d0))  
-c(fracdiff.AICC(fit.ibm_2.1d0),fracdiff.AIC(fit.ibm_2.1d0),fracdiff.BIC(fit.ibm_2.1d0))
-c(fracdiff.AICC(fit.ibm_2.2d0),fracdiff.AIC(fit.ibm_2.2d0),fracdiff.BIC(fit.ibm_2.2d0))
-c(fracdiff.AICC(fit.ibm_2.0d2),fracdiff.AIC(fit.ibm_2.0d2),fracdiff.BIC(fit.ibm_2.0d2))
+c(fracdiff.AICC(fit.ibm_2.1d1),fracdiff.AIC(fit.ibm_2.1d1),fracdiff.BIC(fit.ibm_2.1d1))
+
 
 
 
 
 ### ibm_2 model diagnostics: autocorrelation in residuals
-fit.ibm_2.bst <- fit.ibm_2.0d0                                                          # this minimizes BIC but AICC and AIC are close to min val
+fit.ibm_2.bst <- fit.ibm_2.0d0                                                          
 
 r.t_ibm_2 <- fit.ibm_2.bst$residuals
 summary(r.t_ibm_2)                                                                         
@@ -2918,7 +2917,7 @@ summary(r.t_ibm_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_ibm_2,ylim=c(-2,2),
+plot.ts(r.t_ibm_2,ylim=c(-4,4),
         xlab="Year",ylab="GK volatility",main="IBM Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -2928,9 +2927,9 @@ pacf(r.t_ibm_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_ibm_2,                                                                           # one outlier
-     breaks=seq(-2,5,0.25),
+     breaks=seq(-4,4,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,3),
+     col="grey85",ylim=c(0,1.5),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_ibm_2),sd=sd(r.t_ibm_2)),lty=1,col="red")                   # add theoretical normal density
@@ -2940,7 +2939,7 @@ qqline(r.t_ibm_2)
 shapiro.test(r.t_ibm_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_ibm_2,"pnorm",mean=mean(r.t_ibm_2),sd=sd(r.t_ibm_2))                          # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("IBM", 1, 0, fit.ibm_2.bst$d, 0)                     # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("IBM", 2, 0, fit.ibm_2.bst$d, 0)                     # adding to the table
 
 
 
