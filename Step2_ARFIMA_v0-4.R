@@ -3092,7 +3092,7 @@ qqline(r.t_chevron_2)
 shapiro.test(r.t_chevron_2)                                                                       # Shapiro-Wilk normality test supports normality
 ks.test(r.t_chevron_2,"pnorm",mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2))                      # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Chevron", 2, 1, fit.chevron_2.bst$d, 1)                     # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("Chevron", 2, fit.chevron_2.bst$ar, fit.chevron_2.bst$d, fit.chevron_2.bst$ma)                     
 
 
 
@@ -4129,7 +4129,7 @@ qqline(r.t_homedep_2)
 shapiro.test(r.t_homedep_2)                                                                      # Shapiro-Wilk normality test supports normality
 ks.test(r.t_homedep_2,"pnorm",mean=mean(r.t_homedep_2),sd=sd(r.t_homedep_2))                     # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Home Depot*", 2, 0, fit.homedep_2.bst$d, 0)    
+bst.models[nrow(bst.models)+1,] <- c("Home Depot", 2, 0, fit.homedep_2.bst$d, 0)    
 
 
 ### citi_2 ARFIMA model
@@ -4210,7 +4210,7 @@ bst.models[nrow(bst.models)+1,] <- c("Citi", 2, 0, fit.citi_2.bst$d, 0)
 ### amazon_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_amazon_2,ylim=c(0,40),                                                             
+plot.ts(v.t_amazon_2,ylim=c(0,102),                                                             
         xlab="Year",ylab="GK volatility",main="Amazon Volatility 2/01/2018-12/31/2019")               # note the very large jump in range from other companies
 acf(v.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4221,7 +4221,7 @@ summary(fit.amazon_2.0d0)
 fit.amazon_2.1d0 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=0,M=50)                        # ar term not sig
 summary(fit.amazon_2.1d0)
 
-fit.amazon_2.2d0 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=2,nma=0,M=50)                        # ar terms not sig
+fit.amazon_2.2d0 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=2,nma=0,M=50)                        # ar 1 term not sig
 summary(fit.amazon_2.2d0)
 
 fit.amazon_2.0d1 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=0,nma=1,M=50)                        # d term sig
@@ -4230,7 +4230,7 @@ summary(fit.amazon_2.0d1)
 fit.amazon_2.0d2 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=0,nma=2,M=50)                        # ma2 not sig
 summary(fit.amazon_2.0d2)
 
-fit.amazon_2.1d1 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=1,M=50)                        # all sig
+fit.amazon_2.1d1 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=1,M=50)                        # all sig, ar ma are not that close
 summary(fit.amazon_2.1d1)
 
 fit.amazon_2.1d2 <- fracdiff(v.t_amazon_2-mean(v.t_amazon_2),nar=1,nma=2,M=50)                        # warning
@@ -4247,7 +4247,7 @@ c(fracdiff.AICC(fit.amazon_2.1d1),fracdiff.AIC(fit.amazon_2.1d1),fracdiff.BIC(fi
 
 
 ### amazon_2 model diagnostics: autocorrelation in residuals
-fit.amazon_2.bst <- fit.amazon_2.0d0                                                         
+fit.amazon_2.bst <- fit.amazon_2.1d1                                                         
 
 r.t_amazon_2 <- fit.amazon_2.bst$residuals
 summary(r.t_amazon_2)                                                                   # [Q] a few large outliers -- one residual is 53                                                 
@@ -4255,7 +4255,7 @@ summary(r.t_amazon_2)                                                           
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_amazon_2,ylim=c(-8,53),
+plot.ts(r.t_amazon_2,ylim=c(-30,70),
         xlab="Year",ylab="GK volatility",main="Amazon Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -4265,9 +4265,9 @@ pacf(r.t_amazon_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_amazon_2,                                                                                   
-     breaks=seq(-8,53,0.25),
+     breaks=seq(-70,70,1),
      freq=FALSE,
-     col="grey85",ylim=c(0,0.3),
+     col="grey85",ylim=c(0,0.1),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_amazon_2),sd=sd(r.t_amazon_2)),lty=1,col="red")               
@@ -4277,7 +4277,7 @@ qqline(r.t_amazon_2)
 shapiro.test(r.t_amazon_2)                                                              # Shapiro-Wilk normality test supports normality
 ks.test(r.t_amazon_2,"pnorm",mean=mean(r.t_amazon_2),sd=sd(r.t_amazon_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Amazon", 1, 0, fit.amazon_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("Amazon", 2, fit.amazon_2.bst$ar, fit.amazon_2.bst$d, fit.amazon_2.bst$ma)     
 
 
 
@@ -4293,22 +4293,22 @@ pacf(v.t_chinamob_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.chinamob_2.0d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=0,M=50)                        # d sig
 summary(fit.chinamob_2.0d0)
 
-fit.chinamob_2.1d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=0,M=50)                        # ar sig
+fit.chinamob_2.1d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=0,M=50)                        # ar not sig
 summary(fit.chinamob_2.1d0)
 
-fit.chinamob_2.2d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=2,nma=0,M=50)                        # all terms sig
+fit.chinamob_2.2d0 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=2,nma=0,M=50)                        # ar term not sig
 summary(fit.chinamob_2.2d0)
 
 fit.chinamob_2.0d1 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=1,M=50)                        # all terms sig
 summary(fit.chinamob_2.0d1)
 
-fit.chinamob_2.0d2 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=2,M=50)                        # all terms sig
+fit.chinamob_2.0d2 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=0,nma=2,M=50)                        # ma1 not sig
 summary(fit.chinamob_2.0d2)
 
 fit.chinamob_2.1d1 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=1,M=50)                        # all sig
 summary(fit.chinamob_2.1d1)
 
-fit.chinamob_2.1d2 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=2,M=50)                        # warning
+fit.chinamob_2.1d2 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=1,nma=2,M=50)                        # all sig
 summary(fit.chinamob_2.1d2)
 
 fit.chinamob_2.2d1 <- fracdiff(v.t_chinamob_2-mean(v.t_chinamob_2),nar=2,nma=1,M=50)                        # ar2 not sig   
@@ -4317,10 +4317,9 @@ summary(fit.chinamob_2.2d1)
 
 
 c(fracdiff.AICC(fit.chinamob_2.0d0),fracdiff.AIC(fit.chinamob_2.0d0),fracdiff.BIC(fit.chinamob_2.0d0))
-c(fracdiff.AICC(fit.chinamob_2.1d0),fracdiff.AIC(fit.chinamob_2.1d0),fracdiff.BIC(fit.chinamob_2.1d0))
-c(fracdiff.AICC(fit.chinamob_2.2d0),fracdiff.AIC(fit.chinamob_2.2d0),fracdiff.BIC(fit.chinamob_2.2d0))
 c(fracdiff.AICC(fit.chinamob_2.0d1),fracdiff.AIC(fit.chinamob_2.0d1),fracdiff.BIC(fit.chinamob_2.0d1))
 c(fracdiff.AICC(fit.chinamob_2.0d2),fracdiff.AIC(fit.chinamob_2.0d2),fracdiff.BIC(fit.chinamob_2.0d2))
+c(fracdiff.AICC(fit.chinamob_2.1d2),fracdiff.AIC(fit.chinamob_2.1d2),fracdiff.BIC(fit.chinamob_2.1d2))
 c(fracdiff.AICC(fit.chinamob_2.1d1),fracdiff.AIC(fit.chinamob_2.1d1),fracdiff.BIC(fit.chinamob_2.1d1)) 
 
 
@@ -4346,7 +4345,7 @@ par(mfrow=c(1,2),mex=0.75)
 hist(r.t_chinamob_2,                                                                                   
      breaks=seq(-1,1,0.125),
      freq=FALSE,
-     col="grey85",ylim=c(0,4),
+     col="grey85",ylim=c(0,6),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_chinamob_2),sd=sd(r.t_chinamob_2)),lty=1,col="red")               
@@ -4356,7 +4355,7 @@ qqline(r.t_chinamob_2)
 shapiro.test(r.t_chinamob_2)                                                                  # Shapiro-Wilk normality test supports normality
 ks.test(r.t_chinamob_2,"pnorm",mean=mean(r.t_chinamob_2),sd=sd(r.t_chinamob_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("China Mobile", 1, 0, fit.chinamob_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("China Mobile", 2, 0, fit.chinamob_2.bst$d, 0)     
 
 
 
