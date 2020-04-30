@@ -4501,7 +4501,7 @@ lines(z,dnorm(z,mean=mean(r.t_novartis_2),sd=sd(r.t_novartis_2)),lty=1,col="red"
 qqnorm(r.t_novartis_2)                                                                         
 qqline(r.t_novartis_2)
 
-shapiro.test(r.t_novartis_2)                                                              # Shapiro-Wilk normality test supports normality
+shapiro.test(r.t_novartis_2)                                                                  # Shapiro-Wilk normality test supports normality
 ks.test(r.t_novartis_2,"pnorm",mean=mean(r.t_novartis_2),sd=sd(r.t_novartis_2))               # KS test supports normality
 
 bst.models[nrow(bst.models)+1,] <- c("Novartis", 2, 0, fit.novartis_2.bst$d, 0)  
@@ -4510,7 +4510,7 @@ bst.models[nrow(bst.models)+1,] <- c("Novartis", 2, 0, fit.novartis_2.bst$d, 0)
 ### netflix_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_netflix_2,ylim=c(0,8),                                                             
+plot.ts(v.t_netflix_2,ylim=c(0,22),                                                                     # note the range                                                           
         xlab="Year",ylab="GK volatility",main="Netflix Volatility 2/01/2018-12/31/2019")              
 acf(v.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4521,22 +4521,22 @@ summary(fit.netflix_2.0d0)
 fit.netflix_2.1d0 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=0,M=50)                        # ar sig
 summary(fit.netflix_2.1d0)
 
-fit.netflix_2.2d0 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=2,nma=0,M=50)                        # all terms sig
+fit.netflix_2.2d0 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=2,nma=0,M=50)                        # ar2 not sig
 summary(fit.netflix_2.2d0)
 
-fit.netflix_2.0d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=1,M=100)                        # warning
+fit.netflix_2.0d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=1,M=100)                       # all sig
 summary(fit.netflix_2.0d1)
 
-fit.netflix_2.0d2 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=2,M=50)                        # all sig
+fit.netflix_2.0d2 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=0,nma=2,M=50)                        # ma2 not sig
 summary(fit.netflix_2.0d2)
 
-fit.netflix_2.1d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=1,M=50)                        # warning
+fit.netflix_2.1d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=1,M=50)                        # all sig, ar and ma params close to each other
 summary(fit.netflix_2.1d1)
 
-fit.netflix_2.1d2 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=2,M=50)                        # warning
+fit.netflix_2.1d2 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=1,nma=2,M=80)                        # only d sig
 summary(fit.netflix_2.1d2)
 
-fit.netflix_2.2d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=2,nma=1,M=50)                        # all sig
+fit.netflix_2.2d1 <- fracdiff(v.t_netflix_2-mean(v.t_netflix_2),nar=2,nma=1,M=50)                        # warning
 summary(fit.netflix_2.2d1)
 
 
@@ -4544,9 +4544,7 @@ summary(fit.netflix_2.2d1)
 c(fracdiff.AICC(fit.netflix_2.0d0),fracdiff.AIC(fit.netflix_2.0d0),fracdiff.BIC(fit.netflix_2.0d0))
 c(fracdiff.AICC(fit.netflix_2.0d1),fracdiff.AIC(fit.netflix_2.0d1),fracdiff.BIC(fit.netflix_2.0d1))
 c(fracdiff.AICC(fit.netflix_2.1d0),fracdiff.AIC(fit.netflix_2.1d0),fracdiff.BIC(fit.netflix_2.1d0)) 
-c(fracdiff.AICC(fit.netflix_2.2d0),fracdiff.AIC(fit.netflix_2.2d0),fracdiff.BIC(fit.netflix_2.2d0))
-c(fracdiff.AICC(fit.netflix_2.0d2),fracdiff.AIC(fit.netflix_2.0d2),fracdiff.BIC(fit.netflix_2.0d2))
-c(fracdiff.AICC(fit.netflix_2.2d1),fracdiff.AIC(fit.netflix_2.2d1),fracdiff.BIC(fit.netflix_2.2d1)) 
+c(fracdiff.AICC(fit.netflix_2.1d1),fracdiff.AIC(fit.netflix_2.1d1),fracdiff.BIC(fit.netflix_2.1d1)) 
 
 
 
@@ -4559,7 +4557,7 @@ summary(r.t_netflix_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_netflix_2,ylim=c(-3,5),
+plot.ts(r.t_netflix_2,ylim=c(-6,15),
         xlab="Year",ylab="GK volatility",main="Netflix Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -4569,9 +4567,9 @@ pacf(r.t_netflix_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_netflix_2,                                                                                   
-     breaks=seq(-2,7,0.25),
+     breaks=seq(-15,15,0.5),
      freq=FALSE,
-     col="grey85",ylim=c(0,1),
+     col="grey85",ylim=c(0,0.3),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_netflix_2),sd=sd(r.t_netflix_2)),lty=1,col="red")               
@@ -4581,14 +4579,14 @@ qqline(r.t_netflix_2)
 shapiro.test(r.t_netflix_2)                                                                # Shapiro-Wilk normality test supports normality
 ks.test(r.t_netflix_2,"pnorm",mean=mean(r.t_netflix_2),sd=sd(r.t_netflix_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Netflix", 1, 0, fit.netflix_2.bst$d, 0)
+bst.models[nrow(bst.models)+1,] <- c("Netflix", 2, 0, fit.netflix_2.bst$d, 0)
 
 
 
 ### visa_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_visa_2,ylim=c(0,4),                                                             
+plot.ts(v.t_visa_2,ylim=c(0,6),                                                             
         xlab="Year",ylab="GK volatility",main="Visa Volatility 2/01/2018-12/31/2019")              
 acf(v.t_visa_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_visa_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4599,27 +4597,28 @@ summary(fit.visa_2.0d0)
 fit.visa_2.1d0 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=0,M=50)                        # ar not sig
 summary(fit.visa_2.1d0)
 
-fit.visa_2.2d0 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=2,nma=0,M=50)                        # ar2 term not sig
+fit.visa_2.2d0 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=2,nma=0,M=50)                        # ar term not sig
 summary(fit.visa_2.2d0)
 
 fit.visa_2.0d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=0,nma=1,M=50)                        # ma term not sig
 summary(fit.visa_2.0d1)
 
-fit.visa_2.0d2 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=0,nma=2,M=50)                        # ma2 not sig
+fit.visa_2.0d2 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=0,nma=2,M=50)                        # ma terms not sig
 summary(fit.visa_2.0d2)
 
-fit.visa_2.1d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=1,M=50)                        # ar ma not sig
+fit.visa_2.1d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=1,M=80)                        # all sig
 summary(fit.visa_2.1d1)
 
-fit.visa_2.1d2 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=2,M=50)                        # ar/ma1 sig
+fit.visa_2.1d2 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=1,nma=2,M=50)                        # all sig
 summary(fit.visa_2.1d2)
 
-fit.visa_2.2d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=2,nma=1,M=50)                        # warning 
+fit.visa_2.2d1 <- fracdiff(v.t_visa_2-mean(v.t_visa_2),nar=2,nma=1,M=50)                        # ar2 not sig
 summary(fit.visa_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.visa_2.0d0),fracdiff.AIC(fit.visa_2.0d0),fracdiff.BIC(fit.visa_2.0d0))
+c(fracdiff.AICC(fit.visa_2.1d1),fracdiff.AIC(fit.visa_2.1d1),fracdiff.BIC(fit.visa_2.1d1))
 
 
 
@@ -4645,7 +4644,7 @@ par(mfrow=c(1,2),mex=0.75)
 hist(r.t_visa_2,                                                                                   
      breaks=seq(-4,4,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,2.5),
+     col="grey85",ylim=c(0,1.5),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_visa_2),sd=sd(r.t_visa_2)),lty=1,col="red")               
@@ -4655,13 +4654,13 @@ qqline(r.t_visa_2)
 shapiro.test(r.t_visa_2)                                                              # Shapiro-Wilk normality test supports normality
 ks.test(r.t_visa_2,"pnorm",mean=mean(r.t_visa_2),sd=sd(r.t_visa_2))                   # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Visa", 1, 0, fit.visa_2.bst$d, 0)
+bst.models[nrow(bst.models)+1,] <- c("Visa", 2, 0, fit.visa_2.bst$d, 0)
 
 
 ### unhealth_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_unhealth_2,ylim=c(0,7),                                                             
+plot.ts(v.t_unhealth_2,ylim=c(0,17),                                                             
         xlab="Year",ylab="GK volatility",main="United Health Volatility 2/01/2018-12/31/2019")              
 acf(v.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4672,29 +4671,27 @@ summary(fit.unhealth_2.0d0)
 fit.unhealth_2.1d0 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=0,M=50)                        # ar not sig
 summary(fit.unhealth_2.1d0)
 
-fit.unhealth_2.2d0 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=2,nma=0,M=50)                        # ar2 term not sig
+fit.unhealth_2.2d0 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=2,nma=0,M=50)                        # ar terms not sig
 summary(fit.unhealth_2.2d0)
 
 fit.unhealth_2.0d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=0,nma=1,M=50)                        # ma term not sig
 summary(fit.unhealth_2.0d1)
 
-fit.unhealth_2.0d2 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=0,nma=2,M=50)                        # ma2 not sig
+fit.unhealth_2.0d2 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=0,nma=2,M=50)                        # ma terms not sig
 summary(fit.unhealth_2.0d2)
 
-fit.unhealth_2.1d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=1,M=50)                        # all sig
+fit.unhealth_2.1d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=1,M=50)                        # warning
 summary(fit.unhealth_2.1d1)
 
-fit.unhealth_2.1d2 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=2,M=50)                        # ma2 not sig
+fit.unhealth_2.1d2 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=1,nma=2,M=50)                        # only d sig
 summary(fit.unhealth_2.1d2)
 
-fit.unhealth_2.2d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=2,nma=1,M=50)                        # warning 
+fit.unhealth_2.2d1 <- fracdiff(v.t_unhealth_2-mean(v.t_unhealth_2),nar=2,nma=1,M=50)                        # only d sig
 summary(fit.unhealth_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.unhealth_2.0d0),fracdiff.AIC(fit.unhealth_2.0d0),fracdiff.BIC(fit.unhealth_2.0d0))
-c(fracdiff.AICC(fit.unhealth_2.1d1),fracdiff.AIC(fit.unhealth_2.1d1),fracdiff.BIC(fit.unhealth_2.1d1)) 
-
 
 
 ### unhealth_2 model diagnostics: autocorrelation in residuals
@@ -4706,7 +4703,7 @@ summary(r.t_unhealth_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_unhealth_2,ylim=c(-2,5),
+plot.ts(r.t_unhealth_2,ylim=c(-3,14),
         xlab="Year",ylab="GK volatility",main="United Health Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -4716,9 +4713,9 @@ pacf(r.t_unhealth_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_unhealth_2,                                                                                   
-     breaks=seq(-2,5,0.25),
+     breaks=seq(-14,14,0.5),
      freq=FALSE,
-     col="grey85",ylim=c(0,1),
+     col="grey85",ylim=c(0,0.6),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_unhealth_2),sd=sd(r.t_unhealth_2)),lty=1,col="red")               
@@ -4728,7 +4725,7 @@ qqline(r.t_unhealth_2)
 shapiro.test(r.t_unhealth_2)                                                                  # Shapiro-Wilk normality test supports normality
 ks.test(r.t_unhealth_2,"pnorm",mean=mean(r.t_unhealth_2),sd=sd(r.t_unhealth_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("United Health", 1, 0, fit.unhealth_2.bst$d, 0)
+bst.models[nrow(bst.models)+1,] <- c("United Health", 2, 0, fit.unhealth_2.bst$d, 0)
 
 
 ### busch_2 ARFIMA model
