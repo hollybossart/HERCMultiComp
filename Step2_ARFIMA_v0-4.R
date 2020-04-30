@@ -3841,7 +3841,7 @@ bst.models[nrow(bst.models)+1,] <- c("Intel", 2, 0, fit.intel_2.bst$d, 0)
 ### bankofa_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_bankofa_2,ylim=c(0,1),                                                             
+plot.ts(v.t_bankofa_2,ylim=c(0,2),                                                             
         xlab="Year",ylab="GK volatility",main="Bank of America Volatility 2/01/2018-12/31/2019")
 acf(v.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3855,13 +3855,13 @@ summary(fit.bankofa_2.1d0)
 fit.bankofa_2.2d0 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=2,nma=0,M=50)                        # ar terms not sig
 summary(fit.bankofa_2.2d0)
 
-fit.bankofa_2.0d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=0,nma=1,M=50)                        # ma not sig
+fit.bankofa_2.0d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=0,nma=1,M=50)                        # ma sig
 summary(fit.bankofa_2.0d1)
 
 fit.bankofa_2.0d2 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=0,nma=2,M=50)                        # ma terms not sig
 summary(fit.bankofa_2.0d2)
 
-fit.bankofa_2.1d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=1,nma=1,M=50)                        # all sig
+fit.bankofa_2.1d1 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=1,nma=1,M=20)                        # cannot compute correlation
 summary(fit.bankofa_2.1d1)
 
 fit.bankofa_2.1d2 <- fracdiff(v.t_bankofa_2-mean(v.t_bankofa_2),nar=1,nma=2,M=50)                        # ma 2 not sig
@@ -3873,7 +3873,7 @@ summary(fit.bankofa_2.2d1)
 
 
 c(fracdiff.AICC(fit.bankofa_2.0d0),fracdiff.AIC(fit.bankofa_2.0d0),fracdiff.BIC(fit.bankofa_2.0d0))
-c(fracdiff.AICC(fit.bankofa_2.1d1),fracdiff.AIC(fit.bankofa_2.1d1),fracdiff.BIC(fit.bankofa_2.1d1)) 
+c(fracdiff.AICC(fit.bankofa_2.0d1),fracdiff.AIC(fit.bankofa_2.0d1),fracdiff.BIC(fit.bankofa_2.0d1)) 
 
 
 
@@ -3886,7 +3886,7 @@ summary(r.t_bankofa_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_bankofa_2,ylim=c(-0.5,0.5),
+plot.ts(r.t_bankofa_2,ylim=c(-2,2),
         xlab="Year",ylab="GK volatility",main="Bank of America Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3896,9 +3896,9 @@ pacf(r.t_bankofa_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_bankofa_2,                                                                                   
-     breaks=seq(-1,1,0.125),
+     breaks=seq(-2,2,0.125),
      freq=FALSE,
-     col="grey85",ylim=c(0,5),
+     col="grey85",ylim=c(0,4),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_bankofa_2),sd=sd(r.t_bankofa_2)),lty=1,col="red")               
@@ -3908,7 +3908,7 @@ qqline(r.t_bankofa_2)
 shapiro.test(r.t_bankofa_2)                                                                            # Shapiro-Wilk normality test supports normality
 ks.test(r.t_bankofa_2,"pnorm",mean=mean(r.t_bankofa_2),sd=sd(r.t_bankofa_2))                           # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Bank of America", 1, 0, fit.bankofa_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("Bank of America", 2, 0, fit.bankofa_2.bst$d, 0)     
 
 
 
