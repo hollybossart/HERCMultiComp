@@ -3915,7 +3915,7 @@ bst.models[nrow(bst.models)+1,] <- c("Bank of America", 2, 0, fit.bankofa_2.bst$
 ### verizon_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_verizon_2,ylim=c(0,2),                                                             
+plot.ts(v.t_verizon_2,ylim=c(0,3),                                                             
         xlab="Year",ylab="GK volatility",main="Verizon Volatility 2/01/2018-12/31/2019")
 acf(v.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3926,30 +3926,29 @@ summary(fit.verizon_2.0d0)
 fit.verizon_2.1d0 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=0,M=50)                       # ar term not significant
 summary(fit.verizon_2.1d0)
 
-fit.verizon_2.2d0 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=2,nma=0,M=50)                       # ar terms sig
+fit.verizon_2.2d0 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=2,nma=0,M=50)                       # ar terms not sig
 summary(fit.verizon_2.2d0)
 
 fit.verizon_2.0d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=0,nma=1,M=50)                       # ma not sig
 summary(fit.verizon_2.0d1)
 
-fit.verizon_2.0d2 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=0,nma=2,M=50)                       # all sig
+fit.verizon_2.0d2 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=0,nma=2,M=50)                       # only d sig
 summary(fit.verizon_2.0d2)
 
-fit.verizon_2.1d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=1,M=50)                       # warning
+fit.verizon_2.1d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=1,M=50)                       # all sig, ar and ma are VERY close
 summary(fit.verizon_2.1d1)
 
-fit.verizon_2.1d2 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=2,M=50)                       # all sig
+fit.verizon_2.1d2 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=1,nma=2,M=50)                       # ma2 not sig
 summary(fit.verizon_2.1d2)
 
-fit.verizon_2.2d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=2,nma=1,M=50)                       # ar2 not sig    
+fit.verizon_2.2d1 <- fracdiff(v.t_verizon_2-mean(v.t_verizon_2),nar=2,nma=1,M=80)                       # ar2 not sig    
 summary(fit.verizon_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.verizon_2.0d0),fracdiff.AIC(fit.verizon_2.0d0),fracdiff.BIC(fit.verizon_2.0d0))
-c(fracdiff.AICC(fit.verizon_2.2d0),fracdiff.AIC(fit.verizon_2.2d0),fracdiff.BIC(fit.verizon_2.2d0)) 
-c(fracdiff.AICC(fit.verizon_2.1d2),fracdiff.AIC(fit.verizon_2.1d2),fracdiff.BIC(fit.verizon_2.1d2))
-c(fracdiff.AICC(fit.verizon_2.0d2),fracdiff.AIC(fit.verizon_2.0d2),fracdiff.BIC(fit.verizon_2.0d2))
+c(fracdiff.AICC(fit.verizon_2.1d1),fracdiff.AIC(fit.verizon_2.1d1),fracdiff.BIC(fit.verizon_2.1d1))
+
 
 
 ### verizon_2 model diagnostics: autocorrelation in residuals
@@ -3961,7 +3960,7 @@ summary(r.t_verizon_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_verizon_2,ylim=c(-1,1.5),
+plot.ts(r.t_verizon_2,ylim=c(-2,2),
         xlab="Year",ylab="GK volatility",main="Verizon Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_verizon_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3983,7 +3982,7 @@ qqline(r.t_verizon_2)
 shapiro.test(r.t_verizon_2)                                                                           # Shapiro-Wilk normality test supports normality
 ks.test(r.t_verizon_2,"pnorm",mean=mean(r.t_verizon_2),sd=sd(r.t_verizon_2))                         # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Verizon", 1, 0, fit.verizon_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("Verizon", 2, 0, fit.verizon_2.bst$d, 0)     
 
 
 
