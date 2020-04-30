@@ -4359,13 +4359,10 @@ bst.models[nrow(bst.models)+1,] <- c("China Mobile", 2, 0, fit.chinamob_2.bst$d,
 
 
 
-
-
-
 ### taiwan_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_taiwan_2,ylim=c(0,1.0),                                                             
+plot.ts(v.t_taiwan_2,ylim=c(0,1.5),                                                             
         xlab="Year",ylab="GK volatility",main="Taiwan Semiconductors Volatility 2/01/2018-12/31/2019")              
 acf(v.t_taiwan_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_taiwan_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4382,13 +4379,13 @@ summary(fit.taiwan_2.2d0)
 fit.taiwan_2.0d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=0,nma=1,M=50)                        # ma term not sig
 summary(fit.taiwan_2.0d1)
 
-fit.taiwan_2.0d2 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=0,nma=2,M=50)                        # no terms sig
+fit.taiwan_2.0d2 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=0,nma=2,M=50)                        # only d sig
 summary(fit.taiwan_2.0d2)
 
-fit.taiwan_2.1d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=1,M=50)                        # all sig
+fit.taiwan_2.1d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=1,M=50)                        # all sig, ar and ma close
 summary(fit.taiwan_2.1d1)
 
-fit.taiwan_2.1d2 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=2,M=50)                        # ma2 not sig
+fit.taiwan_2.1d2 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=1,nma=2,M=50)                        # only d sig
 summary(fit.taiwan_2.1d2)
 
 fit.taiwan_2.2d1 <- fracdiff(v.t_taiwan_2-mean(v.t_taiwan_2),nar=2,nma=1,M=50)                        # warning 
@@ -4422,7 +4419,7 @@ par(mfrow=c(1,2),mex=0.75)
 hist(r.t_taiwan_2,                                                                                   
      breaks=seq(-1,1,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,5),
+     col="grey85",ylim=c(0,3),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_taiwan_2),sd=sd(r.t_taiwan_2)),lty=1,col="red")               
@@ -4432,7 +4429,7 @@ qqline(r.t_taiwan_2)
 shapiro.test(r.t_taiwan_2)                                                              # Shapiro-Wilk normality test supports normality
 ks.test(r.t_taiwan_2,"pnorm",mean=mean(r.t_taiwan_2),sd=sd(r.t_taiwan_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Taiwan Semiconductors", 1, 0, fit.taiwan_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("Taiwan Semiconductors", 2, 0, fit.taiwan_2.bst$d, 0)     
 
 
 
