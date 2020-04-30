@@ -3997,32 +3997,30 @@ pacf(v.t_att_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.att_2.0d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=0,M=50)                        # d term significant  
 summary(fit.att_2.0d0)
 
-fit.att_2.1d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=0,M=50)                        # ar term significant
+fit.att_2.1d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=0,M=50)                        # ar term not significant
 summary(fit.att_2.1d0)
 
 fit.att_2.2d0 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=2,nma=0,M=50)                        # ar1 ar2 not sig
 summary(fit.att_2.2d0)
 
-fit.att_2.0d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=1,M=50)                        # ma sig
+fit.att_2.0d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=1,M=50)                        # ma not sig
 summary(fit.att_2.0d1)
 
-fit.att_2.0d2 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=2,M=50)                        # ma1 not sig
+fit.att_2.0d2 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=0,nma=2,M=50)                        # ma terms not sig
 summary(fit.att_2.0d2)
 
-fit.att_2.1d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=1,M=50)                        # all sig
+fit.att_2.1d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=1,M=50)                        # all sig, p and q very close
 summary(fit.att_2.1d1)
 
-fit.att_2.1d2 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=2,M=50)                        # ma2 not sig
+fit.att_2.1d2 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=1,nma=2,M=50)                        # warning
 summary(fit.att_2.1d2)
 
-fit.att_2.2d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=2,nma=1,M=50)                        # ar2 not sig     
+fit.att_2.2d1 <- fracdiff(v.t_att_2-mean(v.t_att_2),nar=2,nma=1,M=50)                        # warning     
 summary(fit.att_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.att_2.0d0),fracdiff.AIC(fit.att_2.0d0),fracdiff.BIC(fit.att_2.0d0))
-c(fracdiff.AICC(fit.att_2.1d0),fracdiff.AIC(fit.att_2.1d0),fracdiff.BIC(fit.att_2.1d0)) 
-c(fracdiff.AICC(fit.att_2.0d1),fracdiff.AIC(fit.att_2.0d1),fracdiff.BIC(fit.att_2.0d1))
 c(fracdiff.AICC(fit.att_2.1d1),fracdiff.AIC(fit.att_2.1d1),fracdiff.BIC(fit.att_2.1d1))
 
 
@@ -4057,7 +4055,7 @@ qqline(r.t_att_2)
 shapiro.test(r.t_att_2)                                                                            # Shapiro-Wilk normality test supports normality
 ks.test(r.t_att_2,"pnorm",mean=mean(r.t_att_2),sd=sd(r.t_att_2))                                   # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("ATT", 1, 0, fit.att_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("ATT", 1, 1, fit.att_2.bst$d, 0)     
 
 
 ### homedep_2 ARFIMA model
