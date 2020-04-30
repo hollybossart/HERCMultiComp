@@ -1,7 +1,8 @@
 #*[-----------------------------------------------------------------------------------------------]*#
 #*[ Objectives : This program splits the volatility data in two time periods and fits ARFIMA      ]*#
-#*[              models to all of the part one data.                                              ]*#
-#*[ Last update: 04/23/2020                                                                       ]*#
+#*[              models to part one and part two data. It will also save a CSV file with model    ]*#
+#*[              parameters.                                                                      ]*#
+#*[ Last update: 04/30/2020                                                                       ]*#
 #*[ Authors    : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
@@ -2740,7 +2741,7 @@ summary(fit.exxon_2.0d1)
 fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1 and ma2 term not significant
 summary(fit.exxon_2.0d2)
 
-fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=25)                  # all terms significant, had to change M value      
+fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=25)                  # all terms significant, had to change M value, about .07 away from each other      
 summary(fit.exxon_2.1d1)
 
 fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # ma2 not sig      
@@ -2787,7 +2788,7 @@ qqline(r.t_exxon_2)
 shapiro.test(r.t_exxon_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_exxon_2,"pnorm",mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2))                      # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Exxon", 2, 1, fit.exxon_2.bst$d, 1)                   # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("Exxon", 2, fit.exxon_2.bst$ar, fit.exxon_2.bst$d, fit.exxon_2.bst$ma)                   
 
 
 
@@ -4796,7 +4797,10 @@ qqnorm(r.t_busch_2)
 qqline(r.t_busch_2)
 
 shapiro.test(r.t_busch_2)                                                              # Shapiro-Wilk normality test supports normality
-ks.test(r.t_busch_2,"pnorm",mean=mean(r.t_busch_2),sd=sd(r.t_busch_2))               # KS test supports normality
+ks.test(r.t_busch_2,"pnorm",mean=mean(r.t_busch_2),sd=sd(r.t_busch_2))                 # KS test supports normality
 
 bst.models[nrow(bst.models)+1,] <- c("Busch", 2, 0, fit.busch_2.bst$d, 0)
 
+
+### ADDING bst.models to a csv file
+write.csv(bst.models, file = "bst_models.csv", row.names = FALSE)
