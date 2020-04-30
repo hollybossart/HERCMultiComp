@@ -3690,7 +3690,7 @@ bst.models[nrow(bst.models)+1,] <- c("JP Morgan", 2, 0, fit.jpmorgan_2.bst$d, 0)
 ### walmart_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_walmart_2,ylim=c(0,3),                                                             
+plot.ts(v.t_walmart_2,ylim=c(0,5.5),                                                             
         xlab="Year",ylab="GK volatility",main="Walmart Volatility 2/01/2018-12/31/2019")
 acf(v.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3704,26 +3704,27 @@ summary(fit.walmart_2.1d0)
 fit.walmart_2.2d0 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=2,nma=0,M=50)                        # ar terms not sig
 summary(fit.walmart_2.2d0)
 
-fit.walmart_2.0d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=1,M=50)                        # ma not sig
+fit.walmart_2.0d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=1,M=50)                        # ma  sig
 summary(fit.walmart_2.0d1)
 
-fit.walmart_2.0d2 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=2,M=50)                       # only d sig
+fit.walmart_2.0d2 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=0,nma=2,M=50)                        # only d sig
 summary(fit.walmart_2.0d2)
 
-fit.walmart_2.1d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=1,M=50)                       # all sig
+fit.walmart_2.1d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=1,M=20)                        # all sig but params are basically the same
 summary(fit.walmart_2.1d1)
 
-fit.walmart_2.1d2 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=2,M=50)                       # warning
+fit.walmart_2.1d2 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=1,nma=2,M=50)                        # all sig
 summary(fit.walmart_2.1d2)
 
-fit.walmart_2.2d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=2,nma=1,M=50)                       # all sig  
+fit.walmart_2.2d1 <- fracdiff(v.t_walmart_2-mean(v.t_walmart_2),nar=2,nma=1,M=50)                        # ar2 not sig
 summary(fit.walmart_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.walmart_2.0d0),fracdiff.AIC(fit.walmart_2.0d0),fracdiff.BIC(fit.walmart_2.0d0))
+c(fracdiff.AICC(fit.walmart_2.0d1),fracdiff.AIC(fit.walmart_2.0d1),fracdiff.BIC(fit.walmart_2.0d1))
 c(fracdiff.AICC(fit.walmart_2.1d1),fracdiff.AIC(fit.walmart_2.1d1),fracdiff.BIC(fit.walmart_2.1d1)) 
-c(fracdiff.AICC(fit.walmart_2.2d1),fracdiff.AIC(fit.walmart_2.2d1),fracdiff.BIC(fit.walmart_2.2d1))
+
 
 
 
@@ -3736,7 +3737,7 @@ summary(r.t_walmart_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_walmart_2,ylim=c(-1,1.5),
+plot.ts(r.t_walmart_2,ylim=c(-1,4),
         xlab="Year",ylab="GK volatility",main="Walmart Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3746,9 +3747,9 @@ pacf(r.t_walmart_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_walmart_2,                                                                                   
-     breaks=seq(-2,2,0.25),
+     breaks=seq(-4,4,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,3),
+     col="grey85",ylim=c(0,2),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_walmart_2),sd=sd(r.t_walmart_2)),lty=1,col="red")               
@@ -3758,7 +3759,7 @@ qqline(r.t_walmart_2)
 shapiro.test(r.t_walmart_2)                                                                            # Shapiro-Wilk normality test supports normality
 ks.test(r.t_walmart_2,"pnorm",mean=mean(r.t_walmart_2),sd=sd(r.t_walmart_2))                           # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Walmart", 1, 0, fit.walmart_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("Walmart", 2, 0, fit.walmart_2.bst$d, 0)     
 
 
 
