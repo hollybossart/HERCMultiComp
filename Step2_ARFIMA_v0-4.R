@@ -4061,7 +4061,7 @@ bst.models[nrow(bst.models)+1,] <- c("ATT", 2, 0, fit.att_2.bst$d, 0)
 ### homedep_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_homedep_2,ylim=c(0,4),                                                             
+plot.ts(v.t_homedep_2,ylim=c(0,10),                                                                      # note the large range                                    
         xlab="Year",ylab="GK volatility",main="Home Depot Volatility 2/01/2018-12/31/2019")
 acf(v.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4075,25 +4075,27 @@ summary(fit.homedep_2.1d0)
 fit.homedep_2.2d0 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=2,nma=0,M=50)                        # ar terms not sig
 summary(fit.homedep_2.2d0)
 
-fit.homedep_2.0d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=1,M=50)                        # ma not sig
+fit.homedep_2.0d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=1,M=50)                        # ma  sig
 summary(fit.homedep_2.0d1)
 
-fit.homedep_2.0d2 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=2,M=50)                        # ma terms not sig
+fit.homedep_2.0d2 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=0,nma=2,M=50)                        # ma 2 not sig
 summary(fit.homedep_2.0d2)
 
-fit.homedep_2.1d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=1,M=50)                        # all terms sig
+fit.homedep_2.1d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=1,M=50)                        # all terms sig, ar and ma params very close
 summary(fit.homedep_2.1d1)
 
-fit.homedep_2.1d2 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=2,M=50)                        # warning
+fit.homedep_2.1d2 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=1,nma=2,M=50)                        # all significant, ma2 close to 0
 summary(fit.homedep_2.1d2)
 
-fit.homedep_2.2d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=2,nma=1,M=50)                        # ar2 not sig  
+fit.homedep_2.2d1 <- fracdiff(v.t_homedep_2-mean(v.t_homedep_2),nar=2,nma=1,M=50)                        # unable to compute correlation
 summary(fit.homedep_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.homedep_2.0d0),fracdiff.AIC(fit.homedep_2.0d0),fracdiff.BIC(fit.homedep_2.0d0))
+c(fracdiff.AICC(fit.homedep_2.0d1),fracdiff.AIC(fit.homedep_2.0d1),fracdiff.BIC(fit.homedep_2.0d1))
 c(fracdiff.AICC(fit.homedep_2.1d1),fracdiff.AIC(fit.homedep_2.1d1),fracdiff.BIC(fit.homedep_2.1d1)) 
+c(fracdiff.AICC(fit.homedep_2.1d2),fracdiff.AIC(fit.homedep_2.1d2),fracdiff.BIC(fit.homedep_2.1d2))      # [Q] this minimizes BIC, but ma2 param is very small
 
 
 ### homedep_2 model diagnostics: autocorrelation in residuals
@@ -4105,7 +4107,7 @@ summary(r.t_homedep_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_homedep_2,ylim=c(-2,2),
+plot.ts(r.t_homedep_2,ylim=c(-3,7),
         xlab="Year",ylab="GK volatility",main="Home Depot Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -4115,9 +4117,9 @@ pacf(r.t_homedep_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_homedep_2,                                                                                   
-     breaks=seq(-3,3,0.25),
+     breaks=seq(-7,7,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,1.5),
+     col="grey85",ylim=c(0,1),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_homedep_2),sd=sd(r.t_homedep_2)),lty=1,col="red")               
@@ -4127,7 +4129,7 @@ qqline(r.t_homedep_2)
 shapiro.test(r.t_homedep_2)                                                                      # Shapiro-Wilk normality test supports normality
 ks.test(r.t_homedep_2,"pnorm",mean=mean(r.t_homedep_2),sd=sd(r.t_homedep_2))                     # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Home Depot", 1, 0, fit.homedep_2.bst$d, 0)    
+bst.models[nrow(bst.models)+1,] <- c("Home Depot*", 2, 0, fit.homedep_2.bst$d, 0)    
 
 
 ### citi_2 ARFIMA model
