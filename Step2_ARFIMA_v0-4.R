@@ -4437,7 +4437,7 @@ bst.models[nrow(bst.models)+1,] <- c("Taiwan Semiconductors", 2, 0, fit.taiwan_2
 ### novartis_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_novartis_2,ylim=c(0,2),                                                             
+plot.ts(v.t_novartis_2,ylim=c(0,3.5),                                                             
         xlab="Year",ylab="GK volatility",main="Novartis Volatility 2/01/2018-12/31/2019")              
 acf(v.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  
 pacf(v.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4448,22 +4448,22 @@ summary(fit.novartis_2.0d0)
 fit.novartis_2.1d0 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=0,M=50)                        # ar not sig
 summary(fit.novartis_2.1d0)
 
-fit.novartis_2.2d0 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=2,nma=0,M=50)                        # ar2 term sig
+fit.novartis_2.2d0 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=2,nma=0,M=50)                        # ar terms not sig
 summary(fit.novartis_2.2d0)
 
 fit.novartis_2.0d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=0,nma=1,M=50)                        # ma term not sig
 summary(fit.novartis_2.0d1)
 
-fit.novartis_2.0d2 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=0,nma=2,M=50)                        # ma2 sig
+fit.novartis_2.0d2 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=0,nma=2,M=50)                        # ma terms not sig
 summary(fit.novartis_2.0d2)
 
 fit.novartis_2.1d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=1,M=50)                        # ar not sig
 summary(fit.novartis_2.1d1)
 
-fit.novartis_2.1d2 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=2,M=50)                        # ar/ma1 not sig
+fit.novartis_2.1d2 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=1,nma=2,M=50)                        # ar/ma1 sig, very close to each other
 summary(fit.novartis_2.1d2)
 
-fit.novartis_2.2d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=2,nma=1,M=50)                        # warning 
+fit.novartis_2.2d1 <- fracdiff(v.t_novartis_2-mean(v.t_novartis_2),nar=2,nma=1,M=50)                        # ar2 not sig
 summary(fit.novartis_2.2d1)
 
 
@@ -4482,7 +4482,7 @@ summary(r.t_novartis_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_novartis_2,ylim=c(-1,1),
+plot.ts(r.t_novartis_2,ylim=c(-3,3),
         xlab="Year",ylab="GK volatility",main="Novartis Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -4492,7 +4492,7 @@ pacf(r.t_novartis_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_novartis_2,                                                                                   
-     breaks=seq(-2,2,0.25),
+     breaks=seq(-3,3,0.25),
      freq=FALSE,
      col="grey85",ylim=c(0,2.5),
      main="Residual Histogram")                                                              
@@ -4504,7 +4504,7 @@ qqline(r.t_novartis_2)
 shapiro.test(r.t_novartis_2)                                                              # Shapiro-Wilk normality test supports normality
 ks.test(r.t_novartis_2,"pnorm",mean=mean(r.t_novartis_2),sd=sd(r.t_novartis_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Novartis", 1, 0, fit.novartis_2.bst$d, 0)  
+bst.models[nrow(bst.models)+1,] <- c("Novartis", 2, 0, fit.novartis_2.bst$d, 0)  
 
 
 ### netflix_2 ARFIMA model
