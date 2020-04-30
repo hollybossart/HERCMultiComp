@@ -3341,19 +3341,19 @@ summary(fit.pfizer_2.0d1)
 fit.pfizer_2.0d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=0,nma=2,M=50)                      # ma terms not sig
 summary(fit.pfizer_2.0d2)
 
-fit.pfizer_2.1d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=1,M=50)                      # ma almost significant
+fit.pfizer_2.1d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=1,M=50)                      # all terms significant
 summary(fit.pfizer_2.1d1)
 
-fit.pfizer_2.1d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=2,M=50)                      # ma2 not sig
+fit.pfizer_2.1d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=2,M=50)                      # only d sig
 summary(fit.pfizer_2.1d2)
 
-fit.pfizer_2.2d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=2,nma=1,M=50)                      # cannot compute correlation      
+fit.pfizer_2.2d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=2,nma=1,M=50)                      # ar2, ma not sig    
 summary(fit.pfizer_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.pfizer_2.0d0),fracdiff.AIC(fit.pfizer_2.0d0),fracdiff.BIC(fit.pfizer_2.0d0))                  
-c(fracdiff.AICC(fit.pfizer_2.1d2),fracdiff.AIC(fit.pfizer_2.1d2),fracdiff.BIC(fit.pfizer_2.1d2))                  
+c(fracdiff.AICC(fit.pfizer_2.1d1),fracdiff.AIC(fit.pfizer_2.1d1),fracdiff.BIC(fit.pfizer_2.1d1))                  
 
 
 ### pfizer_2 model diagnostics: autocorrelation in residuals
@@ -3365,7 +3365,7 @@ summary(r.t_pfizer_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_pfizer_2,ylim=c(-1,1),
+plot.ts(r.t_pfizer_2,ylim=c(-2,2),
         xlab="Year",ylab="GK volatility",main="Pfizer Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3375,9 +3375,9 @@ pacf(r.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_pfizer_2,                                                                                   
-     breaks=seq(-1,1,0.125),
+     breaks=seq(-2,2,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,5),
+     col="grey85",ylim=c(0,3),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_pfizer_2),sd=sd(r.t_pfizer_2)),lty=1,col="red")               
@@ -3387,7 +3387,7 @@ qqline(r.t_pfizer_2)
 shapiro.test(r.t_pfizer_2)                                                                            # Shapiro-Wilk normality test supports normality
 ks.test(r.t_pfizer_2,"pnorm",mean=mean(r.t_pfizer_2),sd=sd(r.t_pfizer_2))                             # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Pfizer", 1, 0, fit.pfizer_2.bst$d, 0)                           # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("Pfizer", 2, 0, fit.pfizer_2.bst$d, 0)                           # adding to the table
 
 
 ### johnson_2 ARFIMA model
