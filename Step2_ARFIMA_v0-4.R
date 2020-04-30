@@ -4055,7 +4055,7 @@ qqline(r.t_att_2)
 shapiro.test(r.t_att_2)                                                                            # Shapiro-Wilk normality test supports normality
 ks.test(r.t_att_2,"pnorm",mean=mean(r.t_att_2),sd=sd(r.t_att_2))                                   # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("ATT", 1, 1, fit.att_2.bst$d, 0)     
+bst.models[nrow(bst.models)+1,] <- c("ATT", 2, 0, fit.att_2.bst$d, 0)     
 
 
 ### homedep_2 ARFIMA model
