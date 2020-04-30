@@ -3393,9 +3393,9 @@ bst.models[nrow(bst.models)+1,] <- c("Pfizer", 2, 0, fit.pfizer_2.bst$d, 0)     
 ### johnson_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_johnson_2,ylim=c(0,4),                                                             
+plot.ts(v.t_johnson_2,ylim=c(0,11),                                                                    # notice the range              
         xlab="Year",ylab="GK volatility",main="Johnson Volatility 2/01/2018-12/31/2019")
-acf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                                  # definitely appears to be long-memory
+acf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                                 
 pacf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
 
 fit.johnson_2.0d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=0,M=50)                      # d term significant  
@@ -3404,29 +3404,28 @@ summary(fit.johnson_2.0d0)
 fit.johnson_2.1d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=0,M=50)                      # ar term not significant
 summary(fit.johnson_2.1d0)
 
-fit.johnson_2.2d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=2,nma=0,M=50)                      # ar terms sig
+fit.johnson_2.2d0 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=2,nma=0,M=50)                      # ar1 not sig
 summary(fit.johnson_2.2d0)
 
 fit.johnson_2.0d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=1,M=50)                      # ma not sig
 summary(fit.johnson_2.0d1)
 
-fit.johnson_2.0d2 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=2,M=50)                      # ma terms sig
+fit.johnson_2.0d2 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=0,nma=2,M=50)                      # ma terms not sig
 summary(fit.johnson_2.0d2)
 
-fit.johnson_2.1d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=1,M=50)                      # only d sig
+fit.johnson_2.1d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=1,M=80)                      # all sig
 summary(fit.johnson_2.1d1)
 
-fit.johnson_2.1d2 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=2,M=50)                      # ma2 only sig
+fit.johnson_2.1d2 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=1,nma=2,M=50)                      # d only sig
 summary(fit.johnson_2.1d2)
 
-fit.johnson_2.2d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=2,nma=1,M=50)                           
+fit.johnson_2.2d1 <- fracdiff(v.t_johnson_2-mean(v.t_johnson_2),nar=2,nma=1,M=50)                      # only d sig               
 summary(fit.johnson_2.2d1)
 
 
 
 c(fracdiff.AICC(fit.johnson_2.0d0),fracdiff.AIC(fit.johnson_2.0d0),fracdiff.BIC(fit.johnson_2.0d0))
-c(fracdiff.AICC(fit.johnson_2.2d0),fracdiff.AIC(fit.johnson_2.2d0),fracdiff.BIC(fit.johnson_2.2d0)) 
-c(fracdiff.AICC(fit.johnson_2.0d2),fracdiff.AIC(fit.johnson_2.0d2),fracdiff.BIC(fit.johnson_2.0d2))
+c(fracdiff.AICC(fit.johnson_2.1d1),fracdiff.AIC(fit.johnson_2.1d1),fracdiff.BIC(fit.johnson_2.1d1)) 
 
 
 
@@ -3439,7 +3438,7 @@ summary(r.t_johnson_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_johnson_2,ylim=c(-1,3),
+plot.ts(r.t_johnson_2,ylim=c(-2,9),
         xlab="Year",ylab="GK volatility",main="Johnson Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -3449,9 +3448,9 @@ pacf(r.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")
 dev.new(height=6,width=12)
 par(mfrow=c(1,2),mex=0.75)
 hist(r.t_johnson_2,                                                                                   
-     breaks=seq(-3,3,0.25),
+     breaks=seq(-9,9,0.25),
      freq=FALSE,
-     col="grey85",ylim=c(0,3),
+     col="grey85",ylim=c(0,1.5),
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_johnson_2),sd=sd(r.t_johnson_2)),lty=1,col="red")               
@@ -3461,7 +3460,7 @@ qqline(r.t_johnson_2)
 shapiro.test(r.t_johnson_2)                                                                             # Shapiro-Wilk normality test supports normality
 ks.test(r.t_johnson_2,"pnorm",mean=mean(r.t_johnson_2),sd=sd(r.t_johnson_2))                            # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Johnson", 1, 0, fit.johnson_2.bst$d, 0)                           # adding to the table
+bst.models[nrow(bst.models)+1,] <- c("Johnson", 2, 0, fit.johnson_2.bst$d, 0)                           # adding to the table
 
 
 
