@@ -198,8 +198,8 @@ v.t_busch      <- garmanklassTA(open =data.busch$OPENPRC,
 start_1 <- 2016
 end_1   <- 2018
 
-start_2 <- end_1 + 21*deltat(v.t_oracle)        # there were 21 trading days in january 2018
-                                                # doing this calculation gives the start time for feb 1 2018
+start_2 <- end_1 + 28*deltat(v.t_oracle)        # there were 21 trading days in january 2018 + 7 days to get rid of outliers
+                                                # doing this calculation gives the start time for feb 8 2018
 end_2   <- tail(time(v.t_oracle),1)             # retrieves the end time index
 
 c(start_1,end_1)                                # 2016 2018
@@ -2573,9 +2573,6 @@ bst.models[nrow(bst.models)+1,] <- c("Busch", 1, 0, fit.busch_1.bst$d, 0)
 
 
 
-## writing best models to a CSV file
-write.csv(bst.models, file = 'models_table_1.csv', row.names = FALSE)
-
 ### MODEL FITTING PART TWO DATA ---------------------------------------------------------------------
 
 
@@ -2599,7 +2596,7 @@ summary(fit.microsoft_2.2d0)
 fit.microsoft_2.0d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=1,M=50)           # ma not sig
 summary(fit.microsoft_2.0d1)
 
-fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=30)           # all terms sig
+fit.microsoft_2.1d1 <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=1,nma=1,M=50)           # all terms sig
 summary(fit.microsoft_2.1d1)
 
 fit.microsoft_2.0d0_b <- fracdiff(v.t_microsoft_2-mean(v.t_microsoft_2),nar=0,nma=0,M=30)         # changed M value to 30, results are the same as above
@@ -2684,7 +2681,7 @@ c(fracdiff.AICC(fit.oracle_2.0d1),fracdiff.AIC(fit.oracle_2.0d1),fracdiff.BIC(fi
 
 
 ### oracle_2 model diagnostics: autocorrelation in residuals
-fit.oracle_2.bst <- fit.oracle_2.0d0                                                          # this minimizes BIC but AICC and AIC are very close to min val
+fit.oracle_2.bst <- fit.oracle_2.0d0                                                          
 
 r.t_oracle_2 <- fit.oracle_2.bst$residuals
 summary(r.t_oracle_2)                                                                         
@@ -2692,7 +2689,7 @@ summary(r.t_oracle_2)
 
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(r.t_oracle_2,ylim=c(-2,2),
+plot.ts(r.t_oracle_2,ylim=c(-1,1),
         xlab="Year",ylab="GK volatility",main="Oracle Volatility Residuals 2/01/2018-12/31/2019")
 abline(h=0,col="blue",lty=2)
 acf(r.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
@@ -2708,8 +2705,7 @@ hist(r.t_oracle_2,                                                              
      main="Residual Histogram")                                                              
 z <- seq(-60,60,length=1000)                                      
 lines(z,dnorm(z,mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2)),lty=1,col="red")                # add theoretical normal density
-qqnorm(r.t_oracle_2)                                                                         # [Q] Does this QQ plot support normality? Hard to tell at the ends
-qqline(r.t_oracle_2)
+qqnorm(r.t_oracle_2)                                                                         
 shapiro.test(r.t_oracle_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_oracle_2,"pnorm",mean=mean(r.t_oracle_2),sd=sd(r.t_oracle_2))                    # KS test supports normality
 
@@ -2719,7 +2715,6 @@ bst.models[nrow(bst.models)+1,] <- c("Oracle", 2, 0, fit.oracle_2.bst$d, 0)
 
 
 ### exxon_2 ARFIMA model
-## TODO: change the time period to remove outliers, will have smaller sample size (maybe 15?)
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
 plot.ts(v.t_exxon_2,ylim=c(0,4),                                                             # might have a slight downward linear trend?
@@ -3040,13 +3035,13 @@ summary(fit.chevron_2.1d0)
 fit.chevron_2.2d0 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=2,nma=0,M=50)                  # ar not sig
 summary(fit.chevron_2.2d0)
 
-fit.chevron_2.0d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=1,M=50)                  # ma sig
+fit.chevron_2.0d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=1,M=50)                  # ma not sig
 summary(fit.chevron_2.0d1)
 
 fit.chevron_2.0d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=0,nma=2,M=50)                  # ma terms not sig
 summary(fit.chevron_2.0d2)
 
-fit.chevron_2.1d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=1,M=50)                  # all terms sig, but have very close ar/ma params  
+fit.chevron_2.1d1 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=1,M=50)                  
 summary(fit.chevron_2.1d1)
 
 fit.chevron_2.1d2 <- fracdiff(v.t_chevron_2-mean(v.t_chevron_2),nar=1,nma=2,M=50)                  # only d sig        
@@ -3064,7 +3059,7 @@ c(fracdiff.AICC(fit.chevron_2.0d1),fracdiff.AIC(fit.chevron_2.0d1),fracdiff.BIC(
 
 
 ### chevron_2 model diagnostics: autocorrelation in residuals
-fit.chevron_2.bst <- fit.chevron_2.1d1                                                         
+fit.chevron_2.bst <- fit.chevron_2.0d0                                                         
 
 r.t_chevron_2 <- fit.chevron_2.bst$residuals
 summary(r.t_chevron_2)                                                                         
@@ -3094,7 +3089,7 @@ qqline(r.t_chevron_2)
 shapiro.test(r.t_chevron_2)                                                                       # Shapiro-Wilk normality test supports normality
 ks.test(r.t_chevron_2,"pnorm",mean=mean(r.t_chevron_2),sd=sd(r.t_chevron_2))                      # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Chevron", 2, fit.chevron_2.bst$ar, fit.chevron_2.bst$d, fit.chevron_2.bst$ma)                     
+bst.models[nrow(bst.models)+1,] <- c("Chevron", 2, 0, fit.chevron_2.bst$d, 0)                     
 
 
 
@@ -4211,7 +4206,6 @@ bst.models[nrow(bst.models)+1,] <- c("Citi", 2, 0, fit.citi_2.bst$d, 0)
 
 ### amazon_2 ARFIMA model
 
-v.t_amazon_2 <- v.t_amazon_2[-c(1:30)]
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
 plot.ts(v.t_amazon_2,ylim=c(0,102),                                                             
