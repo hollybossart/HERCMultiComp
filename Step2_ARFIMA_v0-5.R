@@ -2604,8 +2604,6 @@ summary(fit.microsoft_2.0d0)
 
 
 c(fracdiff.AICC(fit.microsoft_2.0d0),fracdiff.AIC(fit.microsoft_2.0d0),fracdiff.BIC(fit.microsoft_2.0d0))  
-c(fracdiff.AICC(fit.microsoft_2.1d1),fracdiff.AIC(fit.microsoft_2.1d1),fracdiff.BIC(fit.microsoft_2.1d1))
-
 
 
 ### microsoft_2 model diagnostics: autocorrelation in residuals
@@ -2654,7 +2652,7 @@ pacf(v.t_oracle_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.oracle_2.0d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=0,M=50)                  # d term significant  
 summary(fit.oracle_2.0d0)
 
-fit.oracle_2.1d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=0,M=50)                  # ar not sig
+fit.oracle_2.1d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=0,M=50)                  # ar sig
 summary(fit.oracle_2.1d0)
 
 fit.oracle_2.2d0 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=2,nma=0,M=50)                  # only d, ar1 term significant
@@ -2666,7 +2664,7 @@ summary(fit.oracle_2.0d1)
 fit.oracle_2.0d2 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=2,M=50)                  # ma2 term not significant
 summary(fit.oracle_2.0d2)
 
-fit.oracle_2.1d1 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=1,M=50)                  # all sig        
+fit.oracle_2.1d1 <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=1,nma=1,M=10)                  # warning        
 summary(fit.oracle_2.1d1)
 
 fit.oracle_2.0d0_b <- fracdiff(v.t_oracle_2-mean(v.t_oracle_2),nar=0,nma=0,M=30)                # changed M value to 30, results are the same as above
@@ -2674,9 +2672,7 @@ summary(fit.oracle_2.0d0_b)
 
 
 c(fracdiff.AICC(fit.oracle_2.0d0),fracdiff.AIC(fit.oracle_2.0d0),fracdiff.BIC(fit.oracle_2.0d0))  
-c(fracdiff.AICC(fit.oracle_2.1d1),fracdiff.AIC(fit.oracle_2.1d1),fracdiff.BIC(fit.oracle_2.1d1))
 c(fracdiff.AICC(fit.oracle_2.0d1),fracdiff.AIC(fit.oracle_2.0d1),fracdiff.BIC(fit.oracle_2.0d1))
-
 
 
 
@@ -2725,19 +2721,19 @@ pacf(v.t_exxon_2,lag.max=100,ylim=c(-0.2,1),main="")
 fit.exxon_2.0d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=0,M=50)                  # d term significant  
 summary(fit.exxon_2.0d0)
 
-fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar not sig
+fit.exxon_2.1d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=0,M=50)                  # ar sig
 summary(fit.exxon_2.1d0)
 
 fit.exxon_2.2d0 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=2,nma=0,M=50)                  # ar2 not sig
 summary(fit.exxon_2.2d0)
 
-fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term not significant
+fit.exxon_2.0d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=1,M=50)                  # ma term significant
 summary(fit.exxon_2.0d1)
 
 fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1 and ma2 term not significant
 summary(fit.exxon_2.0d2)
 
-fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=85)                  # all terms significant, had to change M value, about .07 away from each other      
+fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=85)                  # all terms significant, estimates are close to each other     
 summary(fit.exxon_2.1d1)
 
 fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # ma2 not sig      
@@ -2811,7 +2807,7 @@ summary(fit.gm_2.0d1)
 fit.gm_2.0d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=0,nma=2,M=50)                  # ma2 not sig
 summary(fit.gm_2.0d2)
 
-fit.gm_2.1d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=1,M=20)                  # all sig, had to change the M value  
+fit.gm_2.1d1 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=1,M=30)                  # warning
 summary(fit.gm_2.1d1)
 
 fit.gm_2.1d2 <- fracdiff(v.t_gm_2-mean(v.t_gm_2),nar=1,nma=2,M=50)                  # ma2 not sig        
@@ -2900,8 +2896,6 @@ summary(fit.ibm_2.2d1)
 
 c(fracdiff.AICC(fit.ibm_2.0d0),fracdiff.AIC(fit.ibm_2.0d0),fracdiff.BIC(fit.ibm_2.0d0))  
 c(fracdiff.AICC(fit.ibm_2.1d1),fracdiff.AIC(fit.ibm_2.1d1),fracdiff.BIC(fit.ibm_2.1d1))
-
-
 
 
 
