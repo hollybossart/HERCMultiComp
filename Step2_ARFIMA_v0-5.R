@@ -2737,7 +2737,7 @@ summary(fit.exxon_2.0d1)
 fit.exxon_2.0d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=0,nma=2,M=50)                  # ma1 and ma2 term not significant
 summary(fit.exxon_2.0d2)
 
-fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=25)                  # all terms significant, had to change M value, about .07 away from each other      
+fit.exxon_2.1d1 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=1,M=85)                  # all terms significant, had to change M value, about .07 away from each other      
 summary(fit.exxon_2.1d1)
 
 fit.exxon_2.1d2 <- fracdiff(v.t_exxon_2-mean(v.t_exxon_2),nar=1,nma=2,M=50)                  # ma2 not sig      
@@ -2754,7 +2754,7 @@ c(fracdiff.AICC(fit.exxon_2.1d1),fracdiff.AIC(fit.exxon_2.1d1),fracdiff.BIC(fit.
 
 
 ### exxon_2 model diagnostics: autocorrelation in residuals
-fit.exxon_2.bst <- fit.exxon_2.1d1                                                          # NOT a 0,d,0 model! ar, ma values quite close though
+fit.exxon_2.bst <- fit.exxon_2.0d0                                                          
 
 r.t_exxon_2 <- fit.exxon_2.bst$residuals
 summary(r.t_exxon_2)                                                                         
@@ -2784,7 +2784,7 @@ qqline(r.t_exxon_2)
 shapiro.test(r.t_exxon_2)                                                                   # Shapiro-Wilk normality test supports normality
 ks.test(r.t_exxon_2,"pnorm",mean=mean(r.t_exxon_2),sd=sd(r.t_exxon_2))                      # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Exxon", 2, fit.exxon_2.bst$ar, fit.exxon_2.bst$d, fit.exxon_2.bst$ma)                   
+bst.models[nrow(bst.models)+1,] <- c("Exxon", 2, 0, fit.exxon_2.bst$d, 0)                   
 
 
 
@@ -4245,10 +4245,10 @@ c(fracdiff.AICC(fit.amazon_2.1d1),fracdiff.AIC(fit.amazon_2.1d1),fracdiff.BIC(fi
 
 
 ### amazon_2 model diagnostics: autocorrelation in residuals
-fit.amazon_2.bst <- fit.amazon_2.1d1                                                         
+fit.amazon_2.bst <- fit.amazon_2.0d0                                                         
 
 r.t_amazon_2 <- fit.amazon_2.bst$residuals
-summary(r.t_amazon_2)                                                                   # [Q] a few large outliers -- one residual is 53                                                 
+summary(r.t_amazon_2)                                                                                                                 
 
 
 dev.new(width=12,height=6)
@@ -4275,7 +4275,7 @@ qqline(r.t_amazon_2)
 shapiro.test(r.t_amazon_2)                                                              # Shapiro-Wilk normality test supports normality
 ks.test(r.t_amazon_2,"pnorm",mean=mean(r.t_amazon_2),sd=sd(r.t_amazon_2))               # KS test supports normality
 
-bst.models[nrow(bst.models)+1,] <- c("Amazon", 2, fit.amazon_2.bst$ar, fit.amazon_2.bst$d, fit.amazon_2.bst$ma)     
+bst.models[nrow(bst.models)+1,] <- c("Amazon", 2, 0, fit.amazon_2.bst$d, 0)     
 
 
 
