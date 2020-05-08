@@ -3015,7 +3015,7 @@ bst.models[nrow(bst.models)+1,] <- c("Facebook", 2, 0, fit.facebook_2.bst$d, 0) 
 ### chevron_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_chevron_2,ylim=c(0,8),                                                             
+plot.ts(v.t_chevron_2,ylim=c(0,5),                                                             
         xlab="Year",ylab="GK volatility",main="Chevron Volatility 2/01/2018-12/31/2019")
 acf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")                                              # definitely appears to be long-memory
 pacf(v.t_chevron_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3186,7 +3186,7 @@ summary(fit.alibaba_2.0d1)
 fit.alibaba_2.0d2 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=0,nma=2,M=50)                  # ma terms not sig
 summary(fit.alibaba_2.0d2)
 
-fit.alibaba_2.1d1 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=1,nma=1,M=20)                  # can't compute correlation 
+fit.alibaba_2.1d1 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=1,nma=1,M=20)                  # all sig
 summary(fit.alibaba_2.1d1)
 
 fit.alibaba_2.1d2 <- fracdiff(v.t_alibaba_2-mean(v.t_alibaba_2),nar=1,nma=2,M=20)                  # can't compute correlation
@@ -3197,7 +3197,8 @@ summary(fit.alibaba_2.2d1)
 
 
 
-c(fracdiff.AICC(fit.alibaba_2.0d0),fracdiff.AIC(fit.alibaba_2.0d0),fracdiff.BIC(fit.alibaba_2.0d0))    # only model with all terms significant  
+c(fracdiff.AICC(fit.alibaba_2.0d0),fracdiff.AIC(fit.alibaba_2.0d0),fracdiff.BIC(fit.alibaba_2.0d0))
+c(fracdiff.AICC(fit.alibaba_2.1d1),fracdiff.AIC(fit.alibaba_2.1d1),fracdiff.BIC(fit.alibaba_2.1d1))   
 
 
 ### alibaba_2 model diagnostics: autocorrelation in residuals
@@ -3312,7 +3313,7 @@ bst.models[nrow(bst.models)+1,] <- c("PG", 2, 0, fit.pg_2.bst$d, 0)             
 ### pfizer_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_pfizer_2,ylim=c(0,1.5),                                                             
+plot.ts(v.t_pfizer_2,ylim=c(0,2),                                                             
         xlab="Year",ylab="GK volatility",main="Pfizer Volatility 2/01/2018-12/31/2019")
 acf(v.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")                                                # definitely appears to be long-memory
 pacf(v.t_pfizer_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -3332,7 +3333,7 @@ summary(fit.pfizer_2.0d1)
 fit.pfizer_2.0d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=0,nma=2,M=50)                      # ma terms not sig
 summary(fit.pfizer_2.0d2)
 
-fit.pfizer_2.1d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=1,M=50)                      # all terms significant
+fit.pfizer_2.1d1 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=1,M=50)                      # all terms significant, parameters close
 summary(fit.pfizer_2.1d1)
 
 fit.pfizer_2.1d2 <- fracdiff(v.t_pfizer_2-mean(v.t_pfizer_2),nar=1,nma=2,M=50)                      # only d sig
@@ -3384,7 +3385,7 @@ bst.models[nrow(bst.models)+1,] <- c("Pfizer", 2, 0, fit.pfizer_2.bst$d, 0)     
 ### johnson_2 ARFIMA model
 dev.new(width=12,height=6)
 par(mfrow=c(3,1),mex=0.75)
-plot.ts(v.t_johnson_2,ylim=c(0,11),                                                                    # notice the range              
+plot.ts(v.t_johnson_2,ylim=c(0,11),                                                                              
         xlab="Year",ylab="GK volatility",main="Johnson Volatility 2/01/2018-12/31/2019")
 acf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                                 
 pacf(v.t_johnson_2,lag.max=100,ylim=c(-0.2,1),main="")                                        
@@ -4086,7 +4087,7 @@ summary(fit.homedep_2.2d1)
 c(fracdiff.AICC(fit.homedep_2.0d0),fracdiff.AIC(fit.homedep_2.0d0),fracdiff.BIC(fit.homedep_2.0d0))
 c(fracdiff.AICC(fit.homedep_2.0d1),fracdiff.AIC(fit.homedep_2.0d1),fracdiff.BIC(fit.homedep_2.0d1))
 c(fracdiff.AICC(fit.homedep_2.1d1),fracdiff.AIC(fit.homedep_2.1d1),fracdiff.BIC(fit.homedep_2.1d1)) 
-c(fracdiff.AICC(fit.homedep_2.1d2),fracdiff.AIC(fit.homedep_2.1d2),fracdiff.BIC(fit.homedep_2.1d2))      # [Q] this minimizes BIC, but ma2 param is very small
+c(fracdiff.AICC(fit.homedep_2.1d2),fracdiff.AIC(fit.homedep_2.1d2),fracdiff.BIC(fit.homedep_2.1d2))      
 
 
 ### homedep_2 model diagnostics: autocorrelation in residuals
@@ -4794,4 +4795,4 @@ bst.models[nrow(bst.models)+1,] <- c("Busch", 2, 0, fit.busch_2.bst$d, 0)
 
 
 ### ADDING bst.models to a csv file
-write.csv(bst.models, file = "bst_models.csv", row.names = FALSE)
+write.csv(bst.models, file = "bst_models2.csv", row.names = FALSE)
