@@ -2,7 +2,7 @@
 #*[ Objectives : This program splits the volatility data in two time periods and fits ARFIMA      ]*#
 #*[              models to part one and part two data. It will also save a CSV file with model    ]*#
 #*[              parameters.                                                                      ]*#
-#*[ Last update: 04/30/2020                                                                       ]*#
+#*[ Last update: 05/08/2020                                                                       ]*#
 #*[ Authors    : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
