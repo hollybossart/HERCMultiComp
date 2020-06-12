@@ -419,7 +419,52 @@ data.Volatility_prd.1 <- cbind.data.frame(v.t_oracle_1,
 dim(data.Volatility_prd.1)                # 503 observations for 30 companies in part 1
 
 
-
+### calling the function for ESS adjusted lsd
+results_prd.1 <- ess.LSD(data.Volatility_prd.1, alternative="two.sided")
 
 ### Writing results to a csv file
-write.csv(results_prd.1$p.val_unc, file = "results_prd_1_unc.csv")
+write.csv(results_prd.1$p.val_unc, file = "lsd_prd_1_unc.csv")
+write.csv(results_prd.1$p.val_ess, file = "lsd_prd_1_ess.csv")
+
+
+### Dataset for the period 2
+data.Volatility_prd.2 <- cbind.data.frame(v.t_oracle_2,
+                                          v.t_microsoft_2,
+                                          v.t_exxon_2,
+                                          v.t_gm_2,
+                                          v.t_ibm_2,
+                                          v.t_facebook_2,
+                                          v.t_chevron_2,
+                                          v.t_apple_2,
+                                          v.t_alibaba_2,
+                                          v.t_pg_2,
+                                          v.t_pfizer_2,
+                                          v.t_johnson_2,
+                                          v.t_disney_2,
+                                          v.t_wellsfargo_2,
+                                          v.t_jpmorgan_2,
+                                          v.t_walmart_2,
+                                          v.t_intel_2,
+                                          v.t_bankofa_2,
+                                          v.t_verizon_2,
+                                          v.t_att_2,
+                                          v.t_homedep_2,
+                                          v.t_citi_2,
+                                          v.t_amazon_2,
+                                          v.t_chinamob_2,
+                                          v.t_taiwan_2,
+                                          v.t_novartis_2,
+                                          v.t_visa_2,
+                                          v.t_unhealth_2,
+                                          v.t_busch_2,
+                                          v.t_netflix_2)
+
+dim(data.Volatility_prd.2)                # 474 observations for 30 companies in part 2
+
+
+### calling the function for ESS adjusted lsd
+results_prd.2 <- ess.LSD(data.Volatility_prd.2, alternative="two.sided")
+
+### Writing results to a csv file
+write.csv(results_prd.2$p.val_unc, file = "lsd_prd_2_unc.csv")
+write.csv(results_prd.2$p.val_ess, file = "lsd_prd_2_ess.csv")
