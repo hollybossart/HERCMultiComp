@@ -96,8 +96,8 @@ ess.LSD <- function(data,alternative=c("two.sided","less","greater")) {
         p.val.ess <- pt(t.val,N.ess-m,lower.tail=(alternative == "less"))
       }
 
-      Table.unc[i,j] <- p.val.unc
-      Table.ess[i,j] <- p.val.ess
+      Table.unc[i,j] <- round(p.val.unc, digits = 7)     # rounds digits to 7 digits to avoid reporting in sci notation          
+      Table.ess[i,j] <- round(p.val.ess, digits = 7)
     }
   }
 
@@ -418,8 +418,8 @@ data.Volatility_prd.1 <- cbind.data.frame(v.t_oracle_1,
 
 dim(data.Volatility_prd.1)                # 503 observations for 30 companies in part 1
 
-### Apply LSD method for part 1 data
-ess.LSD(data=data.Volatility_prd.1,alternative="two.sided")
 
 
 
+### Writing results to a csv file
+write.csv(results_prd.1$p.val_unc, file = "results_prd_1_unc.csv")
