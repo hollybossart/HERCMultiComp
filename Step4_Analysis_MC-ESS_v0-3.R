@@ -1,6 +1,6 @@
 #*[-----------------------------------------------------------------------------------------------]*#
 #*[ Objectives : This program performas ESS-calibrated MC tests for long memory time series       ]*#
-#*[ Last update: 06/12/2020                                                                       ]*#
+#*[ Last update: 07/03/2020                                                                       ]*#
 #*[ Authors    : Holly Bossart & Jaechoul Lee                                                     ]*#
 #*[-----------------------------------------------------------------------------------------------]*#
 
