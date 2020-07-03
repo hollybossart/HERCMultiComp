@@ -423,49 +423,70 @@ dim(data.Volatility_prd.1)                # 503 observations for 30 companies in
 ### calling the function for ESS adjusted lsd
 results_prd.1 <- ess.LSD(data.Volatility_prd.1, alternative="two.sided")
 
+### adding in company names for clarity
+### calling the function for ESS adjusted lsd
+p.val_ess_prd.1 <- data.frame(results_prd.1$p.val_ess,
+                              row.names = colnames(data.Volatility_prd.1))
+p.val_unc_prd.1 <- data.frame(results_prd.1$p.val_unc,
+                              row.names = colnames(data.Volatility_prd.1))
+
+colnames(p.val_ess_prd.1) <- colnames(data.Volatility_prd.1)
+colnames(p.val_unc_prd.1) <- colnames(data.Volatility_prd.1)
+
 ### Writing results to a csv file
-write.csv(results_prd.1$p.val_unc, file = "lsd_prd_1_unc.csv")
-write.csv(results_prd.1$p.val_ess, file = "lsd_prd_1_ess.csv")
+write.csv(p.val_unc_prd.1, file = "lsd_prd_1_unc.csv")
+write.csv(p.val_ess_prd.1, file = "lsd_prd_1_ess.csv")
 
 
-### Dataset for the period 2
-data.Volatility_prd.2 <- cbind.data.frame(v.t_oracle_2,
-                                          v.t_microsoft_2,
+### Dataset for the period 2- arranged in order of d parameter smallest to largest
+# see bst_models.v0-2 for sorted part 2 data based on d parameter in ARFIMA models
+data.Volatility_prd.2 <- cbind.data.frame(v.t_chevron_2,
                                           v.t_exxon_2,
-                                          v.t_gm_2,
-                                          v.t_ibm_2,
-                                          v.t_facebook_2,
-                                          v.t_chevron_2,
-                                          v.t_apple_2,
-                                          v.t_alibaba_2,
-                                          v.t_pg_2,
-                                          v.t_pfizer_2,
-                                          v.t_johnson_2,
-                                          v.t_disney_2,
-                                          v.t_wellsfargo_2,
-                                          v.t_jpmorgan_2,
-                                          v.t_walmart_2,
-                                          v.t_intel_2,
-                                          v.t_bankofa_2,
-                                          v.t_verizon_2,
-                                          v.t_att_2,
-                                          v.t_homedep_2,
-                                          v.t_citi_2,
-                                          v.t_amazon_2,
-                                          v.t_chinamob_2,
-                                          v.t_taiwan_2,
-                                          v.t_novartis_2,
-                                          v.t_visa_2,
-                                          v.t_unhealth_2,
                                           v.t_busch_2,
-                                          v.t_netflix_2)
+                                          v.t_chinamob_2,
+                                          v.t_citi_2,
+                                          v.t_johnson_2,
+                                          v.t_taiwan_2,
+                                          v.t_gm_2,
+                                          v.t_pg_2,
+                                          v.t_jpmorgan_2,
+                                          v.t_intel_2,
+                                          v.t_alibaba_2,
+                                          v.t_homedep_2,
+                                          v.t_verizon_2,
+                                          v.t_walmart_2,
+                                          v.t_wellsfargo_2,
+                                          v.t_disney_2,
+                                          v.t_unhealth_2,
+                                          v.t_bankofa_2,
+                                          v.t_amazon_2,
+                                          v.t_netflix_2,
+                                          v.t_oracle_2,
+                                          v.t_novartis_2,
+                                          v.t_att_2,
+                                          v.t_facebook_2,
+                                          v.t_apple_2,
+                                          v.t_ibm_2,
+                                          v.t_pfizer_2,
+                                          v.t_visa_2,
+                                          v.t_microsoft_2)
 
 dim(data.Volatility_prd.2)                # 474 observations for 30 companies in part 2
 
 
 ### calling the function for ESS adjusted lsd
-results_prd.2 <- ess.LSD(data.Volatility_prd.2, alternative="two.sided")
+results_prd.2   <- ess.LSD(data.Volatility_prd.2, 
+                           alternative="two.sided")
+
+p.val_ess_prd.2 <- data.frame(results_prd.2$p.val_ess,
+                              row.names = colnames(data.Volatility_prd.2))
+
+p.val_unc_prd.2 <- data.frame(results_prd.2$p.val_unc,
+                              row.names = colnames(data.Volatility_prd.2))
+
+colnames(p.val_ess_prd.2) <- colnames(data.Volatility_prd.2)
+colnames(p.val_unc_prd.2) <- colnames(data.Volatility_prd.2)
 
 ### Writing results to a csv file
-write.csv(results_prd.2$p.val_unc, file = "lsd_prd_2_unc.csv")
-write.csv(results_prd.2$p.val_ess, file = "lsd_prd_2_ess.csv")
+write.csv(p.val_ess_prd.2, file = "lsd_prd_2_ess.csv")
+write.csv(p.val_unc_prd.2, file = "lsd_prd_2_unc.csv")
